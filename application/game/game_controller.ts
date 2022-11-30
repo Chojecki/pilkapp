@@ -14,4 +14,22 @@ export const gameController = {
       throw error;
     }
   },
+  async getGame(id: string) {
+    try {
+      const game = await repo.getGame(id);
+      return game;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+  async updateGame(id: string, player: string) {
+    try {
+      const gameres = await repo.updateGame(id, player);
+      return gameres;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
 };
