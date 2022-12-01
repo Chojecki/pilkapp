@@ -204,7 +204,7 @@ export default function GamePage() {
       <div className="w-full px-4">
         <div className="grid grid-cols-12 gap-4 pb-4">
           <div className="col-span-12 sm:col-span-9 md:col-span-9">
-            <p className="font-bold pb-4">Grają:</p>
+            <p className="font-bold pb-4  dark:text-white">Grają:</p>
             {splitPlayers.mainSquad.map((participant, index) => (
               <div className="w-full" key={participant.id}>
                 <PlayerCell
@@ -216,7 +216,7 @@ export default function GamePage() {
             ))}
           </div>
           <div className="col-span-12 sm:col-span-3 md:col-span-3">
-            <p className="font-bold pb-4">Rezerwa:</p>
+            <p className="font-bold pb-4  dark:text-white">Rezerwa:</p>
             {splitPlayers.bench.map((participant, index) => (
               <div className="w-full" key={participant.id}>
                 <PlayerCell bench index={index + 1} player={participant} />
