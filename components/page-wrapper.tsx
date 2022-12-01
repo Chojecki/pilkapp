@@ -4,7 +4,7 @@ interface PageWrapperProps {
 
 const PageWrapper = ({ children }: PageWrapperProps) => {
   return (
-    <div className="flex p-10 flex-col justify-around items-center  place-items-center bg-gray-100 dark:bg-gray-700">
+    <div className="flex p-10 flex-col justify-around items-center  place-items-center bg-gray-100 ">
       {children}
     </div>
   );

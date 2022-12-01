@@ -22,11 +22,11 @@ const Stats = ({
     <div className="p-4 w-full">
       <div className="grid grid-cols-12 gap-4 pb-4">
         <div className="col-span-12 sm:col-span-9 md:col-span-9">
-          <h2 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+          <h2 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl ">
             {name}
           </h2>
           {description && (
-            <p className="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
+            <p className="mb-6 text-lg font-normal text-gray-500 lg:text-xl">
               {description}
             </p>
           )}

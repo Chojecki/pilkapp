@@ -204,7 +204,7 @@ export default function GamePage() {
       <div className="w-full px-4">
         <div className="grid grid-cols-12 gap-4 pb-4">
           <div className="col-span-12 sm:col-span-9 md:col-span-9">
-            <p className="font-bold pb-4  dark:text-white">Grają:</p>
+            <p className="font-bold pb-4    ">Grają:</p>
             {splitPlayers.mainSquad.map((participant, index) => (
               <div className="w-full" key={participant.id}>
                 <PlayerCell
@@ -216,7 +216,7 @@ export default function GamePage() {
             ))}
           </div>
           <div className="col-span-12 sm:col-span-3 md:col-span-3">
-            <p className="font-bold pb-4  dark:text-white">Rezerwa:</p>
+            <p className="font-bold pb-4    ">Rezerwa:</p>
             {splitPlayers.bench.map((participant, index) => (
               <div className="w-full" key={participant.id}>
                 <PlayerCell bench index={index + 1} player={participant} />
@@ -238,22 +238,22 @@ export default function GamePage() {
               className="w-full flex flex-col justify-between h-full items-start"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
+              <label className="block mb-2 text-sm font-medium text-gray-900    ">
                 Imię
               </label>
               <input
-                className="bg-gray-50 my-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 my-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
                 type="text"
                 {...register("name", { required: true })}
                 placeholder="Imię"
               />
-              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
+              <label className="block mb-2 text-sm font-medium text-gray-900    ">
                 Jezeli jest wybór to gdzie wolisz grać ?
               </label>
               <select
                 id="countries"
                 {...register("role", { required: true })}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
               >
                 <option selected value="None">
                   Wyjebane
