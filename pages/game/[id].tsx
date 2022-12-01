@@ -36,7 +36,7 @@ export default function GamePage() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { isSubmitting },
     reset,
   } = useForm<Input>();
   const onSubmit: SubmitHandler<Input> = async (data) => {
@@ -264,7 +264,7 @@ export default function GamePage() {
                 <option value="FW">Napad</option>
               </select>
               <div className="py-2 flex justify-between w-full">
-                <Button>Zapisz się</Button>
+                <Button disabled={isSubmitting}>Zapisz się</Button>
                 <Button type="button" onClick={closeModal}>
                   Zamknij
                 </Button>
