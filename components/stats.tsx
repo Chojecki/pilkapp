@@ -110,7 +110,7 @@ const Stats = ({
           </div>
         </div>
 
-        <div className="col-span-12">
+        <div className="col-span-12 sm:col-span-8 md:col-span-8">
           <div className="flex flex-row bg-white shadow-sm rounded p-4">
             <div className="flex items-center justify-center flex-shrink-0 h-12 w-12 rounded-xl bg-green-100 text-green-500">
               <svg
@@ -131,6 +131,18 @@ const Stats = ({
             <div className="flex flex-col flex-grow ml-4">
               <div className="text-sm text-gray-500">Miejsce</div>
               <div className="font-bold text-lg">{place}</div>
+            </div>
+          </div>
+        </div>
+        <div className="col-span-12 sm:col-span-4 md:col-span-4">
+          <div className="flex flex-row bg-white shadow-sm rounded p-4">
+            <div className="flex flex-col flex-grow ml-4">
+              <div className="text-sm text-gray-500">
+                Jeżeli chcesz się usunąć, napisz do organizatora
+              </div>
+              <div className="font-bold ">
+                Hajs możliwy na BLIKA lub gotówka na miejscu
+              </div>
             </div>
           </div>
         </div>
