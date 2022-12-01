@@ -1,5 +1,12 @@
-import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { Game } from "../../domain/game/game";
+import {
+  arrayRemove,
+  arrayUnion,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { Game, Player } from "../../domain/game/game";
 import { IGameRepo } from "../../domain/game/i_game_repo";
 import { gamesCollectionRef } from "../../utils/firebaseConfig";
 
@@ -25,12 +32,35 @@ export const firebaseGameRepo: IGameRepo = {
       throw error;
     }
   },
-  updateGame: async function (id: string, player: string): Promise<string> {
+  updateGame: async function (id: string, player: Player): Promise<Player> {
+    try {
+      // Get a game
+      const game = await this.getGame(id);
+      // Check if the player is already in the game
+      const playerInGame = game.participants.find(
+        (p) => p.name === player.name
+      );
+
+      // If the player is not in the game, add him
+      if (!playerInGame) {
+        await updateDoc(doc(gamesCollectionRef, id), {
+          participants: arrayUnion(player),
+        });
+        return player;
+      }
+
+      // If the player is in the game, return the player
+      return playerInGame;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+  deletePlayer: async function (id: string, player: Player): Promise<void> {
     try {
       await updateDoc(doc(gamesCollectionRef, id), {
-        participants: arrayUnion(player),
+        participants: arrayRemove(player),
       });
-      return player;
     } catch (error) {
       console.error(error);
       throw error;

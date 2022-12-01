@@ -5,5 +5,11 @@ export type Game = {
   date: string;
   price: number;
   place: string;
-  participants: string[];
+  participants: Player[];
+};
+
+export type Player = {
+  id: string;
+  name: string;
+  role: string;
 };

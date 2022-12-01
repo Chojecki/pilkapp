@@ -1,4 +1,4 @@
-import { Game } from "../../domain/game/game";
+import { Game, Player } from "../../domain/game/game";
 import { IGameRepo } from "../../domain/game/i_game_repo";
 import { firebaseGameRepo } from "../../infrastructure/game/game_repo";
 
@@ -23,10 +23,18 @@ export const gameController = {
       throw error;
     }
   },
-  async updateGame(id: string, player: string) {
+  async updateGame(id: string, player: Player) {
     try {
       const gameres = await repo.updateGame(id, player);
       return gameres;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+  async deletePlayer(id: string, player: Player) {
+    try {
+      await repo.deletePlayer(id, player);
     } catch (error) {
       console.error(error);
       throw error;
