@@ -3,6 +3,9 @@ import {
   arrayUnion,
   doc,
   getDoc,
+  getDocs,
+  orderBy,
+  query,
   setDoc,
   updateDoc,
 } from "firebase/firestore";
@@ -11,8 +14,16 @@ import { IGameRepo } from "../../domain/game/i_game_repo";
 import { gamesCollectionRef } from "../../utils/firebaseConfig";
 
 export const firebaseGameRepo: IGameRepo = {
-  getGames: function (): Promise<Game[]> {
-    throw new Error("Function not implemented.");
+  getGames: async function (): Promise<Game[]> {
+    try {
+      const queryDoc = await query(gamesCollectionRef, orderBy("date", "desc"));
+      const querySnap = await getDocs(queryDoc);
+      const docsData = querySnap.docs.map((doc) => doc.data());
+
+      return docsData;
+    } catch (error) {
+      throw error;
+    }
   },
   getGame: async function (id: string): Promise<Game> {
     const docRef = doc(gamesCollectionRef, id);
