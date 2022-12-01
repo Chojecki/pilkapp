@@ -31,7 +31,7 @@ export default function Page() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<GameCrateInputs>({
     mode: "onChange",
   });
@@ -95,7 +95,7 @@ export default function Page() {
 
         {errors.date && <p className="text-red-500">To pole jest wymagane</p>}
 
-        <Button disabled={!isValid}>Stwórz</Button>
+        <Button disabled={!isValid || isSubmitting}>Stwórz</Button>
       </form>
       <Button type="button" onClick={async () => await authController.logout()}>
         Wyloguj
