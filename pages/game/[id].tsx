@@ -206,19 +206,6 @@ export default function GamePage() {
       }
     }
 
-    // For every None add one to squad1 and one to squad2
-    for (let i = 0; i < nonCategorised.length; i++) {
-      if (squad1.length === 7) {
-        squad2.push(nonCategorised[i]);
-      } else if (squad2.length === 7) {
-        squad1.push(nonCategorised[i]);
-      } else if (i % 2 === 0) {
-        squad1.push(nonCategorised[i]);
-      } else {
-        squad2.push(nonCategorised[i]);
-      }
-    }
-
     return [squad1, squad2];
   }, [splitPlayers]);
 
