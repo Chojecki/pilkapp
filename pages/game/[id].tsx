@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Modal from "react-modal";
 import { v4 as uuidv4 } from "uuid";
@@ -41,6 +41,7 @@ export default function GamePage() {
     formState: { isSubmitting },
     reset,
   } = useForm<Input>();
+  const matches = useMediaQuery("(min-width: 768px)");
   const onSubmit: SubmitHandler<Input> = async (data) => {
     // Check if user from data with the same name is already in the game
     const isUserInGame = game?.participants.some(
@@ -311,22 +312,60 @@ export default function GamePage() {
           onRequestClose={closeSquadModal}
           contentLabel="Zapisz się"
         >
-          <div
-            onClick={closeSquadModal}
-            className="flex flex-col w-full h-full justify-center items-center"
-          >
+          {!matches && (
+            <div className="flex flex-col w-full h-full">
+              {suggestedSquds[0].map((player, index) => (
+                <div className="w-full" key={player.id}>
+                  <PlayerCell index={index + 1} player={player} />
+                </div>
+              ))}
+              <p className="py-4">Skład 2:</p>
+              {suggestedSquds[1].map((player, index) => (
+                <div className="w-full" key={player.id}>
+                  <PlayerCell bench index={index + 1} player={player} />
+                </div>
+              ))}
+            </div>
+          )}
+          {matches && (
             <div
-              className={`w-full h-full lg:h-1/2 lg:w-1/2 flex flex-col justify-center items-center relative bg-cover bg-center`}
+              onClick={closeSquadModal}
+              className=" flex flex-col w-full h-full justify-center items-center"
             >
-              <Image src={field} alt="field" />
               <div
-                className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
-                style={{ top: 0, bottom: 0, left: "10%" }}
+                className={` w-full h-full lg:h-1/2 lg:w-1/2 flex flex-col justify-center items-center relative bg-cover bg-center`}
               >
-                {
-                  // All GKs from first suggested squad
-                  suggestedSquds[0]
-                    .filter((player) => player.role === "GK")
+                <Image src={field} alt="field" />
+                <div
+                  className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
+                  style={{ top: 0, bottom: 0, left: "10%" }}
+                >
+                  {
+                    // All GKs from first suggested squad
+                    suggestedSquds[0]
+                      .filter((player) => player.role === "GK")
+                      .map((player, index) => (
+                        <div
+                          className="flex flex-col justify-center items-center"
+                          key={player.id}
+                        >
+                          <div className="  bg-pink-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
+                          <p
+                            className="text-white text-center"
+                            style={{ fontSize: 11 }}
+                          >
+                            {player.name}
+                          </p>
+                        </div>
+                      ))
+                  }
+                </div>
+                <div
+                  className=" absolute w-10  gap-y-14 flex flex-col justify-center items-center"
+                  style={{ top: 0, bottom: 0, left: "22%" }}
+                >
+                  {suggestedSquds[0]
+                    .filter((player) => player.role === "DF")
                     .map((player, index) => (
                       <div
                         className="flex flex-col justify-center items-center"
@@ -340,80 +379,80 @@ export default function GamePage() {
                           {player.name}
                         </p>
                       </div>
-                    ))
-                }
-              </div>
-              <div
-                className=" absolute w-10  gap-y-14 flex flex-col justify-center items-center"
-                style={{ top: 0, bottom: 0, left: "22%" }}
-              >
-                {suggestedSquds[0]
-                  .filter((player) => player.role === "DF")
-                  .map((player, index) => (
-                    <div
-                      className="flex flex-col justify-center items-center"
-                      key={player.id}
-                    >
-                      <div className="  bg-pink-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
-                      <p
-                        className="text-white text-center"
-                        style={{ fontSize: 11 }}
+                    ))}
+                </div>
+                <div
+                  className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
+                  style={{ top: 0, bottom: 0, left: "32%" }}
+                >
+                  {suggestedSquds[0]
+                    .filter((player) => player.role === "MF")
+                    .map((player, index) => (
+                      <div
+                        className="flex flex-col justify-center items-center"
+                        key={player.id}
                       >
-                        {player.name}
-                      </p>
-                    </div>
-                  ))}
-              </div>
-              <div
-                className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
-                style={{ top: 0, bottom: 0, left: "32%" }}
-              >
-                {suggestedSquds[0]
-                  .filter((player) => player.role === "MF")
-                  .map((player, index) => (
-                    <div
-                      className="flex flex-col justify-center items-center"
-                      key={player.id}
-                    >
-                      <div className=" bg-pink-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
-                      <p
-                        className="text-white text-center"
-                        style={{ fontSize: 11 }}
+                        <div className=" bg-pink-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
+                        <p
+                          className="text-white text-center"
+                          style={{ fontSize: 11 }}
+                        >
+                          {player.name}
+                        </p>
+                      </div>
+                    ))}
+                </div>
+                <div
+                  className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
+                  style={{ top: 0, bottom: 0, left: "42%" }}
+                >
+                  {suggestedSquds[0]
+                    .filter((player) => player.role === "FW")
+                    .map((player, index) => (
+                      <div
+                        className="flex flex-col justify-center items-center"
+                        key={player.id}
                       >
-                        {player.name}
-                      </p>
-                    </div>
-                  ))}
-              </div>
-              <div
-                className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
-                style={{ top: 0, bottom: 0, left: "42%" }}
-              >
-                {suggestedSquds[0]
-                  .filter((player) => player.role === "FW")
-                  .map((player, index) => (
-                    <div
-                      className="flex flex-col justify-center items-center"
-                      key={player.id}
-                    >
-                      <div className="  bg-pink-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
-                      <p
-                        className="text-white text-center"
-                        style={{ fontSize: 11 }}
-                      >
-                        {player.name}
-                      </p>
-                    </div>
-                  ))}
-              </div>
-              <div
-                className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
-                style={{ top: 0, bottom: 0, right: "10%" }}
-              >
-                {
-                  // All GKs from first suggested squad
-                  suggestedSquds[1]
-                    .filter((player) => player.role === "GK")
+                        <div className="  bg-pink-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
+                        <p
+                          className="text-white text-center"
+                          style={{ fontSize: 11 }}
+                        >
+                          {player.name}
+                        </p>
+                      </div>
+                    ))}
+                </div>
+                <div
+                  className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
+                  style={{ top: 0, bottom: 0, right: "10%" }}
+                >
+                  {
+                    // All GKs from first suggested squad
+                    suggestedSquds[1]
+                      .filter((player) => player.role === "GK")
+                      .map((player, index) => (
+                        <div
+                          className="flex flex-col justify-center items-center"
+                          key={player.id}
+                        >
+                          <div className="  bg-blue-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
+                          <p
+                            className="text-white text-center"
+                            style={{ fontSize: 11 }}
+                          >
+                            {player.name}
+                          </p>
+                        </div>
+                      ))
+                  }
+                </div>
+                <div
+                  className=" absolute w-10  gap-y-14 flex flex-col justify-center items-center"
+                  style={{ top: 0, bottom: 0, right: "22%" }}
+                >
+                  {suggestedSquds[1]
+                    .filter((player) => player.role === "DF")
                     .map((player, index) => (
                       <div
                         className="flex flex-col justify-center items-center"
@@ -427,74 +466,53 @@ export default function GamePage() {
                           {player.name}
                         </p>
                       </div>
-                    ))
-                }
-              </div>
-              <div
-                className=" absolute w-10  gap-y-14 flex flex-col justify-center items-center"
-                style={{ top: 0, bottom: 0, right: "22%" }}
-              >
-                {suggestedSquds[1]
-                  .filter((player) => player.role === "DF")
-                  .map((player, index) => (
-                    <div
-                      className="flex flex-col justify-center items-center"
-                      key={player.id}
-                    >
-                      <div className="  bg-blue-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
-                      <p
-                        className="text-white text-center"
-                        style={{ fontSize: 11 }}
+                    ))}
+                </div>
+                <div
+                  className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
+                  style={{ top: 0, bottom: 0, right: "32%" }}
+                >
+                  {suggestedSquds[1]
+                    .filter((player) => player.role === "MF")
+                    .map((player, index) => (
+                      <div
+                        className="flex flex-col justify-center items-center"
+                        key={player.id}
                       >
-                        {player.name}
-                      </p>
-                    </div>
-                  ))}
-              </div>
-              <div
-                className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
-                style={{ top: 0, bottom: 0, right: "32%" }}
-              >
-                {suggestedSquds[1]
-                  .filter((player) => player.role === "MF")
-                  .map((player, index) => (
-                    <div
-                      className="flex flex-col justify-center items-center"
-                      key={player.id}
-                    >
-                      <div className=" bg-blue-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
-                      <p
-                        className="text-white text-center"
-                        style={{ fontSize: 11 }}
+                        <div className=" bg-blue-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
+                        <p
+                          className="text-white text-center"
+                          style={{ fontSize: 11 }}
+                        >
+                          {player.name}
+                        </p>
+                      </div>
+                    ))}
+                </div>
+                <div
+                  className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
+                  style={{ top: 0, bottom: 0, right: "42%" }}
+                >
+                  {suggestedSquds[1]
+                    .filter((player) => player.role === "FW")
+                    .map((player, index) => (
+                      <div
+                        className="flex flex-col justify-center items-center"
+                        key={player.id}
                       >
-                        {player.name}
-                      </p>
-                    </div>
-                  ))}
-              </div>
-              <div
-                className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
-                style={{ top: 0, bottom: 0, right: "42%" }}
-              >
-                {suggestedSquds[1]
-                  .filter((player) => player.role === "FW")
-                  .map((player, index) => (
-                    <div
-                      className="flex flex-col justify-center items-center"
-                      key={player.id}
-                    >
-                      <div className="  bg-blue-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
-                      <p
-                        className="text-white text-center"
-                        style={{ fontSize: 11 }}
-                      >
-                        {player.name}
-                      </p>
-                    </div>
-                  ))}
+                        <div className="  bg-blue-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
+                        <p
+                          className="text-white text-center"
+                          style={{ fontSize: 11 }}
+                        >
+                          {player.name}
+                        </p>
+                      </div>
+                    ))}
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </Modal>
       </div>
     </PageWrapper>
@@ -509,3 +527,44 @@ const useGetGame = (id: string) => {
 
   return { game: data, isLoading, isError, refetch };
 };
+
+function useMediaQuery(query: string): boolean {
+  const getMatches = (query: string): boolean => {
+    // Prevents SSR issues
+    if (typeof window !== "undefined") {
+      return window.matchMedia(query).matches;
+    }
+    return false;
+  };
+
+  const [matches, setMatches] = useState<boolean>(getMatches(query));
+
+  function handleChange() {
+    setMatches(getMatches(query));
+  }
+
+  useEffect(() => {
+    const matchMedia = window.matchMedia(query);
+
+    // Triggered at the first client-side load and if query changes
+    handleChange();
+
+    // Listen matchMedia
+    if (matchMedia.addListener) {
+      matchMedia.addListener(handleChange);
+    } else {
+      matchMedia.addEventListener("change", handleChange);
+    }
+
+    return () => {
+      if (matchMedia.removeListener) {
+        matchMedia.removeListener(handleChange);
+      } else {
+        matchMedia.removeEventListener("change", handleChange);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
+
+  return matches;
+}
