@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Modal from "react-modal";
 import { v4 as uuidv4 } from "uuid";
 import { gameController } from "../../application/game/game_controller";
+import field from "../../assets/field.jpg";
 import Button from "../../components/button";
 import PageWrapper from "../../components/page-wrapper";
 import PlayerCell from "../../components/player-cell";
@@ -13,7 +15,7 @@ import { Game, Player } from "../../domain/game/game";
 
 const customStyles = {
   content: {
-    top: "50%",
+    top: "40%",
     left: "50%",
     right: "20%",
     bottom: "20%",
@@ -94,6 +96,33 @@ export default function GamePage() {
     return { mainSquad, bench };
   }, [game?.participants]);
 
+  const assignPlayerToMostRareRole = (
+    defenders: Player[],
+    midfielders: Player[],
+    forwards: Player[]
+  ) => {
+    const defendersCount = defenders.length;
+    const midfieldersCount = midfielders.length;
+    const forwardsCount = forwards.length;
+
+    if (defendersCount <= midfieldersCount && defendersCount <= forwardsCount) {
+      return "DF";
+    }
+
+    if (
+      midfieldersCount <= defendersCount &&
+      midfieldersCount <= forwardsCount
+    ) {
+      return "MF";
+    }
+
+    if (forwardsCount <= defendersCount && forwardsCount <= midfieldersCount) {
+      return "FW";
+    }
+
+    return "DF";
+  };
+
   const suggestedSquds = useMemo(() => {
     const { mainSquad } = splitPlayers;
 
@@ -103,6 +132,24 @@ export default function GamePage() {
     const midfielders = mainSquad.filter((player) => player.role === "MF");
     const forwards = mainSquad.filter((player) => player.role === "FW");
     const nonCategorised = mainSquad.filter((player) => player.role === "None");
+
+    nonCategorised.forEach((player) => {
+      const mostRare = assignPlayerToMostRareRole(
+        defenders,
+        midfielders,
+        forwards
+      );
+      if (mostRare === "DF") {
+        player.role = "DF";
+        defenders.push(player);
+      } else if (mostRare === "MF") {
+        player.role = "MF";
+        midfielders.push(player);
+      } else if (mostRare === "FW") {
+        player.role = "FW";
+        forwards.push(player);
+      }
+    });
 
     const squad1 = [];
     const squad2 = [];
@@ -277,26 +324,187 @@ export default function GamePage() {
           onRequestClose={closeSquadModal}
           contentLabel="Zapisz się"
         >
-          <div className="flex flex-col w-full h-full">
-            <Button type="button" onClick={closeSquadModal}>
-              Zamknij
-            </Button>
-            <div className="w-full flex flex-col justify-between h-full items-start">
-              <div className="w-full flex flex-col justify-between h-full items-start">
-                <p className="font-bold pb-4">Skład 1:</p>
-                {suggestedSquds[0].map((participant, index) => (
-                  <div className="w-full" key={participant.id}>
-                    <PlayerCell index={index + 1} player={participant} />
-                  </div>
-                ))}
+          <div
+            onClick={closeSquadModal}
+            className="flex flex-col w-full h-full justify-center items-center"
+          >
+            <div
+              className={`w-full h-full lg:h-1/2 lg:w-1/2 flex flex-col justify-center items-center relative bg-cover bg-center`}
+            >
+              <Image src={field} alt="field" />
+              <div
+                className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
+                style={{ top: 0, bottom: 0, left: "10%" }}
+              >
+                {
+                  // All GKs from first suggested squad
+                  suggestedSquds[0]
+                    .filter((player) => player.role === "GK")
+                    .map((player, index) => (
+                      <div
+                        className="flex flex-col justify-center items-center"
+                        key={player.id}
+                      >
+                        <div className="  bg-pink-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
+                        <p
+                          className="text-white text-center"
+                          style={{ fontSize: 11 }}
+                        >
+                          {player.name}
+                        </p>
+                      </div>
+                    ))
+                }
               </div>
-              <div className="w-full flex flex-col justify-between h-full items-start">
-                <p className="font-bold pb-4">Skład 2:</p>
-                {suggestedSquds[1].map((participant, index) => (
-                  <div className="w-full" key={participant.id}>
-                    <PlayerCell bench index={index + 1} player={participant} />
-                  </div>
-                ))}
+              <div
+                className=" absolute w-10  gap-y-14 flex flex-col justify-center items-center"
+                style={{ top: 0, bottom: 0, left: "22%" }}
+              >
+                {suggestedSquds[0]
+                  .filter((player) => player.role === "DF")
+                  .map((player, index) => (
+                    <div
+                      className="flex flex-col justify-center items-center"
+                      key={player.id}
+                    >
+                      <div className="  bg-pink-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
+                      <p
+                        className="text-white text-center"
+                        style={{ fontSize: 11 }}
+                      >
+                        {player.name}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+              <div
+                className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
+                style={{ top: 0, bottom: 0, left: "32%" }}
+              >
+                {suggestedSquds[0]
+                  .filter((player) => player.role === "MF")
+                  .map((player, index) => (
+                    <div
+                      className="flex flex-col justify-center items-center"
+                      key={player.id}
+                    >
+                      <div className=" bg-pink-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
+                      <p
+                        className="text-white text-center"
+                        style={{ fontSize: 11 }}
+                      >
+                        {player.name}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+              <div
+                className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
+                style={{ top: 0, bottom: 0, left: "42%" }}
+              >
+                {suggestedSquds[0]
+                  .filter((player) => player.role === "FW")
+                  .map((player, index) => (
+                    <div
+                      className="flex flex-col justify-center items-center"
+                      key={player.id}
+                    >
+                      <div className="  bg-pink-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
+                      <p
+                        className="text-white text-center"
+                        style={{ fontSize: 11 }}
+                      >
+                        {player.name}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+              <div
+                className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
+                style={{ top: 0, bottom: 0, right: "10%" }}
+              >
+                {
+                  // All GKs from first suggested squad
+                  suggestedSquds[1]
+                    .filter((player) => player.role === "GK")
+                    .map((player, index) => (
+                      <div
+                        className="flex flex-col justify-center items-center"
+                        key={player.id}
+                      >
+                        <div className="  bg-blue-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
+                        <p
+                          className="text-white text-center"
+                          style={{ fontSize: 11 }}
+                        >
+                          {player.name}
+                        </p>
+                      </div>
+                    ))
+                }
+              </div>
+              <div
+                className=" absolute w-10  gap-y-14 flex flex-col justify-center items-center"
+                style={{ top: 0, bottom: 0, right: "22%" }}
+              >
+                {suggestedSquds[1]
+                  .filter((player) => player.role === "DF")
+                  .map((player, index) => (
+                    <div
+                      className="flex flex-col justify-center items-center"
+                      key={player.id}
+                    >
+                      <div className="  bg-blue-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
+                      <p
+                        className="text-white text-center"
+                        style={{ fontSize: 11 }}
+                      >
+                        {player.name}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+              <div
+                className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
+                style={{ top: 0, bottom: 0, right: "32%" }}
+              >
+                {suggestedSquds[1]
+                  .filter((player) => player.role === "MF")
+                  .map((player, index) => (
+                    <div
+                      className="flex flex-col justify-center items-center"
+                      key={player.id}
+                    >
+                      <div className=" bg-blue-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
+                      <p
+                        className="text-white text-center"
+                        style={{ fontSize: 11 }}
+                      >
+                        {player.name}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+              <div
+                className=" absolute w-10 gap-y-14 flex flex-col justify-center items-center"
+                style={{ top: 0, bottom: 0, right: "42%" }}
+              >
+                {suggestedSquds[1]
+                  .filter((player) => player.role === "FW")
+                  .map((player, index) => (
+                    <div
+                      className="flex flex-col justify-center items-center"
+                      key={player.id}
+                    >
+                      <div className="  bg-blue-400 rounded-full w-4 h-4 md:w-6 md:h-6" />
+                      <p
+                        className="text-white text-center"
+                        style={{ fontSize: 11 }}
+                      >
+                        {player.name}
+                      </p>
+                    </div>
+                  ))}
               </div>
             </div>
           </div>

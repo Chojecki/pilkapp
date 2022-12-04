@@ -81,7 +81,7 @@ const Stats = ({
             </div>
             <div className="flex flex-col flex-grow ml-4">
               <div className="text-sm text-gray-500">Termin</div>
-              <div className="font-bold text-lg">{date}</div>
+              <div className="font-bold text-lg">{date} (20:30)</div>
             </div>
           </div>
         </div>
