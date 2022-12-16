@@ -3,11 +3,11 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import Modal from "react-modal";
 import { v4 as uuidv4 } from "uuid";
 import { gameController } from "../../application/game/game_controller";
 import field from "../../assets/field.jpg";
 import Button from "../../components/button";
+import AppDialog from "../../components/dialog";
 import PageWrapper from "../../components/page-wrapper";
 import PlayerCell from "../../components/player-cell";
 import Stats from "../../components/stats";
@@ -229,44 +229,12 @@ export default function GamePage() {
         date={game.date}
       />
       <div className="flex space-x-4">
-        <Button onClick={openModal} type="button">
-          Zapisz się
-        </Button>
-        <Button onClick={openSquadModal} type="button">
-          Zobacz propozycję składów
-        </Button>
-      </div>
-      <div className="w-full px-4">
-        <div className="grid grid-cols-12 gap-4 pb-4">
-          <div className="col-span-12 sm:col-span-9 md:col-span-9">
-            <p className="font-bold pb-4    ">Grają:</p>
-            {splitPlayers.mainSquad.map((participant, index) => (
-              <div className="w-full" key={participant.id}>
-                <PlayerCell
-                  onClick={() => hanldePlayerDelete(participant)}
-                  index={index + 1}
-                  player={participant}
-                />
-              </div>
-            ))}
-          </div>
-          <div className="col-span-12 sm:col-span-3 md:col-span-3">
-            <p className="font-bold pb-4    ">Rezerwa:</p>
-            {splitPlayers.bench.map((participant, index) => (
-              <div className="w-full" key={participant.id}>
-                <PlayerCell bench index={index + 1} player={participant} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <Modal
+        <AppDialog
           isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          style={customStyles}
-          contentLabel="Zapisz się"
+          openModal={openModal}
+          closeModal={closeModal}
+          title="Zapisz się"
+          buttonLabel="Zapisz się"
         >
           <div className="flex flex-col w-full h-full">
             <form
@@ -306,11 +274,14 @@ export default function GamePage() {
               </div>
             </form>
           </div>
-        </Modal>
-        <Modal
+        </AppDialog>
+        <AppDialog
           isOpen={squadModalIsOpen}
-          onRequestClose={closeSquadModal}
-          contentLabel="Zapisz się"
+          openModal={openSquadModal}
+          closeModal={closeSquadModal}
+          title=" Zobacz propozycję składów"
+          buttonLabel=" Zobacz propozycję składów"
+          full
         >
           {!matches && (
             <div className="flex flex-col w-full h-full">
@@ -513,7 +484,34 @@ export default function GamePage() {
               </div>
             </div>
           )}
-        </Modal>
+          <Button type="button" onClick={closeSquadModal}>
+            Zamknij
+          </Button>
+        </AppDialog>
+      </div>
+      <div className="w-full px-4">
+        <div className="grid grid-cols-12 gap-4 pb-4">
+          <div className="col-span-12 sm:col-span-9 md:col-span-9">
+            <p className="font-bold pb-4    ">Grają:</p>
+            {splitPlayers.mainSquad.map((participant, index) => (
+              <div className="w-full" key={participant.id}>
+                <PlayerCell
+                  onClick={() => hanldePlayerDelete(participant)}
+                  index={index + 1}
+                  player={participant}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="col-span-12 sm:col-span-3 md:col-span-3">
+            <p className="font-bold pb-4    ">Rezerwa:</p>
+            {splitPlayers.bench.map((participant, index) => (
+              <div className="w-full" key={participant.id}>
+                <PlayerCell bench index={index + 1} player={participant} />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </PageWrapper>
   );
