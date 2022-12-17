@@ -8,15 +8,20 @@ import {
   query,
   setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { Game, Player } from "../../domain/game/game";
 import { IGameRepo } from "../../domain/game/i_game_repo";
 import { gamesCollectionRef } from "../../utils/firebaseConfig";
 
 export const firebaseGameRepo: IGameRepo = {
-  getGames: async function (): Promise<Game[]> {
+  getGames: async function (userId?: string): Promise<Game[]> {
     try {
-      const queryDoc = await query(gamesCollectionRef, orderBy("date", "desc"));
+      const queryDoc = await query(
+        gamesCollectionRef,
+        orderBy("date", "desc"),
+        where("creator", "==", userId ?? "")
+      );
       const querySnap = await getDocs(queryDoc);
       const docsData = querySnap.docs.map((doc) => doc.data());
 
@@ -71,6 +76,7 @@ export const firebaseGameRepo: IGameRepo = {
     try {
       await updateDoc(doc(gamesCollectionRef, id), {
         participants: arrayRemove(player),
+        removedPlayers: arrayUnion(player),
       });
     } catch (error) {
       console.error(error);

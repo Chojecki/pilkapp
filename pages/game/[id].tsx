@@ -103,14 +103,15 @@ export default function GamePage() {
   };
 
   const splitPlayers = useMemo(() => {
-    // First 14 players
-    const mainSquad = game?.participants.slice(0, 14) ?? [];
+    // First game.numberOfPlayers players
+    const mainSquad =
+      game?.participants.slice(0, game.numberOfPlayers ?? 14) ?? [];
 
     // Players on the bench
-    const bench = game?.participants.slice(14) ?? [];
+    const bench = game?.participants.slice(game.numberOfPlayers ?? 14) ?? [];
 
     return { mainSquad, bench };
-  }, [game?.participants]);
+  }, [game?.numberOfPlayers, game?.participants]);
 
   const assignPlayerToMostRareRole = (
     defenders: Player[],
@@ -223,6 +224,7 @@ export default function GamePage() {
         price={game.price}
         place={game.place}
         date={game.date}
+        numberOfPlayers={game.numberOfPlayers ?? 14}
       />
       <div className="flex space-x-4">
         <AppDialog
@@ -502,13 +504,21 @@ export default function GamePage() {
             ))}
           </div>
           <div className="col-span-12 sm:col-span-3 md:col-span-3">
-            <p className="font-bold pb-4    ">Rezerwa:</p>
+            <p className="font-bold pb-4">Rezerwa:</p>
             {splitPlayers.bench.map((participant, index) => (
               <div className="w-full" key={participant.id}>
                 <PlayerCell bench index={index + 1} player={participant} />
               </div>
             ))}
           </div>
+          {/* <div className="col-span-12 sm:col-span-4 md:col-span-4">
+            <p className="font-bold pb-4">Zrezygnowali:</p>
+            {(game.removedPlayers ?? []).map((participant, index) => (
+              <div className="w-full" key={participant.id}>
+                <PlayerCell bench index={index + 1} player={participant} />
+              </div>
+            ))}
+          </div> */}
         </div>
       </div>
     </PageWrapper>

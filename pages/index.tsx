@@ -19,6 +19,7 @@ type GameCrateInputs = {
   date: string;
   price: number;
   place: string;
+  numberOfPlayers?: number;
 };
 
 export default function Page() {
@@ -43,16 +44,18 @@ export default function Page() {
   });
 
   const onSubmit: SubmitHandler<GameCrateInputs> = async (data) => {
-    const { name, description, date, price, place } = data;
+    const { name, description, date, price, place, numberOfPlayers } = data;
     const id = uuidv4();
-    const game = {
+    const game: Game = {
       id,
       name,
       description,
       date,
       price,
       place,
+      creator: user.uid,
       participants: [],
+      numberOfPlayers: numberOfPlayers || 14,
     };
     try {
       await setDoc(doc(gamesCollectionRef, game.id), { ...game });
@@ -90,6 +93,13 @@ export default function Page() {
           className="bg-gray-50 my-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
           {...register("price", { required: true })}
           placeholder="Opłata"
+          type="number"
+        />
+
+        <input
+          className="bg-gray-50 my-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
+          {...register("numberOfPlayers")}
+          placeholder="Liczba graczy (opcjonalnie, domyślnie 14)"
           type="number"
         />
 
@@ -135,9 +145,10 @@ export default function Page() {
 }
 
 const useGetGames = () => {
+  const { user } = useAuth();
   const { data, isLoading, isError, refetch } = useQuery<Game[], Error>({
-    queryKey: ["games"],
-    queryFn: () => gameController.getGames().then((res) => res),
+    queryKey: ["games", user.uid],
+    queryFn: () => gameController.getGames(user.uid).then((res) => res),
   });
 
   return { games: data, isLoading, isError, refetch };

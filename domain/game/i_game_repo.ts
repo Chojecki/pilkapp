@@ -1,7 +1,7 @@
 import { Game, Player } from "./game";
 
 export type IGameRepo = {
-  getGames: () => Promise<Game[]>;
+  getGames: (userId?: string) => Promise<Game[]>;
   getGame: (id: string) => Promise<Game>;
   createGame: (game: Game) => Promise<Game>;
   updateGame: (id: string, player: Player) => Promise<Player>;

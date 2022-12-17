@@ -6,6 +6,9 @@ export type Game = {
   price: number;
   place: string;
   participants: Player[];
+  creator?: string;
+  removedPlayers?: Player[];
+  numberOfPlayers?: number;
 };
 
 export type Player = {
