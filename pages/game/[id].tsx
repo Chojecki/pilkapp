@@ -152,11 +152,13 @@ export default function GamePage() {
     const squad1 = [];
     const squad2 = [];
 
+    const halfOfPlayers = (game?.numberOfPlayers ?? 14) / 2;
+
     // For every GK add one to squad1 and one to squad2.
     for (let i = 0; i < goalkeepers.length; i++) {
-      if (squad1.length === 7) {
+      if (squad1.length === halfOfPlayers) {
         squad2.push(goalkeepers[i]);
-      } else if (squad2.length === 7) {
+      } else if (squad2.length === halfOfPlayers) {
         squad1.push(goalkeepers[i]);
       } else if (i % 2 === 0) {
         squad1.push(goalkeepers[i]);
@@ -165,11 +167,11 @@ export default function GamePage() {
       }
     }
 
-    // For every DF add one to squad1 and one to squad2. If one squad has 7 players, add to the other one
+    // For every DF add one to squad1 and one to squad2. If one squad has (game?.numberOfPlayers ?? 14) / 2 players, add to the other one
     for (let i = 0; i < defenders.length; i++) {
-      if (squad1.length === 7) {
+      if (squad1.length === halfOfPlayers) {
         squad2.push(defenders[i]);
-      } else if (squad2.length === 7) {
+      } else if (squad2.length === halfOfPlayers) {
         squad1.push(defenders[i]);
       } else if (i % 2 === 0) {
         squad1.push(defenders[i]);
@@ -180,9 +182,9 @@ export default function GamePage() {
 
     // For every MF add one to squad1 and one to squad2
     for (let i = 0; i < midfielders.length; i++) {
-      if (squad1.length === 7) {
+      if (squad1.length === halfOfPlayers) {
         squad2.push(midfielders[i]);
-      } else if (squad2.length === 7) {
+      } else if (squad2.length === halfOfPlayers) {
         squad1.push(midfielders[i]);
       } else if (i % 2 === 0) {
         squad1.push(midfielders[i]);
@@ -193,9 +195,9 @@ export default function GamePage() {
 
     // For every FW add one to squad1 and one to squad2
     for (let i = 0; i < forwards.length; i++) {
-      if (squad1.length === 7) {
+      if (squad1.length === halfOfPlayers) {
         squad2.push(forwards[i]);
-      } else if (squad2.length === 7) {
+      } else if (squad2.length === halfOfPlayers) {
         squad1.push(forwards[i]);
       } else if (i % 2 === 0) {
         squad1.push(forwards[i]);
@@ -204,8 +206,26 @@ export default function GamePage() {
       }
     }
 
+    // Check if any squad had more than 1 playes more than second squad
+    const squad1Length = squad1.length;
+    const squad2Length = squad2.length;
+
+    if (squad1Length - squad2Length > 1) {
+      // Remove one player from squad1 and add to squad2
+      const player = squad1.pop();
+      if (player) {
+        squad2.push(player);
+      }
+    } else if (squad2Length - squad1Length > 1) {
+      // Remove one player from squad2 and add to squad1
+      const player = squad2.pop();
+      if (player) {
+        squad1.push(player);
+      }
+    }
+
     return [squad1, squad2];
-  }, [splitPlayers]);
+  }, [game?.numberOfPlayers, splitPlayers]);
 
   if (isLoading) {
     return <div>Loading...</div>;
