@@ -29,7 +29,11 @@ const PlayerCell = ({
           {player.name} <span>({player.role})</span>
         </div>
       </div>
-      {user.uid && onClick && <Button onClick={onClick}>Usuń</Button>}
+      {user.uid && onClick && (
+        <Button color="red" onClick={onClick}>
+          Usuń
+        </Button>
+      )}
     </div>
   );
 };
