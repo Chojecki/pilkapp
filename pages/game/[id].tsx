@@ -265,7 +265,7 @@ export default function GamePage() {
                 ]}
               />
               <div className="py-2 flex justify-between w-full">
-                <Button type="button" onClick={closeModal}>
+                <Button color="gray" type="button" onClick={closeModal}>
                   Zamknij
                 </Button>
                 <Button disabled={isSubmitting}>Zapisz się</Button>
@@ -482,7 +482,7 @@ export default function GamePage() {
               </div>
             </div>
           )}
-          <Button type="button" onClick={closeSquadModal}>
+          <Button color="gray" type="button" onClick={closeSquadModal}>
             Zamknij
           </Button>
         </AppDialog>
