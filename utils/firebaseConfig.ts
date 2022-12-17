@@ -3,9 +3,9 @@ import { initializeApp } from "firebase/app";
 import "firebase/auth";
 import { getAuth } from "firebase/auth";
 import {
+  QueryDocumentSnapshot,
   collection,
   getFirestore,
-  QueryDocumentSnapshot,
 } from "firebase/firestore";
 import { Game } from "../domain/game/game";
 // import { ServerData } from "~/domain/server_data/server_data";
@@ -14,12 +14,12 @@ import { Game } from "../domain/game/game";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 const firebaseConfig = {
-  apiKey: "AIzaSyABAYZtpwFs5QB7-kc4S9rRgi2ittRqQG0",
-  authDomain: "pilkapp.firebaseapp.com",
-  projectId: "pilkapp",
-  storageBucket: "pilkapp.appspot.com",
-  messagingSenderId: "461864708285",
-  appId: "1:461864708285:web:854a0ba4efc2b2bebeefd4",
+  apiKey: process.env.API_KEY,
+  authDomain: process.env.AUTH_DOMAIN,
+  projectId: process.env.PROJECT_ID,
+  storageBucket: process.env.STORAGE_BUCKET,
+  messagingSenderId: process.env.MESSAGING_SENDER_ID,
+  appId: process.env.APP_ID,
 };
 
 // Initialize Firebase
