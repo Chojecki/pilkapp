@@ -10,6 +10,7 @@ interface AppDialogProps {
   buttonLabel: string;
   title: string;
   full?: boolean;
+  buttonColor?: "blue" | "red" | "green" | "yellow" | "gray";
 }
 
 export default function AppDialog({
@@ -20,11 +21,12 @@ export default function AppDialog({
   buttonLabel,
   title,
   full = false,
+  buttonColor = "blue",
 }: AppDialogProps) {
   return (
     <>
       <div className=" inset-0 flex items-center justify-center">
-        <Button type="button" onClick={openModal}>
+        <Button color={buttonColor} type="button" onClick={openModal}>
           {buttonLabel}
         </Button>
       </div>

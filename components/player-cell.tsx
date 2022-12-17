@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { useAuth } from "../context/auth-context";
 import { Player } from "../domain/game/game";
 import Button from "./button";
+import AppDialog from "./dialog";
 
 const PlayerCell = ({
   player,
@@ -14,6 +16,15 @@ const PlayerCell = ({
   onClick?: () => void;
 }) => {
   const { user } = useAuth();
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   return (
     <div className="flex flex-row bg-white shadow-sm rounded p-4 w-full">
@@ -30,9 +41,23 @@ const PlayerCell = ({
         </div>
       </div>
       {user.uid && onClick && (
-        <Button color="red" onClick={onClick}>
-          Usuń
-        </Button>
+        <AppDialog
+          isOpen={modalIsOpen}
+          openModal={openModal}
+          closeModal={closeModal}
+          title="Czy na pewno chcesz usunąć gracza?"
+          buttonLabel="Usuń"
+          buttonColor="red"
+        >
+          <div className="flex py-4 flex-row space-x-4 justify-center">
+            <Button color="red" onClick={onClick}>
+              Usuń
+            </Button>
+            <Button color="gray" onClick={closeModal}>
+              Anuluj
+            </Button>
+          </div>
+        </AppDialog>
       )}
     </div>
   );
