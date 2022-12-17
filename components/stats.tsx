@@ -35,6 +35,16 @@ const Stats = ({
           <Image src={malpa} alt="malpa" />
         </div>
       </div>
+      <div className="flex mb-4 flex-row bg-white shadow-sm rounded p-4">
+        <div className="flex flex-col flex-grow ml-4">
+          <div className="text-sm text-gray-500">
+            Jeżeli chcesz się usunąć, napisz do organizatora
+          </div>
+          <div className="font-bold ">
+            Hajs możliwy na BLIKA lub gotówka na miejscu
+          </div>
+        </div>
+      </div>
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-12 sm:col-span-6 md:col-span-4">
           <div className="flex flex-row bg-white shadow-sm rounded p-4">
@@ -131,18 +141,6 @@ const Stats = ({
             <div className="flex flex-col flex-grow ml-4">
               <div className="text-sm text-gray-500">Miejsce</div>
               <div className="font-bold text-lg">{place}</div>
-            </div>
-          </div>
-        </div>
-        <div className="col-span-12 sm:col-span-4 md:col-span-4">
-          <div className="flex flex-row bg-white shadow-sm rounded p-4">
-            <div className="flex flex-col flex-grow ml-4">
-              <div className="text-sm text-gray-500">
-                Jeżeli chcesz się usunąć, napisz do organizatora
-              </div>
-              <div className="font-bold ">
-                Hajs możliwy na BLIKA lub gotówka na miejscu
-              </div>
             </div>
           </div>
         </div>
