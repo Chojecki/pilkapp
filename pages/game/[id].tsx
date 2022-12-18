@@ -244,6 +244,7 @@ export default function GamePage() {
         price={game.price}
         place={game.place}
         date={game.date}
+        time={game.time ?? "20:30"}
         numberOfPlayers={game.numberOfPlayers ?? 14}
       />
       <div className="flex space-x-4">

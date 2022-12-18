@@ -20,6 +20,7 @@ type GameCrateInputs = {
   price: number;
   place: string;
   numberOfPlayers?: number;
+  time?: string;
 };
 
 export default function Page() {
@@ -44,7 +45,8 @@ export default function Page() {
   });
 
   const onSubmit: SubmitHandler<GameCrateInputs> = async (data) => {
-    const { name, description, date, price, place, numberOfPlayers } = data;
+    const { name, description, date, price, place, numberOfPlayers, time } =
+      data;
     const id = uuidv4();
     const game: Game = {
       id,
@@ -56,6 +58,7 @@ export default function Page() {
       creator: user.uid,
       participants: [],
       numberOfPlayers: numberOfPlayers || 14,
+      time: time || "20:30",
     };
     try {
       await setDoc(doc(gamesCollectionRef, game.id), { ...game });
@@ -87,6 +90,14 @@ export default function Page() {
           {...register("date", { required: true })}
           placeholder="Data"
           type="date"
+        />
+
+        <input
+          className="bg-gray-50 my-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
+          {...register("time")}
+          defaultValue="20:30"
+          placeholder="Godzina (opcjonalnie, domyślnie 20:30)"
+          type="time"
         />
 
         <input

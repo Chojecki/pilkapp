@@ -9,6 +9,7 @@ export type Game = {
   creator?: string;
   removedPlayers?: Player[];
   numberOfPlayers?: number;
+  time?: string;
 };
 
 export type Player = {

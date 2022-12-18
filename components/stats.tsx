@@ -9,6 +9,7 @@ interface StatsProps {
   price: number;
   place: string;
   numberOfPlayers: number;
+  time: string;
 }
 
 const Stats = ({
@@ -19,6 +20,7 @@ const Stats = ({
   price,
   place,
   numberOfPlayers,
+  time,
 }: StatsProps) => {
   return (
     <div className="p-4 w-full">
@@ -95,7 +97,9 @@ const Stats = ({
             </div>
             <div className="flex flex-col flex-grow ml-4">
               <div className="text-sm text-gray-500">Termin</div>
-              <div className="font-bold text-lg">{date} (20:30)</div>
+              <div className="font-bold text-lg">
+                {date} {time}
+              </div>
             </div>
           </div>
         </div>
