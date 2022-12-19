@@ -5,12 +5,12 @@ import router from "next/router";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
-import { gameController } from "../application/game/game_controller";
 import Button from "../components/button";
 import PageWrapper from "../components/page-wrapper";
 import { useAuth } from "../context/auth-context";
 import { Game } from "../domain/game/game";
 import { firebaseAuthRepository } from "../infrastructure/auth/auth_facade";
+import { firebaseGameRepo } from "../infrastructure/game/game_repo";
 import { gamesCollectionRef } from "../utils/firebaseConfig";
 
 type GameCrateInputs = {
@@ -162,7 +162,7 @@ const useGetGames = () => {
   const { user } = useAuth();
   const { data, isLoading, isError, refetch } = useQuery<Game[], Error>({
     queryKey: ["games", user.uid],
-    queryFn: () => gameController.getGames(user.uid).then((res) => res),
+    queryFn: () => firebaseGameRepo.getGames(user.uid).then((res) => res),
   });
 
   return { games: data, isLoading, isError, refetch };

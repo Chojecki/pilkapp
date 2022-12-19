@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
-import { gameController } from "../../application/game/game_controller";
 import field from "../../assets/field.jpg";
 import Button from "../../components/button";
 import AppDialog from "../../components/dialog";
@@ -12,6 +11,7 @@ import PageWrapper from "../../components/page-wrapper";
 import PlayerCell from "../../components/player-cell";
 import Stats from "../../components/stats";
 import { Game, Player } from "../../domain/game/game";
+import { firebaseGameRepo } from "../../infrastructure/game/game_repo";
 import AppListBox from "./components/list-box";
 
 export type Input = {
@@ -74,7 +74,7 @@ export default function GamePage() {
       name: data.name,
       role,
     };
-    await gameController.updateGame(game.id, player);
+    await firebaseGameRepo.updateGame(game.id, player);
     closeModal();
     reset();
     refetch();
@@ -98,7 +98,7 @@ export default function GamePage() {
 
   const hanldePlayerDelete = async (player: Player) => {
     if (!game?.id) return;
-    await gameController.deletePlayer(game.id, player);
+    await firebaseGameRepo.deletePlayer(game.id, player);
     refetch();
   };
 
@@ -549,7 +549,7 @@ export default function GamePage() {
 const useGetGame = (id: string) => {
   const { data, isLoading, isError, refetch } = useQuery<Game, Error>({
     queryKey: ["game", id],
-    queryFn: () => gameController.getGame(id).then((res) => res),
+    queryFn: () => firebaseGameRepo.getGame(id).then((res) => res),
   });
 
   return { game: data, isLoading, isError, refetch };
