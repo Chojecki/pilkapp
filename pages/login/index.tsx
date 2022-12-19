@@ -1,10 +1,10 @@
 import router from "next/router";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { authController } from "../../application/auth/auth_controller";
 import Button from "../../components/button";
 import PageWrapper from "../../components/page-wrapper";
 import { useAuth } from "../../context/auth-context";
+import { firebaseAuthRepository } from "../../infrastructure/auth/auth_facade";
 
 type Inputs = {
   email: string;
@@ -21,7 +21,7 @@ export default function Page() {
   const { user } = useAuth();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    await authController.login(data.email, data.password);
+    await firebaseAuthRepository.login(data.email, data.password);
     return router.push("/");
   };
 

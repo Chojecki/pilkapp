@@ -5,12 +5,12 @@ import router from "next/router";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
-import { authController } from "../application/auth/auth_controller";
 import { gameController } from "../application/game/game_controller";
 import Button from "../components/button";
 import PageWrapper from "../components/page-wrapper";
 import { useAuth } from "../context/auth-context";
 import { Game } from "../domain/game/game";
+import { firebaseAuthRepository } from "../infrastructure/auth/auth_facade";
 import { gamesCollectionRef } from "../utils/firebaseConfig";
 
 type GameCrateInputs = {
@@ -124,7 +124,10 @@ export default function Page() {
 
         <Button disabled={!isValid || isSubmitting}>Stwórz</Button>
       </form>
-      <Button type="button" onClick={async () => await authController.logout()}>
+      <Button
+        type="button"
+        onClick={async () => await firebaseAuthRepository.logout()}
+      >
         Wyloguj
       </Button>
       <div className="py-4">
