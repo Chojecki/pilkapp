@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
@@ -25,6 +25,7 @@ export default function GamePage() {
   const [squadModalIsOpen, setIsSquadOpen] = React.useState(false);
   const { id } = router.query;
   const { game, isLoading, isError, refetch } = useGetGame(id as string);
+  const { mutate } = useUpdateParticipat();
   const {
     register,
     handleSubmit,
@@ -520,6 +521,12 @@ export default function GamePage() {
                   onClick={() => hanldePlayerDelete(participant)}
                   index={index + 1}
                   player={participant}
+                  onSwitchClick={(checked) =>
+                    mutate({
+                      id: game.id,
+                      player: { ...participant, didPay: checked },
+                    })
+                  }
                 />
               </div>
             ))}
@@ -553,6 +560,21 @@ const useGetGame = (id: string) => {
   });
 
   return { game: data, isLoading, isError, refetch };
+};
+
+const useUpdateParticipat = () => {
+  const queryClient = useQueryClient();
+  const { mutate, isLoading, isError } = useMutation<
+    Player,
+    Error,
+    { id: string; player: Player }
+  >((update) => firebaseGameRepo.updateParticipant(update.id, update.player), {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
+  });
+
+  return { mutate, isLoading, isError };
 };
 
 function useMediaQuery(query: string): boolean {

@@ -3,17 +3,20 @@ import { useAuth } from "../context/auth-context";
 import { Player } from "../domain/game/game";
 import Button from "./button";
 import AppDialog from "./dialog";
+import AppSwitch from "./switch";
 
 const PlayerCell = ({
   player,
   index,
   onClick,
   bench = false,
+  onSwitchClick,
 }: {
   player: Player;
   index: number;
   bench?: boolean;
   onClick?: () => void;
+  onSwitchClick?: (checked: boolean) => void;
 }) => {
   const { user } = useAuth();
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -40,6 +43,15 @@ const PlayerCell = ({
           {player.name} <span>({player.role})</span>
         </div>
       </div>
+      {user.uid && onSwitchClick && (
+        <div className="flex justify-center items-center pr-2">
+          <AppSwitch
+            symbol="$"
+            checked={Boolean(player.didPay)}
+            onChange={onSwitchClick ?? (() => {})}
+          />
+        </div>
+      )}
       {user.uid && onClick && (
         <AppDialog
           isOpen={modalIsOpen}
