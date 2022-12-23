@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background-color: rgb(243 244 246 / 100%);
+input:checked + div {
+  @apply border-blue-500;
+}
+input:checked + div svg {
+  @apply block;
 }

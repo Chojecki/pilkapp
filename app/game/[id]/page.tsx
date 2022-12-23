@@ -1,31 +1,36 @@
+"use client";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
-import field from "../../assets/field.jpg";
-import Button from "../../components/button";
-import AppDialog from "../../components/dialog";
-import PageWrapper from "../../components/page-wrapper";
-import PlayerCell from "../../components/player-cell";
-import Stats from "../../components/stats";
-import { Game, Player } from "../../domain/game/game";
-import { firebaseGameRepo } from "../../infrastructure/game/game_repo";
-import AppListBox from "./components/list-box";
+import field from "../../../assets/field.jpg";
+import Button from "../../../components/button";
+import AppDialog from "../../../components/dialog";
+import PlayerCell from "../../../components/player-cell";
+import Stats from "../../../components/stats";
+import { Game, Player } from "../../../domain/game/game";
+import { firebaseGameRepo } from "../../../infrastructure/game/game_repo";
+import AppListBox from "../components/list-box";
 
 export type Input = {
   name: string;
   role: { value: string; name: string };
 };
 
-export default function GamePage() {
-  const router = useRouter();
+interface Props {
+  params: {
+    id: string;
+  };
+}
+
+export default function GamePage({ params }: Props) {
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const [squadModalIsOpen, setIsSquadOpen] = React.useState(false);
-  const { id } = router.query;
+  const id = params.id;
   const { game, isLoading, isError, refetch } = useGetGame(id as string);
-  const { mutate } = useUpdateParticipat();
+  const { mutate, isLoading: isMutationLoading } = useUpdateParticipat();
   const {
     register,
     handleSubmit,
@@ -237,7 +242,7 @@ export default function GamePage() {
   }
 
   return (
-    <PageWrapper>
+    <div className="flex flex-col items-center">
       <Stats
         playrsLength={game.participants.length}
         name={game.name}
@@ -521,6 +526,7 @@ export default function GamePage() {
                   onClick={() => hanldePlayerDelete(participant)}
                   index={index + 1}
                   player={participant}
+                  isLoading={isMutationLoading}
                   onSwitchClick={(checked) =>
                     mutate({
                       id: game.id,
@@ -549,7 +555,7 @@ export default function GamePage() {
           </div> */}
         </div>
       </div>
-    </PageWrapper>
+    </div>
   );
 }
 

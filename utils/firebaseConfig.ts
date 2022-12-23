@@ -3,9 +3,9 @@ import { initializeApp } from "firebase/app";
 import "firebase/auth";
 import { getAuth } from "firebase/auth";
 import {
-  QueryDocumentSnapshot,
   collection,
   getFirestore,
+  QueryDocumentSnapshot,
 } from "firebase/firestore";
 import { Game } from "../domain/game/game";
 // import { ServerData } from "~/domain/server_data/server_data";

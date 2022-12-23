@@ -1,4 +1,6 @@
-import router from "next/router";
+"use client";
+
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "../../components/button";
@@ -19,6 +21,7 @@ export default function Page() {
   } = useForm<Inputs>({ mode: "onChange" });
 
   const { user } = useAuth();
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await firebaseAuthRepository.login(data.email, data.password);
@@ -31,7 +34,7 @@ export default function Page() {
     } else {
       router.push("/");
     }
-  }, [user]);
+  }, [router, user]);
 
   return (
     <PageWrapper>

@@ -1,12 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+"use client";
+
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { doc, setDoc } from "firebase/firestore";
 import Link from "next/link";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import Button from "../components/button";
-import PageWrapper from "../components/page-wrapper";
 import { useAuth } from "../context/auth-context";
 import { Game } from "../domain/game/game";
 import { firebaseAuthRepository } from "../infrastructure/auth/auth_facade";
@@ -25,6 +26,8 @@ type GameCrateInputs = {
 
 export default function Page() {
   const { user } = useAuth();
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { games, isLoading, isError, refetch } = useGetGames();
 
@@ -34,7 +37,7 @@ export default function Page() {
     } else {
       router.push("/");
     }
-  }, [user]);
+  }, [router, user]);
 
   const {
     register,
@@ -70,7 +73,7 @@ export default function Page() {
   };
 
   return (
-    <PageWrapper>
+    <>
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         <input
           className="bg-gray-50 my-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
@@ -137,6 +140,14 @@ export default function Page() {
         {games?.map((game, index) => (
           <div
             key={game.id}
+            onMouseEnter={async () =>
+              await queryClient.prefetchQuery({
+                queryKey: ["game", game.id],
+                queryFn: () =>
+                  firebaseGameRepo.getGame(game.id).then((res) => res),
+                staleTime: 10 * 1000, // only prefetch if older than 10 seconds
+              })
+            }
             className="flex flex-row bg-white shadow-sm rounded p-4 w-full"
           >
             <Link className="flex" href={`/game/${game.id}`}>
@@ -154,7 +165,7 @@ export default function Page() {
           </div>
         ))}
       </div>
-    </PageWrapper>
+    </>
   );
 }
 
