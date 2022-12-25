@@ -6,10 +6,22 @@ interface ButtonProps {
   disabled?: boolean;
   type?: "submit" | "button" | "reset" | undefined;
   color?: "blue" | "red" | "green" | "yellow" | "gray";
+  full?: boolean;
+  bold?: boolean;
+  padding?: string;
 }
 
 const Button = (props: ButtonProps) => {
-  const { onClick, children, disabled, color, type = "submit" } = props;
+  const {
+    onClick,
+    children,
+    disabled,
+    color,
+    type = "submit",
+    full = false,
+    bold = false,
+    padding = "px-4 py-2",
+  } = props;
 
   const style = useMemo(() => {
     switch (color) {
@@ -28,7 +40,9 @@ const Button = (props: ButtonProps) => {
     }
   }, [color]);
 
-  const styles = `inline-flex items-center justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium   focus:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 ${style}`;
+  const styles = `${full ? "w-full" : ""} ${
+    bold ? "font-extrabold" : "font-medium"
+  } ${padding} inline-flex items-center justify-center rounded-md border border-transparent text-sm focus:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 ${style}`;
   return (
     <button
       onClick={onClick}

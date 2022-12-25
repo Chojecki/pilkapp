@@ -1,37 +1,162 @@
+import Image from "next/image";
 import React from "react";
+import field from "../assets/field.jpg";
 import { Player } from "../domain/game/game";
 
 type SoccerFieldProps = {
-  players: Player[];
+  suggestedSquds: Player[][];
 };
 
-const FootballField: React.FC<SoccerFieldProps> = ({ players }) => {
+const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
   return (
-    <svg viewBox="0 0 120 120" className="h-64 w-full">
-      <rect x="10" y="10" width="100" height="100" fill="#1c9e1c" />
-      <rect x="10" y="10" width="100" height="20" fill="#fff" />
-      <rect x="10" y="90" width="100" height="20" fill="#fff" />
-      <rect x="10" y="30" width="20" height="60" fill="#fff" />
-      <rect x="90" y="30" width="20" height="60" fill="#fff" />
-      <circle cx="60" cy="60" r="20" fill="#fff" />
-      <circle cx="60" cy="60" r="6" fill="#1c9e1c" />
-    </svg>
+    <div className="relative tablet:w-[520px] tablet:h-[300px] laptop:w-[650px] laptop:h-[420px]">
+      <Image fill src={field} alt="Soccer field" />
+      <div
+        className=" absolute w-10 gap-y-8 laptop:gap-y-14 flex flex-col justify-center items-center"
+        style={{ top: 0, bottom: 0, left: "10%" }}
+      >
+        {suggestedSquds[0]
+          .filter((player) => player.role === "GK")
+          .map((player, index) => (
+            <div
+              className="flex flex-col justify-center items-center"
+              key={player.id}
+            >
+              <div className="  bg-pink-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
+              <p className="text-white text-center" style={{ fontSize: 11 }}>
+                {player.name}
+              </p>
+            </div>
+          ))}
+      </div>
+      <div
+        className=" absolute w-10 gap-y-8 laptop:gap-y-14 flex flex-col justify-center items-center"
+        style={{ top: 0, bottom: 0, left: "22%" }}
+      >
+        {suggestedSquds[0]
+          .filter((player) => player.role === "DF")
+          .map((player, index) => (
+            <div
+              className="flex flex-col justify-center items-center"
+              key={player.id}
+            >
+              <div className="  bg-pink-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
+              <p className="text-white text-center" style={{ fontSize: 11 }}>
+                {player.name}
+              </p>
+            </div>
+          ))}
+      </div>
+      <div
+        className=" absolute w-10 gap-y-8 laptop:gap-y-14 flex flex-col justify-center items-center"
+        style={{ top: 0, bottom: 0, left: "32%" }}
+      >
+        {suggestedSquds[0]
+          .filter((player) => player.role === "MF")
+          .map((player, index) => (
+            <div
+              className="flex flex-col justify-center items-center"
+              key={player.id}
+            >
+              <div className="  bg-pink-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
+              <p className="text-white text-center" style={{ fontSize: 11 }}>
+                {player.name}
+              </p>
+            </div>
+          ))}
+      </div>
+      <div
+        className=" absolute w-10 gap-y-8 laptop:gap-y-14 flex flex-col justify-center items-center"
+        style={{ top: 0, bottom: 0, left: "42%" }}
+      >
+        {suggestedSquds[0]
+          .filter((player) => player.role === "FW")
+          .map((player, index) => (
+            <div
+              className="flex flex-col justify-center items-center"
+              key={player.id}
+            >
+              <div className="  bg-pink-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
+              <p className="text-white text-center" style={{ fontSize: 11 }}>
+                {player.name}
+              </p>
+            </div>
+          ))}
+      </div>
+      <div
+        className=" absolute w-10 gap-y-8 laptop:gap-y-14 flex flex-col justify-center items-center"
+        style={{ top: 0, bottom: 0, left: "85%" }}
+      >
+        {suggestedSquds[1]
+          .filter((player) => player.role === "GK")
+          .map((player, index) => (
+            <div
+              className="flex flex-col justify-center items-center"
+              key={player.id}
+            >
+              <div className="  bg-blue-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
+              <p className="text-white text-center" style={{ fontSize: 11 }}>
+                {player.name}
+              </p>
+            </div>
+          ))}
+      </div>
+      <div
+        className=" absolute w-10 gap-y-8 laptop:gap-y-14 flex flex-col justify-center items-center"
+        style={{ top: 0, bottom: 0, left: "72%" }}
+      >
+        {suggestedSquds[1]
+          .filter((player) => player.role === "DF")
+          .map((player, index) => (
+            <div
+              className="flex flex-col justify-center items-center"
+              key={player.id}
+            >
+              <div className="  bg-blue-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
+              <p className="text-white text-center" style={{ fontSize: 11 }}>
+                {player.name}
+              </p>
+            </div>
+          ))}
+      </div>
+      <div
+        className=" absolute w-10 gap-y-8 laptop:gap-y-14 flex flex-col justify-center items-center"
+        style={{ top: 0, bottom: 0, left: "62%" }}
+      >
+        {suggestedSquds[1]
+          .filter((player) => player.role === "MF")
+          .map((player, index) => (
+            <div
+              className="flex flex-col justify-center items-center"
+              key={player.id}
+            >
+              <div className="  bg-blue-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
+              <p className="text-white text-center" style={{ fontSize: 11 }}>
+                {player.name}
+              </p>
+            </div>
+          ))}
+      </div>
+      <div
+        className=" absolute w-10 gap-y-8 laptop:gap-y-14 flex flex-col justify-center items-center"
+        style={{ top: 0, bottom: 0, left: "52%" }}
+      >
+        {suggestedSquds[1]
+          .filter((player) => player.role === "FW")
+          .map((player, index) => (
+            <div
+              className="flex flex-col justify-center items-center"
+              key={player.id}
+            >
+              <div className="  bg-blue-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
+              <p className="text-white text-center" style={{ fontSize: 11 }}>
+                {player.name}
+              </p>
+            </div>
+          ))}
+      </div>
+    </div>
   );
 };
-
-function getPosition(role: Player["role"]) {
-  switch (role) {
-    case "GK":
-      return "bottom-0 right-0";
-    case "DF":
-      return "bottom-0 left-0";
-    case "MF":
-      return "top-0 left-0";
-    case "FW":
-      return "top-0 right-0";
-    default:
-      return "";
-  }
-}
 
 export default FootballField;

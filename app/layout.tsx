@@ -1,5 +1,6 @@
 "use client";
 
+import { Montserrat } from "@next/font/google";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import PageWrapper from "../components/page-wrapper";
 import { AuthContextProvider } from "../context/auth-context";
@@ -17,6 +18,11 @@ const queryClient = new QueryClient({
   },
 });
 
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin", "latin-ext"],
+});
+
 export default function RootLayout({
   // Layouts must accept a children prop.
   // This will be populated with nested layouts or pages
@@ -25,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={montserrat.className}>
       <body>
         <QueryClientProvider client={queryClient}>
           <AuthContextProvider>

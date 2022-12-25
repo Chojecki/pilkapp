@@ -10,7 +10,9 @@ interface AppDialogProps {
   buttonLabel: string;
   title: string;
   full?: boolean;
+  fullWidth?: boolean;
   buttonColor?: "blue" | "red" | "green" | "yellow" | "gray";
+  buttonPadding?: string;
 }
 
 export default function AppDialog({
@@ -21,12 +23,25 @@ export default function AppDialog({
   buttonLabel,
   title,
   full = false,
+  fullWidth = false,
   buttonColor = "blue",
+  buttonPadding,
 }: AppDialogProps) {
   return (
     <>
-      <div className=" inset-0 flex items-center justify-center">
-        <Button color={buttonColor} type="button" onClick={openModal}>
+      <div
+        className={`${
+          full ? "w-full" : ""
+        } inset-0 flex items-center justify-center`}
+      >
+        <Button
+          padding={buttonPadding}
+          bold
+          full
+          color={buttonColor}
+          type="button"
+          onClick={openModal}
+        >
           {buttonLabel}
         </Button>
       </div>
@@ -58,7 +73,7 @@ export default function AppDialog({
               >
                 <Dialog.Panel
                   className={`w-full max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all ${
-                    full ? "min-w-full" : ""
+                    fullWidth ? "min-w-full" : ""
                   }`}
                 >
                   <Dialog.Title

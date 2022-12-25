@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "../../components/button";
-import PageWrapper from "../../components/page-wrapper";
 import { useAuth } from "../../context/auth-context";
 import { firebaseAuthRepository } from "../../infrastructure/auth/auth_facade";
 
@@ -37,23 +36,21 @@ export default function Page() {
   }, [router, user]);
 
   return (
-    <PageWrapper>
-      <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
-        <input
-          className="bg-gray-50 my-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
-          defaultValue=""
-          {...register("email", { required: true })}
-        />
+    <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
+      <input
+        className="bg-gray-50 my-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
+        defaultValue=""
+        {...register("email", { required: true })}
+      />
 
-        <input
-          className="bg-gray-50 my-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
-          {...register("password", { required: true })}
-        />
+      <input
+        className="bg-gray-50 my-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
+        {...register("password", { required: true })}
+      />
 
-        {errors.password && <span>This field is required</span>}
+      {errors.password && <span>This field is required</span>}
 
-        <Button>login</Button>
-      </form>
-    </PageWrapper>
+      <Button>login</Button>
+    </form>
   );
 }
