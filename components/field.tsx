@@ -28,8 +28,11 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
               className="flex flex-col justify-center items-center"
               key={player.id}
             >
-              <div className="  bg-pink-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
-              <p className="text-white text-center" style={{ fontSize: 11 }}>
+              <div className="  bg-blue-500 rounded-full w-4 h-4 laptop:h-6 shadow-2xl shadow-gray-500/50 laptop:w-6" />
+              <p
+                className="text-white font-bold text-center"
+                style={{ fontSize: 11 }}
+              >
                 {player.name}
               </p>
             </div>
@@ -46,8 +49,11 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
               className="flex flex-col justify-center items-center"
               key={player.id}
             >
-              <div className="  bg-pink-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
-              <p className="text-white text-center" style={{ fontSize: 11 }}>
+              <div className="  bg-blue-500 rounded-full w-4 h-4 laptop:h-6 shadow-2xl shadow-gray-500/50 laptop:w-6" />
+              <p
+                className="text-white font-bold text-center"
+                style={{ fontSize: 11 }}
+              >
                 {player.name}
               </p>
             </div>
@@ -64,8 +70,11 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
               className="flex flex-col justify-center items-center"
               key={player.id}
             >
-              <div className="  bg-pink-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
-              <p className="text-white text-center" style={{ fontSize: 11 }}>
+              <div className="  bg-blue-500 rounded-full w-4 h-4 laptop:h-6 shadow-2xl shadow-gray-500/50 laptop:w-6" />
+              <p
+                className="text-white font-bold text-center"
+                style={{ fontSize: 11 }}
+              >
                 {player.name}
               </p>
             </div>
@@ -82,8 +91,11 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
               className="flex flex-col justify-center items-center"
               key={player.id}
             >
-              <div className="  bg-pink-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
-              <p className="text-white text-center" style={{ fontSize: 11 }}>
+              <div className="  bg-blue-500 rounded-full w-4 h-4 laptop:h-6 shadow-2xl shadow-gray-500/50 laptop:w-6" />
+              <p
+                className="text-white font-bold text-center"
+                style={{ fontSize: 11 }}
+              >
                 {player.name}
               </p>
             </div>
@@ -100,8 +112,11 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
               className="flex flex-col justify-center items-center"
               key={player.id}
             >
-              <div className="  bg-blue-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
-              <p className="text-white text-center" style={{ fontSize: 11 }}>
+              <div className="  bg-fuchsia-300 rounded-full w-4 h-4 laptop:h-6 shadow-2xl shadow-gray-500/50 laptop:w-6" />
+              <p
+                className="text-white font-bold text-center"
+                style={{ fontSize: 11 }}
+              >
                 {player.name}
               </p>
             </div>
@@ -118,8 +133,11 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
               className="flex flex-col justify-center items-center"
               key={player.id}
             >
-              <div className="  bg-blue-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
-              <p className="text-white text-center" style={{ fontSize: 11 }}>
+              <div className="  bg-fuchsia-300 rounded-full w-4 h-4 laptop:h-6 shadow-2xl shadow-gray-500/50 laptop:w-6" />
+              <p
+                className="text-white font-bold text-center"
+                style={{ fontSize: 11 }}
+              >
                 {player.name}
               </p>
             </div>
@@ -136,8 +154,11 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
               className="flex flex-col justify-center items-center"
               key={player.id}
             >
-              <div className="  bg-blue-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
-              <p className="text-white text-center" style={{ fontSize: 11 }}>
+              <div className="  bg-fuchsia-300 rounded-full w-4 h-4 laptop:h-6 shadow-2xl shadow-gray-500/50 laptop:w-6" />
+              <p
+                className="text-white font-bold text-center"
+                style={{ fontSize: 11 }}
+              >
                 {player.name}
               </p>
             </div>
@@ -154,8 +175,11 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
               className="flex flex-col justify-center items-center"
               key={player.id}
             >
-              <div className="  bg-blue-400 rounded-full w-4 h-4 laptop:h-6 laptop:w-6" />
-              <p className="text-white text-center" style={{ fontSize: 11 }}>
+              <div className="  bg-fuchsia-300 rounded-full w-4 h-4 laptop:h-6 shadow-2xl shadow-gray-500/50 laptop:w-6" />
+              <p
+                className="text-white font-bold text-center"
+                style={{ fontSize: 11 }}
+              >
                 {player.name}
               </p>
             </div>

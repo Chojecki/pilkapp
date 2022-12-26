@@ -1,6 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import Button from "./button";
+import IconButton from "./icon-button";
 
 interface AppDialogProps {
   isOpen: boolean;
@@ -13,6 +14,8 @@ interface AppDialogProps {
   fullWidth?: boolean;
   buttonColor?: "blue" | "red" | "green" | "yellow" | "gray";
   buttonPadding?: string;
+  dark?: boolean;
+  closeOnTitle?: boolean;
 }
 
 export default function AppDialog({
@@ -26,6 +29,8 @@ export default function AppDialog({
   fullWidth = false,
   buttonColor = "blue",
   buttonPadding,
+  dark = false,
+  closeOnTitle = false,
 }: AppDialogProps) {
   return (
     <>
@@ -74,13 +79,39 @@ export default function AppDialog({
                 <Dialog.Panel
                   className={`w-full max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all ${
                     fullWidth ? "min-w-full" : ""
+                  } ${
+                    dark
+                      ? "bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700"
+                      : ""
                   }`}
                 >
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
+                    className="text-lg flex justify-between font-extrabold leading-6 text-gray-900"
                   >
                     {title}
+
+                    {closeOnTitle && (
+                      <IconButton
+                        onClick={closeModal}
+                        icon={
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-6 h-6"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        }
+                      />
+                    )}
                   </Dialog.Title>
                   <div className="mt-2">{children}</div>
                 </Dialog.Panel>

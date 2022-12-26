@@ -1,7 +1,6 @@
 import {
-  arrayRemove,
-  arrayUnion,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -62,13 +61,15 @@ export const firebaseGameRepo: IGameRepo = {
 
       // If the player is not in the game, add him
       if (!playerInGame) {
+        const updatedPlayer = {
+          ...player,
+          createdAt: Math.floor(Date.now() / 1000),
+        };
         await setDoc(
           doc(collection(database, "games", id, "participants"), player.id),
-          {
-            ...player,
-          }
+          updatedPlayer
         );
-        return player;
+        return updatedPlayer;
       }
 
       // If the player is in the game, return the player
@@ -80,10 +81,9 @@ export const firebaseGameRepo: IGameRepo = {
   },
   deletePlayer: async function (id: string, player: Player): Promise<void> {
     try {
-      await updateDoc(doc(gamesCollectionRef, id), {
-        participants: arrayRemove(player),
-        removedPlayers: arrayUnion(player),
-      });
+      await deleteDoc(
+        doc(collection(database, "games", id, "participants"), player.id)
+      );
     } catch (error) {
       console.error(error);
       throw error;
@@ -117,15 +117,29 @@ export const firebaseGameRepo: IGameRepo = {
     }
   },
   getParticipants: async function (id: string): Promise<Player[]> {
-    const docRef = collection(
-      database,
-      "games",
-      id,
-      "participants"
-    ).withConverter(playerCoverter);
+    const docRef = await query(
+      collection(database, "games", id, "participants").withConverter(
+        playerCoverter
+      ),
+      orderBy("createdAt", "asc")
+    );
     const docSnap = await getDocs(docRef);
     const docsData = docSnap.docs.map((doc) => doc.data());
 
     return docsData;
+  },
+  updatePlayer: async function (id: string, player: Player): Promise<Player> {
+    try {
+      await updateDoc(
+        doc(collection(database, "games", id, "participants"), player.id),
+        {
+          ...player,
+        }
+      );
+      return player;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   },
 };

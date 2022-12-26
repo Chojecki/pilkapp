@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "../context/auth-context";
+import Balancer from "react-wrap-balancer";
 import { Player } from "../domain/game/game";
 import Button from "./button";
 import AppDialog from "./dialog";
@@ -11,6 +11,9 @@ const PlayerCell = ({
   bench = false,
   onSwitchClick,
   isLoading,
+  canManage = false,
+  dark = false,
+  secondary = false,
 }: {
   player: Player;
   index: number;
@@ -18,8 +21,10 @@ const PlayerCell = ({
   onClick?: () => void;
   isLoading?: boolean;
   onSwitchClick?: (checked: boolean) => void;
+  canManage?: boolean;
+  dark?: boolean;
+  secondary?: boolean;
 }) => {
-  const { user } = useAuth();
   const [modalIsOpen, setIsOpen] = useState(false);
 
   function openModal() {
@@ -34,17 +39,21 @@ const PlayerCell = ({
     <div className="flex flex-row squad-list bg-transparent  border-b-2 border-sky-100 p-4 w-full">
       <div
         className={`flex items-center justify-center border-2 border-white flex-shrink-0 h-12 w-12 rounded-xl ${
-          bench ? "bg-rose-700" : "bg-blue-600"
+          bench ? "bg-rose-700" : secondary ? "bg-fuchsia-700" : "bg-blue-600"
         } text-white`}
       >
         <p className="font-bold">#{index}</p>
       </div>
       <div className="flex flex-col items-start justify-center flex-grow ml-4">
-        <div className="font-bold text-white text-lg">
+        <div
+          className={`font-bold ${
+            dark ? "text-stone-800" : "text-white"
+          } text-lg`}
+        >
           {player.name} <span>({player.role})</span>
         </div>
       </div>
-      {user.uid && onSwitchClick && (
+      {canManage && onSwitchClick && (
         <div className="flex justify-center items-center pr-2">
           <div className="form-control">
             <label className="cursor-pointer label flex">
@@ -86,22 +95,52 @@ const PlayerCell = ({
           </div>
         </div>
       )}
-      {user.uid && onClick && (
+      {onClick && (
         <AppDialog
           isOpen={modalIsOpen}
           openModal={openModal}
           closeModal={closeModal}
-          title="Czy na pewno chcesz usunąć gracza?"
+          closeOnTitle={!canManage}
+          title={
+            canManage
+              ? "Czy na pewno chcesz usunąć gracza?"
+              : "Skontaktuj się z organizatorem"
+          }
           buttonLabel="Usuń"
           buttonColor="red"
         >
-          <div className="flex py-4 flex-row space-x-4 justify-center">
-            <Button color="red" onClick={onClick}>
-              Usuń
-            </Button>
-            <Button color="gray" onClick={closeModal}>
-              Anuluj
-            </Button>
+          <div
+            className={`flex py-4 flex-row space-x-4 ${
+              canManage ? "justify-center" : ""
+            }`}
+          >
+            {canManage ? (
+              <>
+                <Button color="red" onClick={onClick}>
+                  Usuń
+                </Button>
+                <Button color="gray" onClick={closeModal}>
+                  Anuluj
+                </Button>
+              </>
+            ) : (
+              <div className="flex flex-col gap-4">
+                <p className="text-left">
+                  <Balancer>
+                    Tylko zalogowany użytkownik może sie usunać. Chodzi o to aby
+                    nie było bałaganu. Już niedługo będzie to możliwe, ale na tę
+                    chwilę, poroś oranizotora o usunuęcie.
+                  </Balancer>
+                </p>
+                <label className="block bg-gray-50 mb-2 text-sm font-medium text-gray-900 border p-2 rounded-md  ">
+                  Gdzie jest kontakt? <br />
+                  <span className="font-small text-xs text-gray-600">
+                    Jeżeli nie masz kontaktu z organizatorem, powinien on być
+                    widoczny w sekcji informacyjnej
+                  </span>
+                </label>
+              </div>
+            )}
           </div>
         </AppDialog>
       )}

@@ -9,6 +9,7 @@ import AppDialog from "../../../components/dialog";
 import FootballField from "../../../components/field";
 import PlayerCell from "../../../components/player-cell";
 import Stats from "../../../components/stats";
+import { useAuth } from "../../../context/auth-context";
 import { Game, Player } from "../../../domain/game/game";
 import { firebaseGameRepo } from "../../../infrastructure/game/game_repo";
 import {
@@ -30,11 +31,16 @@ interface Props {
 
 export default function GamePage({ params }: Props) {
   const [modalIsOpen, setIsOpen] = React.useState(false);
+  const [squadModalIsOpen, setSquadIsOpen] = React.useState(false);
   const id = params.id;
-  const { game, isLoading, isError, refetch } = useGetGame(id as string);
+  const { user } = useAuth();
+  const { game, isLoading, isError } = useGetGame(id as string);
   const { participants, isLoading: areParticipantsLoading } =
     useGetParticipants(id as string);
-  const { mutate, isLoading: isMutationLoading } = useUpdateParticipat();
+  const { mutate: addPlayer, isLoading: isAddLoading } = useUpdateGame();
+  const { mutate: updatePlayer, isLoading: isPlayerUpdateLoading } =
+    useUpdateParticipat();
+  const { mutate: deletePlayer } = useDeleteParticipat();
   const {
     register,
     handleSubmit,
@@ -42,6 +48,10 @@ export default function GamePage({ params }: Props) {
     reset,
     control,
   } = useForm<Input>();
+
+  const canManage = useMemo(() => {
+    return user.uid === game?.creator;
+  }, [user, game]);
 
   const onSubmit: SubmitHandler<Input> = async (data) => {
     // Check if user from data with the same name is already in the game
@@ -83,7 +93,7 @@ export default function GamePage({ params }: Props) {
       name: data.name,
       role,
     };
-    await mutate({ id: game.id, player });
+    await addPlayer({ id: game.id, player });
     closeModal();
     reset();
   };
@@ -95,11 +105,17 @@ export default function GamePage({ params }: Props) {
   const closeModal = () => {
     setIsOpen(false);
   };
+  const openSquadModal = () => {
+    setSquadIsOpen(true);
+  };
+
+  const closeSquadModal = () => {
+    setSquadIsOpen(false);
+  };
 
   const hanldePlayerDelete = async (player: Player) => {
     if (!game?.id) return;
-    await firebaseGameRepo.deletePlayer(game.id, player);
-    refetch();
+    await deletePlayer({ id: game.id, player });
   };
 
   const splitPlayers = useMemo(() => {
@@ -134,61 +150,104 @@ export default function GamePage({ params }: Props) {
             place={game.place}
             date={game.date}
             time={game.time ?? "20:30"}
+            creatorContact={game.creatorContact}
             numberOfPlayers={game.numberOfPlayers ?? 14}
-          />
-          <div className="flex px-5 justify-center space-x-4">
-            <AppDialog
-              isOpen={modalIsOpen}
-              openModal={openModal}
-              closeModal={closeModal}
-              title="Zapisz się"
-              buttonLabel="Zapisz się"
-              full
-              buttonPadding="px-4 py-3"
-            >
-              <div className="flex flex-col w-full h-full">
-                <form
-                  className="w-full flex flex-col justify-between h-full items-start"
-                  onSubmit={handleSubmit(onSubmit)}
-                >
-                  <label className="block mb-2 text-sm font-medium text-gray-900    ">
-                    Imię
-                  </label>
-                  <input
-                    className="bg-gray-50 mb-4 mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
-                    type="text"
-                    {...register("name", { required: true })}
-                    placeholder="Imię"
-                  />
-                  <label className="block bg-gray-50 mb-2 text-sm font-medium text-gray-900 border p-2 rounded-md  ">
-                    Gdzie wolisz grać ? (wybież z listy) <br />
-                    <span className="font-small text-xs text-gray-600">
-                      Jeżeli jest ci to obojętne, dostaniesz losową pozycje
-                      której jest akurat najmniej, tak aby było łatwo podzielić
-                      skład
-                    </span>
-                  </label>
-                  <AppListBox
-                    padding="py-2"
-                    control={control}
-                    items={[
-                      { value: "None", name: "Wyjebane" },
-                      { value: "GK", name: "Gruby na brame" },
-                      { value: "DF", name: "Obrona" },
-                      { value: "MF", name: "Pomoc" },
-                      { value: "FW", name: "Napad" },
-                    ]}
-                  />
-                  <div className="py-2 flex justify-between w-full">
-                    <Button color="gray" type="button" onClick={closeModal}>
-                      Zamknij
-                    </Button>
-                    <Button disabled={isSubmitting}>Zapisz się</Button>
-                  </div>
-                </form>
-              </div>
-            </AppDialog>
-          </div>
+          >
+            <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:space-x-4">
+              <AppDialog
+                isOpen={modalIsOpen}
+                closeOnTitle
+                openModal={openModal}
+                closeModal={closeModal}
+                title="Zapisz się"
+                buttonLabel="Zapisz się"
+                full
+                buttonPadding="px-4 py-3"
+              >
+                <div className="flex flex-col w-full h-full">
+                  <form
+                    className="w-full flex flex-col justify-between h-full items-start"
+                    onSubmit={handleSubmit(onSubmit)}
+                  >
+                    <label className="block mb-2 text-sm font-medium text-gray-900    ">
+                      Imię
+                    </label>
+                    <input
+                      className="bg-gray-50 mb-4 mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
+                      type="text"
+                      {...register("name", { required: true })}
+                      placeholder="Imię"
+                    />
+                    <label className="block bg-gray-50 mb-2 text-sm font-medium text-gray-900 border p-2 rounded-md  ">
+                      Gdzie wolisz grać ? (wybież z listy) <br />
+                      <span className="font-small text-xs text-gray-600">
+                        Jeżeli jest ci to obojętne, dostaniesz losową pozycje
+                        której jest akurat najmniej, tak aby było łatwo
+                        podzielić skład
+                      </span>
+                    </label>
+                    <AppListBox
+                      padding="py-2"
+                      control={control}
+                      items={[
+                        { value: "None", name: "Wyjebane" },
+                        { value: "GK", name: "Gruby na brame" },
+                        { value: "DF", name: "Obrona" },
+                        { value: "MF", name: "Pomoc" },
+                        { value: "FW", name: "Napad" },
+                      ]}
+                    />
+                    <div className="py-2 flex justify-between w-full">
+                      <Button color="gray" type="button" onClick={closeModal}>
+                        Zamknij
+                      </Button>
+                      <Button disabled={isSubmitting}>Zapisz się</Button>
+                    </div>
+                  </form>
+                </div>
+              </AppDialog>
+              <AppDialog
+                closeOnTitle
+                buttonColor="green"
+                isOpen={squadModalIsOpen}
+                openModal={openSquadModal}
+                closeModal={closeSquadModal}
+                title="Sugerowane składy"
+                buttonLabel="Poka składy"
+                full
+                buttonPadding="px-4 py-3"
+              >
+                <div className="">
+                  <p className="font-bold py-4">FC Ziomale</p>
+                  {suggestedSquds[0].map((player, index) => {
+                    return (
+                      <div key={player.id}>
+                        <PlayerCell dark player={player} index={index + 1} />
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="pb-4">
+                  <p className="font-bold pt-6 pb-4">Mordeczki United</p>
+                  {suggestedSquds[1].map((player, index) => {
+                    return (
+                      <div key={player.id}>
+                        <PlayerCell
+                          secondary
+                          dark
+                          player={player}
+                          index={index + 1}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+                <Button bold full onClick={closeSquadModal}>
+                  Ok
+                </Button>
+              </AppDialog>
+            </div>
+          </Stats>
         </div>
         <div className="col-span-2 md:overflow-y-scroll md:h-screen">
           <div>
@@ -210,14 +269,15 @@ export default function GamePage({ params }: Props) {
                         <PlayerCell
                           onClick={() => hanldePlayerDelete(participant)}
                           index={index + 1}
+                          canManage={canManage}
                           player={participant}
-                          isLoading={isMutationLoading}
-                          onSwitchClick={(checked) =>
-                            mutate({
+                          isLoading={isPlayerUpdateLoading}
+                          onSwitchClick={(checked) => {
+                            updatePlayer({
                               id: game.id,
                               player: { ...participant, didPay: checked },
-                            })
-                          }
+                            });
+                          }}
                         />
                       </div>
                     ))}
@@ -229,8 +289,10 @@ export default function GamePage({ params }: Props) {
                     <div className="w-full" key={participant.id}>
                       <PlayerCell
                         bench
+                        canManage={canManage}
                         index={index + 1}
                         player={participant}
+                        onClick={() => hanldePlayerDelete(participant)}
                       />
                     </div>
                   ))}
@@ -267,13 +329,43 @@ const useGetParticipants = (id: string) => {
   return { participants: data, isLoading, isError, refetch };
 };
 
-const useUpdateParticipat = () => {
+const useUpdateGame = () => {
   const queryClient = useQueryClient();
   const { mutate, isLoading, isError } = useMutation<
     Player,
     Error,
     { id: string; player: Player }
   >((update) => firebaseGameRepo.updateGame(update.id, update.player), {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
+  });
+
+  return { mutate, isLoading, isError };
+};
+
+const useUpdateParticipat = () => {
+  const queryClient = useQueryClient();
+  const { mutate, isLoading, isError } = useMutation<
+    Player,
+    Error,
+    { id: string; player: Player }
+  >((update) => firebaseGameRepo.updatePlayer(update.id, update.player), {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
+  });
+
+  return { mutate, isLoading, isError };
+};
+
+const useDeleteParticipat = () => {
+  const queryClient = useQueryClient();
+  const { mutate, isLoading, isError } = useMutation<
+    void,
+    Error,
+    { id: string; player: Player }
+  >((update) => firebaseGameRepo.deletePlayer(update.id, update.player), {
     onSuccess: () => {
       queryClient.invalidateQueries();
     },

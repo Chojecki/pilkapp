@@ -10,6 +10,7 @@ export type Game = {
   removedPlayers?: Player[];
   numberOfPlayers?: number;
   time?: string;
+  creatorContact?: string;
 };
 
 export type Player = {
@@ -17,4 +18,5 @@ export type Player = {
   name: string;
   role: string;
   didPay?: boolean;
+  createdAt?: number;
 };
