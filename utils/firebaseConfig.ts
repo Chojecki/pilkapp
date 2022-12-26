@@ -7,7 +7,7 @@ import {
   getFirestore,
   QueryDocumentSnapshot,
 } from "firebase/firestore";
-import { Game } from "../domain/game/game";
+import { Game, Player } from "../domain/game/game";
 // import { ServerData } from "~/domain/server_data/server_data";
 
 // Your web app's Firebase configuration
@@ -31,6 +31,16 @@ export const auth = getAuth();
 export const gamesCoverter = {
   toFirestore: (data: Game) => data,
   fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as Game,
+};
+
+export const playerCoverter = {
+  toFirestore: (data: Player) => data,
+  fromFirestore: (snap: QueryDocumentSnapshot) => {
+    return {
+      ...snap.data(),
+      id: snap.id,
+    } as Player;
+  },
 };
 
 export const gamesCollectionRef = collection(database, "games").withConverter(

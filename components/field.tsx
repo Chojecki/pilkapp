@@ -10,7 +10,13 @@ type SoccerFieldProps = {
 const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
   return (
     <div className="relative tablet:w-[520px] tablet:h-[300px] laptop:w-[650px] laptop:h-[420px]">
-      <Image fill src={field} alt="Soccer field" />
+      <Image
+        fill
+        src={field}
+        alt="Soccer field"
+        sizes={"(max-width: 1px) 650px, 420px"}
+        priority
+      />
       <div
         className=" absolute w-10 gap-y-8 laptop:gap-y-14 flex flex-col justify-center items-center"
         style={{ top: 0, bottom: 0, left: "10%" }}

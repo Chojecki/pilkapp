@@ -1,6 +1,7 @@
 import {
   arrayRemove,
   arrayUnion,
+  collection,
   doc,
   getDoc,
   getDocs,
@@ -12,7 +13,11 @@ import {
 } from "firebase/firestore";
 import { Game, Player } from "../../domain/game/game";
 import { IGameRepo } from "../../domain/game/i_game_repo";
-import { gamesCollectionRef } from "../../utils/firebaseConfig";
+import {
+  database,
+  gamesCollectionRef,
+  playerCoverter,
+} from "../../utils/firebaseConfig";
 
 export const firebaseGameRepo: IGameRepo = {
   getGames: async function (userId?: string): Promise<Game[]> {
@@ -51,17 +56,18 @@ export const firebaseGameRepo: IGameRepo = {
   updateGame: async function (id: string, player: Player): Promise<Player> {
     try {
       // Get a game
-      const game = await this.getGame(id);
+      const current = await this.getParticipants(id);
       // Check if the player is already in the game
-      const playerInGame = game.participants.find(
-        (p) => p.name === player.name
-      );
+      const playerInGame = current.find((p) => p.name === player.name);
 
       // If the player is not in the game, add him
       if (!playerInGame) {
-        await updateDoc(doc(gamesCollectionRef, id), {
-          participants: arrayUnion(player),
-        });
+        await setDoc(
+          doc(collection(database, "games", id, "participants"), player.id),
+          {
+            ...player,
+          }
+        );
         return player;
       }
 
@@ -109,5 +115,17 @@ export const firebaseGameRepo: IGameRepo = {
       console.error(error);
       throw error;
     }
+  },
+  getParticipants: async function (id: string): Promise<Player[]> {
+    const docRef = collection(
+      database,
+      "games",
+      id,
+      "participants"
+    ).withConverter(playerCoverter);
+    const docSnap = await getDocs(docRef);
+    const docsData = docSnap.docs.map((doc) => doc.data());
+
+    return docsData;
   },
 };

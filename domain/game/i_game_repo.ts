@@ -8,4 +8,5 @@ export type IGameRepo = {
   updateGame: (id: string, player: Player) => Promise<Player>;
   deletePlayer: (id: string, player: Player) => Promise<void>;
   deleteGame: (id: string) => Promise<void>;
+  getParticipants: (id: string) => Promise<Player[]>;
 };
