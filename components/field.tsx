@@ -14,7 +14,7 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
         fill
         src={field}
         alt="Soccer field"
-        sizes={"(max-width: 1px) 650px, 420px"}
+        sizes={"650px, 420px"}
         priority
       />
       <div
