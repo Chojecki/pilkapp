@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import Button from "../../../components/button";
 import AppDialog from "../../../components/dialog";
 import FootballField from "../../../components/field";
+import AppListBox from "../../../components/list-box";
 import PlayerCell from "../../../components/player-cell";
 import Stats from "../../../components/stats";
 import { useAuth } from "../../../context/auth-context";
@@ -16,7 +17,6 @@ import {
   assignPlayerToMostRareRole,
   suggestSquads,
 } from "../../../utils/squads";
-import AppListBox from "../components/list-box";
 
 export type Input = {
   name: string;
@@ -130,11 +130,11 @@ export default function GamePage({ params }: Props) {
 
   const suggestedSquds = suggestSquads(splitPlayers.mainSquad, game);
 
-  if (isLoading) {
+  if (isLoading || !participants) {
     return <div>Loading...</div>;
   }
 
-  if (isError || !game || !participants) {
+  if (isError || !game) {
     return <div>Error</div>;
   }
 
