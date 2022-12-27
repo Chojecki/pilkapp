@@ -140,14 +140,21 @@ export default function Page() {
         {games?.map((game, index) => (
           <div
             key={game.id}
-            onMouseEnter={async () =>
+            onMouseEnter={async () => {
               await queryClient.prefetchQuery({
                 queryKey: ["game", game.id],
                 queryFn: () =>
                   firebaseGameRepo.getGame(game.id).then((res) => res),
                 staleTime: 10 * 1000, // only prefetch if older than 10 seconds
-              })
-            }
+              });
+
+              await queryClient.prefetchQuery({
+                queryKey: ["participants", game.id],
+                queryFn: () =>
+                  firebaseGameRepo.getParticipants(game.id).then((res) => res),
+                staleTime: 10 * 1000, // only prefetch if older than 10 seconds
+              });
+            }}
             className="flex flex-row bg-white shadow-sm rounded p-4 w-full"
           >
             <Link className="flex" href={`/game/${game.id}`}>

@@ -1,9 +1,11 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Lottie from "lottie-react";
 import React, { useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
+import football from "../../../assets/football.json";
 import Button from "../../../components/button";
 import AppDialog from "../../../components/dialog";
 import FootballField from "../../../components/field";
@@ -35,8 +37,9 @@ export default function GamePage({ params }: Props) {
   const id = params.id;
   const { user } = useAuth();
   const { game, isLoading, isError } = useGetGame(id as string);
-  const { participants, isLoading: areParticipantsLoading } =
-    useGetParticipants(id as string);
+  const { participants, isError: isParticipantsError } = useGetParticipants(
+    id as string
+  );
   const { mutate: addPlayer, isLoading: isAddLoading } = useUpdateGame();
   const { mutate: updatePlayer, isLoading: isPlayerUpdateLoading } =
     useUpdateParticipat();
@@ -131,10 +134,16 @@ export default function GamePage({ params }: Props) {
   const suggestedSquds = suggestSquads(splitPlayers.mainSquad, game);
 
   if (isLoading || !participants) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <div className="w-[200px] h-[200px]">
+          <Lottie animationData={football} loop={true} />
+        </div>
+      </div>
+    );
   }
 
-  if (isError || !game) {
+  if (isError || !game || isParticipantsError) {
     return <div>Error</div>;
   }
 
