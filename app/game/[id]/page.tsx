@@ -1,11 +1,9 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Lottie from "lottie-react";
 import React, { useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
-import football from "../../../assets/football.json";
 import Button from "../../../components/button";
 import AppDialog from "../../../components/dialog";
 import FootballField from "../../../components/field";
@@ -136,9 +134,7 @@ export default function GamePage({ params }: Props) {
   if (isLoading || !participants) {
     return (
       <div className="flex justify-center items-center h-screen w-full">
-        <div className="w-[200px] h-[200px]">
-          <Lottie animationData={football} loop={true} />
-        </div>
+        <h3>Ładowanie...</h3>
       </div>
     );
   }
