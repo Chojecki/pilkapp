@@ -1,6 +1,5 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 import "firebase/auth";
 import { getAuth } from "firebase/auth";
 import {
@@ -28,23 +27,6 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const database = getFirestore(app);
 export const auth = getAuth();
-
-const appCheckKey = process.env.APP_CHECK ?? "";
-
-// const env = process.env.NODE_ENV;
-// if (env == "development" && typeof window != "undefined") {
-//   Object.assign(window, {
-//     FIREBASE_APPCHECK_DEBUG_TOKEN: process.env.NEXT_PUBLIC_APPCHECK_DEBUG_TOKEN,
-//   });
-// }
-
-initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider(appCheckKey),
-
-  // Optional argument. If true, the SDK automatically refreshes App Check
-  // tokens as needed.
-  isTokenAutoRefreshEnabled: true,
-});
 
 export const gamesCoverter = {
   toFirestore: (data: Game) => data,
