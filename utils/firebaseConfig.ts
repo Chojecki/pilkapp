@@ -31,9 +31,12 @@ export const auth = getAuth();
 
 const appCheckKey = process.env.APP_CHECK ?? "";
 
-Object.assign(window, {
-  FIREBASE_APPCHECK_DEBUG_TOKEN: process.env.NEXT_PUBLIC_APPCHECK_DEBUG_TOKENć,
-});
+const env = process.env.NODE_ENV;
+if (env == "development") {
+  Object.assign(window, {
+    FIREBASE_APPCHECK_DEBUG_TOKEN: process.env.NEXT_PUBLIC_APPCHECK_DEBUG_TOKEN,
+  });
+}
 
 initializeAppCheck(app, {
   provider: new ReCaptchaV3Provider(appCheckKey),
