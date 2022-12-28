@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import React, { useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
@@ -38,10 +38,10 @@ export default function GamePage({ params }: Props) {
   const { participants, isError: isParticipantsError } = useGetParticipants(
     id as string
   );
-  const { mutate: addPlayer, isLoading: isAddLoading } = useUpdateGame();
-  const { mutate: updatePlayer, isLoading: isPlayerUpdateLoading } =
-    useUpdateParticipat();
-  const { mutate: deletePlayer } = useDeleteParticipat();
+  // const { mutate: addPlayer, isLoading: isAddLoading } = useUpdateGame();
+  // const { mutate: updatePlayer, isLoading: isPlayerUpdateLoading } =
+  //   useUpdateParticipat();
+  // const { mutate: deletePlayer } = useDeleteParticipat();
   const {
     register,
     handleSubmit,
@@ -94,7 +94,7 @@ export default function GamePage({ params }: Props) {
       name: data.name,
       role,
     };
-    await addPlayer({ id: game.id, player });
+    // await addPlayer({ id: game.id, player });
     closeModal();
     reset();
   };
@@ -116,7 +116,7 @@ export default function GamePage({ params }: Props) {
 
   const hanldePlayerDelete = async (player: Player) => {
     if (!game?.id) return;
-    await deletePlayer({ id: game.id, player });
+    // await deletePlayer({ id: game.id, player });
   };
 
   const splitPlayers = useMemo(() => {
@@ -138,6 +138,8 @@ export default function GamePage({ params }: Props) {
       </div>
     );
   }
+
+  const isPlayerUpdateLoading = false;
 
   if (isError || !game || isParticipantsError) {
     return <div>Error</div>;
@@ -278,10 +280,10 @@ export default function GamePage({ params }: Props) {
                           player={participant}
                           isLoading={isPlayerUpdateLoading}
                           onSwitchClick={(checked) => {
-                            updatePlayer({
-                              id: game.id,
-                              player: { ...participant, didPay: checked },
-                            });
+                            // updatePlayer({
+                            //   id: game.id,
+                            //   player: { ...participant, didPay: checked },
+                            // });
                           }}
                         />
                       </div>
@@ -335,46 +337,49 @@ const useGetParticipants = (id: string) => {
 };
 
 const useUpdateGame = () => {
-  const queryClient = useQueryClient();
-  const { mutate, isLoading, isError } = useMutation<
-    Player,
-    Error,
-    { id: string; player: Player }
-  >((update) => firebaseGameRepo.updateGame(update.id, update.player), {
-    onSuccess: () => {
-      queryClient.invalidateQueries();
-    },
-  });
+  // const queryClient = useQueryClient();
+  // const { mutate, isLoading, isError } = useMutation<
+  //   Player,
+  //   Error,
+  //   { id: string; player: Player }
+  // >((update) => firebaseGameRepo.updateGame(update.id, update.player), {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries();
+  //   },
+  // });
 
-  return { mutate, isLoading, isError };
+  // return { mutate, isLoading, isError };
+  return { mutate: () => {} };
 };
 
 const useUpdateParticipat = () => {
-  const queryClient = useQueryClient();
-  const { mutate, isLoading, isError } = useMutation<
-    Player,
-    Error,
-    { id: string; player: Player }
-  >((update) => firebaseGameRepo.updatePlayer(update.id, update.player), {
-    onSuccess: () => {
-      queryClient.invalidateQueries();
-    },
-  });
+  // const queryClient = useQueryClient();
+  // const { mutate, isLoading, isError } = useMutation<
+  //   Player,
+  //   Error,
+  //   { id: string; player: Player }
+  // >((update) => firebaseGameRepo.updatePlayer(update.id, update.player), {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries();
+  //   },
+  // });
 
-  return { mutate, isLoading, isError };
+  // return { mutate, isLoading, isError };
+  return { mutate: () => {} };
 };
 
 const useDeleteParticipat = () => {
-  const queryClient = useQueryClient();
-  const { mutate, isLoading, isError } = useMutation<
-    void,
-    Error,
-    { id: string; player: Player }
-  >((update) => firebaseGameRepo.deletePlayer(update.id, update.player), {
-    onSuccess: () => {
-      queryClient.invalidateQueries();
-    },
-  });
+  // const queryClient = useQueryClient();
+  // const { mutate, isLoading, isError } = useMutation<
+  //   void,
+  //   Error,
+  //   { id: string; player: Player }
+  // >((update) => firebaseGameRepo.deletePlayer(update.id, update.player), {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries();
+  //   },
+  // });
 
-  return { mutate, isLoading, isError };
+  // return { mutate, isLoading, isError };
+  return { mutate: () => {} };
 };
