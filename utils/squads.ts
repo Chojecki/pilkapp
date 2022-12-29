@@ -1,5 +1,15 @@
 import { Game, Player } from "../domain/game/game";
 
+export const splitPlayers = (players: Player[], game: Game) => {
+  // First game.numberOfPlayers players
+  const mainSquad = players?.slice(0, game?.numberOfPlayers ?? 14) ?? [];
+
+  // Players on the bench
+  const bench = players?.slice(game?.numberOfPlayers ?? 14) ?? [];
+
+  return { mainSquad, bench };
+};
+
 export const suggestSquads = (mainSquad: Player[], game?: Game) => {
   // Get all players with the same role
   const goalkeepers = mainSquad.filter((player) => player.role === "GK");

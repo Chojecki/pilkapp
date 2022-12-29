@@ -1,3 +1,4 @@
+import Link from "next/link";
 import "server-only";
 
 import { createClient } from "../../utils/supabase-server";
@@ -10,7 +11,15 @@ export const revalidate = 0;
 export default async function Page() {
   const supabase = createClient();
 
-  const { data } = await supabase.from("games").select("*,players ( * ) ");
+  const { data } = await supabase.from("games").select("*");
 
-  return <pre>{JSON.stringify({ data }, null, 2)}</pre>;
+  return (
+    <div>
+      {data?.map((game) => (
+        <div key={game.id}>
+          <Link href={`/game/${game.id}`}>{game.name}</Link>
+        </div>
+      ))}
+    </div>
+  );
 }

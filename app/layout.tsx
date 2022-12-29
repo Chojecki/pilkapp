@@ -6,10 +6,10 @@ import PageWrapper from "../components/page-wrapper";
 import { createClient } from "../utils/supabase-server";
 
 import type { SupabaseClient } from "@supabase/auth-helpers-nextjs";
-import type { Database } from "../db_types";
 
 import SupabaseListener from "../components/supabase-listener";
 import SupabaseProvider from "../components/supabase-provider";
+import { Database } from "../domain/supabase";
 import "../styles/globals.css";
 
 export type TypedSupabaseClient = SupabaseClient<Database>;

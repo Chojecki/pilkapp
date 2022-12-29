@@ -1,12 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import Button from "../components/button";
-import { useAuth } from "../context/auth-context";
 import { Game } from "../domain/game/game";
+import { createBrowserClient } from "../utils/supabase-browser";
+import { useSupabase } from "./supabase-provider";
 
 type GameCrateInputs = {
   name: string;
@@ -19,10 +19,9 @@ type GameCrateInputs = {
 };
 
 const CrateGameForm = () => {
-  const { user } = useAuth();
   const router = useRouter();
-
-  const games: Game[] = [];
+  const supabase = createBrowserClient();
+  const { session } = useSupabase();
 
   const {
     register,
@@ -36,6 +35,9 @@ const CrateGameForm = () => {
     const { name, description, date, price, place, numberOfPlayers, time } =
       data;
     const id = uuidv4();
+    if (!session?.user.id) {
+      return;
+    }
     const game: Game = {
       id,
       name,
@@ -43,18 +45,22 @@ const CrateGameForm = () => {
       date,
       price,
       place,
-      creator: user.uid,
-      participants: [],
+      creator: session.user.id,
       numberOfPlayers: numberOfPlayers || 14,
       time: time || "20:30",
+      creatorContact: session.user.id,
     };
     try {
-      //   await setDoc(doc(gamesCollectionRef, game.id), { ...game });
+      const data = await supabase.from("games").insert([{ ...game }]);
+
+      router.refresh();
+
+      if (data) {
+        router.push(`/game/${id}`);
+      }
     } catch (e) {
       console.log(e);
     }
-
-    return router.push(`/game/${id}`);
   };
 
   return (
@@ -112,30 +118,6 @@ const CrateGameForm = () => {
 
         <Button disabled={!isValid || isSubmitting}>Stwórz</Button>
       </form>
-      <div className="py-4">
-        <h2 className="mb-6 md:text-3xl lg:text-3xl">Twoje Gry:</h2>
-        {/* {isLoading && <p>Loading...</p>}
-        {isError && <p>Error</p>} */}
-        {games?.map((game, index) => (
-          <div
-            key={game.id}
-            className="flex flex-row bg-white shadow-sm rounded p-4 w-full"
-          >
-            <Link className="flex" href={`/game/${game.id}`}>
-              <div
-                className={`flex items-center justify-center flex-shrink-0 h-12 w-12 rounded-xl bg-green-400 text-cyan-900`}
-              >
-                <p className="font-bold">#{index + 1}</p>
-              </div>
-              <div className="flex flex-col items-start justify-center flex-grow ml-4">
-                <div className="font-bold text-lg">
-                  {game.name} <span>({game.date})</span>
-                </div>
-              </div>
-            </Link>
-          </div>
-        ))}
-      </div>
     </>
   );
 };

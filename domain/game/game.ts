@@ -5,9 +5,8 @@ export type Game = {
   date: string;
   price: number;
   place: string;
-  participants: Player[];
+  players?: Player[];
   creator?: string;
-  removedPlayers?: Player[];
   numberOfPlayers?: number;
   time?: string;
   creatorContact?: string;

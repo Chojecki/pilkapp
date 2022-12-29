@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import Balancer from "react-wrap-balancer";
 import { Player } from "../domain/game/game";
