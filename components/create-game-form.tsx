@@ -16,6 +16,7 @@ type GameCrateInputs = {
   place: string;
   numberOfPlayers?: number;
   time?: string;
+  creatorContact?: string;
 };
 
 const CrateGameForm = () => {
@@ -48,7 +49,7 @@ const CrateGameForm = () => {
       creator: session.user.id,
       numberOfPlayers: numberOfPlayers || 14,
       time: time || "20:30",
-      creatorContact: session.user.id,
+      creatorContact: data.creatorContact,
     };
     try {
       const data = await supabase.from("games").insert([{ ...game }]);
@@ -64,7 +65,10 @@ const CrateGameForm = () => {
   };
 
   return (
-    <>
+    <div className="p-4">
+      <h2 className="font-extrabold text-transparent text-4xl bg-clip-text bg-gradient-to-r from-fuchsia-900 to-fuchsia-600  py-4">
+        Stwórz nową grę
+      </h2>
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         <input
           className="bg-gray-50 my-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
@@ -114,11 +118,19 @@ const CrateGameForm = () => {
           placeholder="Miejsce/Adres"
         />
 
+        <input
+          className="bg-gray-50 my-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
+          {...register("creatorContact", { required: true })}
+          placeholder="Kontakt do organizatora"
+        />
+
         {errors.date && <p className="text-red-500">To pole jest wymagane</p>}
 
-        <Button disabled={!isValid || isSubmitting}>Stwórz</Button>
+        <Button full bold disabled={!isValid || isSubmitting}>
+          Stwórz
+        </Button>
       </form>
-    </>
+    </div>
   );
 };
 

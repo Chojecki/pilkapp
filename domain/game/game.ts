@@ -18,4 +18,6 @@ export type Player = {
   role: string;
   didPay?: boolean;
   createdAt?: number;
+  gameId: string;
+  userId?: string;
 };

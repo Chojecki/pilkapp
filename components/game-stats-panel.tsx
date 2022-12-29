@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { Game, Player } from "../domain/game/game";
 import { assignPlayerToMostRareRole, suggestSquads } from "../utils/squads";
@@ -12,27 +12,36 @@ import AppDialog from "./dialog";
 import AppListBox from "./list-box";
 import PlayerCell from "./player-cell";
 import Stats from "./stats";
+import { useSupabase } from "./supabase-provider";
+import AppSwitch from "./switch";
 
 export type Input = {
   name: string;
   role: { value: string; name: string };
+  isAnonymous: boolean;
 };
 
 export default function GameStatsPanel({
   game,
   players,
+  userData,
 }: {
   game: Game;
   players: Player[];
+  userData: {
+    full_name: string | null;
+  } | null;
 }) {
   const router = useRouter();
   const supabase = createBrowserClient();
+  const { session } = useSupabase();
   const [modalIsOpen, setIsOpen] = useState(false);
   const [squadModalIsOpen, setSquadIsOpen] = useState(false);
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isSubmitting },
     control,
   } = useForm<Input>();
@@ -47,13 +56,20 @@ export default function GameStatsPanel({
     return { mainSquad, bench };
   }, [game?.numberOfPlayers, players]);
 
+  const isUserIdInTheGame = useMemo(() => {
+    return players?.some(
+      (participant) =>
+        session?.user?.id && participant.userId === session.user.id
+    );
+  }, [players, session?.user.id]);
+
   const onSubmit: SubmitHandler<Input> = async (data) => {
     // Check if user from data with the same name is already in the game
-    const isUserInGame = players?.some(
+    const isUserNameInTheGame = players?.some(
       (participant) => participant.name === data.name
     );
 
-    if (isUserInGame) {
+    if (isUserNameInTheGame) {
       alert("Jesteś już w grze albo ktoś podpisał sie tak samo jak ty");
       return;
     }
@@ -81,16 +97,20 @@ export default function GameStatsPanel({
       }
     }
 
+    const userId = data.isAnonymous ? undefined : session?.user?.id;
+
     if (!game?.id) return;
-    const player = {
+    const player: Player = {
       id: uuidv4(),
       name: data.name,
       role,
       gameId: game.id,
+      userId,
     };
     await supabase.from("players").insert([player]);
     router.refresh();
     closeModal();
+    reset();
   };
 
   const openModal = () => {
@@ -147,6 +167,7 @@ export default function GameStatsPanel({
                   type="text"
                   {...register("name", { required: true })}
                   placeholder="Imię"
+                  defaultValue={userData?.full_name ?? ""}
                 />
                 <label className="block bg-gray-50 mb-2 text-sm font-medium text-gray-900 border p-2 rounded-md  ">
                   Gdzie wolisz grać ? (wybież z listy) <br />
@@ -166,6 +187,47 @@ export default function GameStatsPanel({
                     { value: "FW", name: "Napad" },
                   ]}
                 />
+                <div className="flex gap-2 py-4 items-center w-full justify-between">
+                  {isUserIdInTheGame ? (
+                    <p className="block mb-2 text-sm font-medium text-gray-900">
+                      Jesteś już zapisany jako{" "}
+                      <span className="font-bold text-cyan-700">
+                        {userData?.full_name ?? ""}
+                      </span>
+                      . Możesz dopisać innego gracza podając jego imię, będzie
+                      on zapisany anonimowo.
+                    </p>
+                  ) : session?.user ? (
+                    <>
+                      <div className="flex flex-col">
+                        <label className="block mb-2 text-sm font-medium text-gray-900">
+                          Czy chcesz się zapisać anonimowo ?
+                        </label>
+                        <p className="text-gray-700 text-xs">
+                          Jesteś zalogowany jako{" "}
+                          <span className="font-bold text-cyan-700">
+                            {userData?.full_name ?? ""}
+                          </span>{" "}
+                          ale możesz zapisać się anonimowo. Jeżeli to zrobisz,
+                          ten mecz nie będzie widoczny w twoim profilu.
+                        </p>
+                      </div>
+                      <Controller
+                        name="isAnonymous"
+                        control={control}
+                        render={({ field }) => (
+                          <AppSwitch
+                            {...field}
+                            disabled={isUserIdInTheGame}
+                            srOnlyLabel="Zapisuje się anonimowo"
+                            checked={isUserIdInTheGame ? true : field.value}
+                            onChange={(e) => field.onChange(e)}
+                          />
+                        )}
+                      />
+                    </>
+                  ) : null}
+                </div>
                 <div className="py-2 flex justify-between w-full">
                   <Button color="gray" type="button" onClick={closeModal}>
                     Zamknij

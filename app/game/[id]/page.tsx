@@ -23,7 +23,17 @@ export default async function GamePage({ params }: Props) {
   const { data: game, error } = await supabase
     .from("games")
     .select("*, players(*)")
+    .order("created_at", {
+      foreignTable: "players",
+      ascending: true,
+    })
     .eq("id", id)
+    .single();
+
+  const { data: userData } = await supabase
+    .from("profiles")
+    .select("full_name")
+    .eq("id", (await supabase.auth.getSession()).data?.session?.user.id)
     .single();
 
   const players = game?.players ?? [];
@@ -36,7 +46,11 @@ export default async function GamePage({ params }: Props) {
   return (
     <div className="h-screen md:fixed w-full">
       <div className="grid grid-cols-1 md:grid-cols-3">
-        <GameStatsPanel game={game as Game} players={players as Player[]} />
+        <GameStatsPanel
+          game={game as Game}
+          players={players as Player[]}
+          userData={userData}
+        />
         <div className="col-span-2 md:overflow-y-scroll md:h-screen">
           <div>
             <div className="flex flex-col w-full justify-center items-center">

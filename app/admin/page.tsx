@@ -1,5 +1,6 @@
 import Link from "next/link";
 import "server-only";
+import ItemCard from "../../components/item-card";
 
 import { createClient } from "../../utils/supabase-server";
 
@@ -14,10 +15,18 @@ export default async function Page() {
   const { data } = await supabase.from("games").select("*");
 
   return (
-    <div>
+    <div className="flex flex-col gap-3 p-4">
+      <h2 className="font-extrabold text-transparent text-4xl bg-clip-text bg-gradient-to-r from-sky-900 to-sky-600  py-4">
+        Twoje gry:
+      </h2>
       {data?.map((game) => (
         <div key={game.id}>
-          <Link href={`/game/${game.id}`}>{game.name}</Link>
+          <Link href={`/game/${game.id}`}>
+            <ItemCard
+              title={game.date ?? ""}
+              boldTitle={game.name ?? "Bład wczytywania nazwy"}
+            />
+          </Link>
         </div>
       ))}
     </div>

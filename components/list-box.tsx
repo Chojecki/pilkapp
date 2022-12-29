@@ -4,7 +4,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { Fragment } from "react";
 import { Control, Controller } from "react-hook-form";
-import { Input } from "../app/game/[id]/page";
+import { Input } from "./game-stats-panel";
 
 interface AppListBoxProps {
   items: {

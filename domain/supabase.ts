@@ -58,6 +58,7 @@ export interface Database {
           id: string
           didPay: boolean | null
           gameId: string | null
+          userId: string | null
         }
         Insert: {
           created_at?: string | null
@@ -66,6 +67,7 @@ export interface Database {
           id?: string
           didPay?: boolean | null
           gameId?: string | null
+          userId?: string | null
         }
         Update: {
           created_at?: string | null
@@ -74,6 +76,7 @@ export interface Database {
           id?: string
           didPay?: boolean | null
           gameId?: string | null
+          userId?: string | null
         }
       }
       profiles: {
