@@ -14,17 +14,6 @@ import "../styles/globals.css";
 
 export type TypedSupabaseClient = SupabaseClient<Database>;
 
-// const queryClient = new QueryClient({
-//   defaultOptions: {
-//     queries: {
-//       refetchOnWindowFocus: true,
-//       refetchOnMount: true,
-//       refetchOnReconnect: true,
-//       refetchInterval: false,
-//     },
-//   },
-// });
-
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin", "latin-ext"],
