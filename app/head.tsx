@@ -19,7 +19,7 @@ export default function Head() {
         property="og:image"
         content="https://pilkapp.vercel.app/_next/image?url=/_next/static/media/logo.8cafd7f8.png&w=2048&q=75"
       />
-      <meta property="og:url" content="https://pilkapp.pl" />
+      <meta property="og:url" content="https://www.pilkapp.pl" />
       <meta property="og:type" content="website" />
     </>
   );
