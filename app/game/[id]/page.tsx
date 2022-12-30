@@ -1,6 +1,5 @@
 import "server-only";
 
-import { NextSeo } from "next-seo";
 // do not cache this page
 export const revalidate = 0;
 
@@ -45,56 +44,28 @@ export default async function GamePage({ params }: Props) {
   if (!game || !players || error) return <div>Błąd meczu :/</div>;
 
   return (
-    <>
-      <NextSeo
-        useAppDir={true}
-        title="PiłkApp"
-        description="Appka do umawiania się na mecze"
-        openGraph={{
-          url: "https://www.pilkapp.pl",
-          title: "PiłkaApp",
-          description: "Appka do umawiania się na mecze",
-          images: [
-            {
-              url: "https://sitbofqhkzbwjpbcmnwp.supabase.co/storage/v1/object/public/images/logo.png",
-              width: 800,
-              height: 600,
-              alt: "logo",
-              type: "image/png",
-            },
-          ],
-          siteName: "PiłkApp",
-        }}
-        twitter={{
-          handle: "@handle",
-          site: "@site",
-          cardType: "summary_large_image",
-        }}
-      />
-
-      <div className="h-screen md:fixed w-full">
-        <div className="grid grid-cols-1 md:grid-cols-3">
-          <GameStatsPanel
-            game={game as Game}
-            players={players as Player[]}
-            userData={userData}
-          />
-          <div className="col-span-2 md:overflow-y-scroll md:h-screen">
-            <div className="flex flex-col w-full justify-center items-center">
-              <div className="w-full flex items-center justify-center bojo relative">
-                <div className="absolute top-0 bottom-0 left-0 right-0" />
-                <div className=" m-4 hidden md:block shadow-2 xl">
-                  <FootballField suggestedSquds={suggestedSquds} />
-                </div>
+    <div className="h-screen md:fixed w-full">
+      <div className="grid grid-cols-1 md:grid-cols-3">
+        <GameStatsPanel
+          game={game as Game}
+          players={players as Player[]}
+          userData={userData}
+        />
+        <div className="col-span-2 md:overflow-y-scroll md:h-screen">
+          <div className="flex flex-col w-full justify-center items-center">
+            <div className="w-full flex items-center justify-center bojo relative">
+              <div className="absolute top-0 bottom-0 left-0 right-0" />
+              <div className=" m-4 hidden md:block shadow-2 xl">
+                <FootballField suggestedSquds={suggestedSquds} />
               </div>
-              <GamePlayersList
-                splitedPlayers={splitedPlayers}
-                gameCreator={game.creator}
-              />
             </div>
+            <GamePlayersList
+              splitedPlayers={splitedPlayers}
+              gameCreator={game.creator}
+            />
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
