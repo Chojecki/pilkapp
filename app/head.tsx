@@ -14,7 +14,7 @@ export default function Head() {
           description: "Appka do umawiania się na mecze",
           images: [
             {
-              url: "https://pilkapp.vercel.app/_next/image?url=/_next/static/media/logo.8cafd7f8.png&w=2048&q=75",
+              url: "https://sitbofqhkzbwjpbcmnwp.supabase.co/storage/v1/object/public/images/logo.png",
               width: 800,
               height: 600,
               alt: "Og Image Alt",
