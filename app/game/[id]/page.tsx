@@ -41,7 +41,7 @@ export default async function GamePage({ params }: Props) {
   const splitedPlayers = splitPlayers(players as Player[], game as Game);
   const suggestedSquds = suggestSquads(splitedPlayers.mainSquad, game as Game);
 
-  if (!game || !players || error) return <div>Error</div>;
+  if (!game || !players || error) return <div>Błąd meczu :/</div>;
 
   return (
     <div className="h-screen md:fixed w-full">
@@ -52,19 +52,17 @@ export default async function GamePage({ params }: Props) {
           userData={userData}
         />
         <div className="col-span-2 md:overflow-y-scroll md:h-screen">
-          <div>
-            <div className="flex flex-col w-full justify-center items-center">
-              <div className="w-full flex items-center justify-center bojo relative">
-                <div className="absolute top-0 bottom-0 left-0 right-0" />
-                <div className=" m-4 hidden md:block shadow-2 xl">
-                  <FootballField suggestedSquds={suggestedSquds} />
-                </div>
+          <div className="flex h-full flex-col w-full justify-center items-center">
+            <div className="w-full flex items-center justify-center bojo relative">
+              <div className="absolute top-0 bottom-0 left-0 right-0" />
+              <div className=" m-4 hidden md:block shadow-2 xl">
+                <FootballField suggestedSquds={suggestedSquds} />
               </div>
-              <GamePlayersList
-                splitedPlayers={splitedPlayers}
-                gameCreator={game.creator}
-              />
             </div>
+            <GamePlayersList
+              splitedPlayers={splitedPlayers}
+              gameCreator={game.creator}
+            />
           </div>
         </div>
       </div>

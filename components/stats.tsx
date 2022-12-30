@@ -1,4 +1,6 @@
+import dayjs from "dayjs";
 import Balancer from "react-wrap-balancer";
+import Button from "./button";
 import ItemCard from "./item-card";
 
 interface StatsProps {
@@ -12,6 +14,7 @@ interface StatsProps {
   time: string;
   creatorContact?: string;
   children?: React.ReactNode;
+  deleteGame?: () => void;
 }
 
 const Stats = ({
@@ -25,6 +28,7 @@ const Stats = ({
   time,
   creatorContact,
   children,
+  deleteGame,
 }: StatsProps) => {
   return (
     <div className="p-4 w-full flex flex-col gap-4">
@@ -63,7 +67,7 @@ const Stats = ({
 
       <ItemCard
         title="Termin"
-        boldTitle={`${date} ${time}`}
+        boldTitle={`${dayjs(date).format("DD.MM.YYYY")} ${time}`}
         icon={
           <svg
             className="w-6 h-6"
@@ -144,6 +148,11 @@ const Stats = ({
           }
         />
       )}
+      {deleteGame ? (
+        <Button full bold onClick={deleteGame} color="red">
+          Usuń mecz
+        </Button>
+      ) : null}
     </div>
   );
 };

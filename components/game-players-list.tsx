@@ -88,7 +88,7 @@ export default function GamePlayersList({
           ))}
         </div>
       ) : (
-        <div className="h-full p-4 w-full bg-gradient-to-r from-sky-900 via-sky-800 to-sky-800 ...">
+        <div className="h-full p-4 flex items-center justify-center w-full bg-gradient-to-r from-sky-900 via-sky-800 to-sky-800 ...">
           <p className="text-white text-center text-2xl font-extrabold">
             Dodaj pierwszego gracza, aby wyświetlić listę ...
           </p>

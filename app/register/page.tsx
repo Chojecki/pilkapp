@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import Balancer from "react-wrap-balancer";
 import logo from "../../assets/logo.png";
 import Button from "../../components/button";
 import { useSupabase } from "../../components/supabase-provider";
@@ -18,16 +19,25 @@ export default function Page() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<Inputs>({ mode: "onChange" });
 
   const { supabase, session } = useSupabase();
   const [loading, setLoading] = useState(false);
 
-  const handleEmailLogin = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
+  const handleEmailRegister = async (
+    email: string,
+    password: string,
+    username: string
+  ) => {
+    const { error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          full_name: username,
+        },
+      },
     });
 
     if (error) {
@@ -42,8 +52,9 @@ export default function Page() {
   }, [session]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    await handleEmailLogin(data.email, data.password);
     setLoading(true);
+    await handleEmailRegister(data.email, data.password, data.username);
+
     window.location.reload();
   };
 
@@ -61,11 +72,19 @@ export default function Page() {
               />
             </div>
 
-            <div className="w-full flex flex-col gap-5 lg:w-1/2 bg-white p-5 rounded-lg lg:rounded-l-none">
-              <div className="px-8 mb-4 text-center">
-                <h3 className="pt-4 mb-2 text-2xl">Zaloguj się</h3>
+            <div className="w-full lg:w-1/2 flex flex-col gap-4 bg-white p-5 rounded-lg lg:rounded-l-none">
+              <div className="px-1   text-center">
+                <h3 className="pt-4 mb-2 text-2xl">Zarejestruj się</h3>
+                <p className=" text-sm text-gray-700">
+                  <Balancer>
+                    Nie muisz posiadać konta, aby korzystać z aplikacji i
+                    zapisywać się na mecze. Jednak jeśli chcesz mieć dostęp
+                    tworzenia własnych meczy oraz swojego konta w którym
+                    będziesz mógł analizować swoją grę, musić być zalogowany.
+                  </Balancer>
+                </p>
               </div>
-              <form className="w-full " onSubmit={handleSubmit(onSubmit)}>
+              <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
                 <input
                   className="bg-gray-50 my-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
                   placeholder="Email"
@@ -75,20 +94,26 @@ export default function Page() {
                 <input
                   className="bg-gray-50 my-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
                   {...register("password", { required: true })}
-                  placeholder="hasło"
+                  placeholder="Hasło"
                 />
 
-                <Button full bold>
-                  {isSubmitting || loading ? "Logowanie ..." : "Zaloguj się"}
+                <input
+                  className="bg-gray-50 my-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
+                  {...register("username", { required: true })}
+                  placeholder="Nazwa użytkownika"
+                />
+
+                {errors.password && <span>This field is required</span>}
+
+                <Button disabled={!isValid || isSubmitting} full bold>
+                  {loading ? "Ładowanie ..." : "Zarejestruj"}
                 </Button>
               </form>
-              <Link className="text-sm" href="/register">
-                Nie masz konta?{" "}
-                <span className="text-blue-600 font-bold underline hover:cursor-pointer">
-                  Tutaj je stworzysz
-                </span>{" "}
-                Pamiętaj, że możesz używać zapisywać się na mecze bez logowania.
-                Potrzebujesz tylko linku do meczu od organizotora
+              <Link className="text-sm" href="/login">
+                Masz konto?
+                <span className="text-blue-600 mx-1 font-bold underline hover:cursor-pointer">
+                  Tutaj się zalogujesz
+                </span>
               </Link>
             </div>
           </div>

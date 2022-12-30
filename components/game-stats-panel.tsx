@@ -36,6 +36,7 @@ export default function GameStatsPanel({
   const supabase = createBrowserClient();
   const { session } = useSupabase();
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalRemoveIsOpen, setRemoveIsOpen] = useState(false);
   const [squadModalIsOpen, setSquadIsOpen] = useState(false);
 
   const {
@@ -97,7 +98,8 @@ export default function GameStatsPanel({
       }
     }
 
-    const userId = data.isAnonymous ? undefined : session?.user?.id;
+    const userId =
+      data.isAnonymous || isUserIdInTheGame ? undefined : session?.user?.id;
 
     if (!game?.id) return;
     const player: Player = {
@@ -128,7 +130,48 @@ export default function GameStatsPanel({
     setSquadIsOpen(false);
   };
 
+  const openRemoveModal = () => {
+    setRemoveIsOpen(true);
+  };
+
+  const closeRemoveModal = () => {
+    setRemoveIsOpen(false);
+  };
+
+  const handleDeleteGame = async () => {
+    if (!game?.id) return;
+
+    const playersWithoutUserId = players.filter((player) => !player.userId);
+    const playersWithUserId = players.filter((player) => player.userId);
+
+    // Update players with userId to have gameId = null
+    await supabase
+      .from("players")
+      .update({ gameId: null })
+      .in(
+        "id",
+        playersWithUserId.map((player) => player.id)
+      );
+
+    // Delete players without userId
+    await supabase
+      .from("players")
+      .delete()
+      .in(
+        "id",
+        playersWithoutUserId.map((player) => player.id)
+      );
+
+    // Delete game
+    await supabase.from("games").delete().eq("id", game.id);
+
+    router.refresh();
+    router.push("/admin");
+  };
+
   const suggestedSquds = suggestSquads(splitPlayers.mainSquad, game);
+  const canManage =
+    game.creator !== undefined && session?.user.id === game.creator;
 
   return (
     <div className="pb-8 md:overflow-y-scroll md:h-screen col-span-1 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 ...">
@@ -142,6 +185,7 @@ export default function GameStatsPanel({
         time={game.time ?? "20:30"}
         creatorContact={game.creatorContact}
         numberOfPlayers={game.numberOfPlayers ?? 14}
+        deleteGame={canManage ? openRemoveModal : undefined}
       >
         <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:space-x-4">
           <AppDialog
@@ -278,6 +322,25 @@ export default function GameStatsPanel({
             </Button>
           </AppDialog>
         </div>
+        {/* Remove dialog */}
+        <AppDialog
+          isOpen={modalRemoveIsOpen}
+          openModal={openRemoveModal}
+          closeModal={closeRemoveModal}
+          closeOnTitle={false}
+          title={"Czy na pewno chcesz usunąć grę?"}
+          buttonLabel=""
+          buttonColor="red"
+        >
+          <div className={`flex py-4 flex-row space-x-4 justify-center`}>
+            <Button color="red" onClick={handleDeleteGame}>
+              Usuń
+            </Button>
+            <Button color="gray" onClick={closeRemoveModal}>
+              Anuluj
+            </Button>
+          </div>
+        </AppDialog>
       </Stats>
     </div>
   );

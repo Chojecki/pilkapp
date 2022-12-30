@@ -42,7 +42,7 @@ const Button = (props: ButtonProps) => {
 
   const styles = `${full ? "w-full" : ""} ${
     bold ? "font-extrabold" : "font-medium"
-  } ${padding} inline-flex items-center justify-center rounded-md border border-transparent text-sm focus:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 ${style}`;
+  } ${padding} inline-flex items-center justify-center rounded-md border border-transparent text-sm focus:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 ${style} disabled:bg-gray-200 disabled:cursor-not-allowed`;
   return (
     <button
       onClick={onClick}

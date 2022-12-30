@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import Link from "next/link";
 import "server-only";
 import ItemCard from "../../components/item-card";
@@ -12,7 +13,11 @@ export const revalidate = 0;
 export default async function Page() {
   const supabase = createClient();
 
-  const { data } = await supabase.from("games").select("*");
+  const { data } = await supabase
+    .from("games")
+    .select("*")
+    .eq("creator", (await supabase.auth.getSession()).data?.session?.user.id)
+    .order("date", { ascending: false });
 
   return (
     <div className="flex flex-col gap-3 p-4">
@@ -23,7 +28,7 @@ export default async function Page() {
         <div key={game.id}>
           <Link href={`/game/${game.id}`}>
             <ItemCard
-              title={game.date ?? ""}
+              title={dayjs(game.date ?? "").format("DD.MM.YYYY")}
               boldTitle={game.name ?? "Bład wczytywania nazwy"}
             />
           </Link>
