@@ -9,10 +9,18 @@ export default function Head() {
         property="og:description"
         content="Appka do umawiania się na mecze"
       />
+
+      <meta property="og:title" content="Piłkapp" />
+      <meta
+        property="og:description"
+        content="Appka do umawiania się na mecze"
+      />
       <meta
         property="og:image"
         content="https://pilkapp.vercel.app/_next/image?url=/_next/static/media/logo.8cafd7f8.png&w=2048&q=75"
       />
+      <meta property="og:url" content="https://pilkapp.pl" />
+      <meta property="og:type" content="website" />
     </>
   );
 }
