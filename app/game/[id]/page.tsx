@@ -52,7 +52,7 @@ export default async function GamePage({ params }: Props) {
           userData={userData}
         />
         <div className="col-span-2 md:overflow-y-scroll md:h-screen">
-          <div className="flex h-full flex-col w-full justify-center items-center">
+          <div className="flex flex-col w-full justify-center items-center">
             <div className="w-full flex items-center justify-center bojo relative">
               <div className="absolute top-0 bottom-0 left-0 right-0" />
               <div className=" m-4 hidden md:block shadow-2 xl">

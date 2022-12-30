@@ -74,7 +74,7 @@ export default function GamePlayersList({
               </Transition>
             ))}
           </div>
-          <h3 className="text-2xl  font-extrabold text-white py-4">Rezerwa:</h3>
+          <h3 className="text-2xl font-extrabold text-white py-4">Rezerwa:</h3>
           {splitedPlayers.bench.map((participant, index) => (
             <div className="w-full" key={participant.id}>
               <PlayerCell
