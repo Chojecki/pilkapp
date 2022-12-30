@@ -48,7 +48,7 @@ export default async function Page() {
           {logged ? (
             <Link href="/admin">
               <Button bold>
-                <p className="text-2xl">Admin</p>
+                <p className="text-2xl">Panel Admina</p>
               </Button>
             </Link>
           ) : null}
