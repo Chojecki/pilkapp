@@ -108,6 +108,7 @@ const CrateGameForm = () => {
           className="bg-gray-50 col-span-2 md:col-span-1 my-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
           {...register("price", { required: true })}
           placeholder="Opłata"
+          min="0"
           type="number"
         />
 
@@ -115,6 +116,7 @@ const CrateGameForm = () => {
           className="bg-gray-50 col-span-2 md:col-span-1 my-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
           {...register("numberOfPlayers")}
           placeholder="Liczba graczy (opcjonalnie, domyślnie 14)"
+          min="1"
           type="number"
         />
 
