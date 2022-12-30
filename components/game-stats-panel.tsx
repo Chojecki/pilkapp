@@ -214,7 +214,7 @@ export default function GameStatsPanel({
                   defaultValue={userData?.full_name ?? ""}
                 />
                 <label className="block bg-gray-50 mb-2 text-sm font-medium text-gray-900 border p-2 rounded-md  ">
-                  Gdzie wolisz grać ? (wybież z listy) <br />
+                  Gdzie wolisz grać ? (wybierz z listy) <br />
                   <span className="font-small text-xs text-gray-600">
                     Jeżeli jest ci to obojętne, dostaniesz losową pozycje której
                     jest akurat najmniej, tak aby było łatwo podzielić skład
