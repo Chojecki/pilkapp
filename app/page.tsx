@@ -35,7 +35,7 @@ export default async function Page() {
         </h3>
         <div className="flex items-center justify-center gap-8">
           {!logged ? (
-            <Link href="/login" shallow={true}>
+            <Link href="/login">
               <Button bold>
                 <p className="text-2xl">Login</p>
               </Button>
