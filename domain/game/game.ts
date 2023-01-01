@@ -20,4 +20,5 @@ export type Player = {
   createdAt?: number;
   gameId: string;
   userId?: string;
+  order?: number;
 };

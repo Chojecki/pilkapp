@@ -108,6 +108,7 @@ export default function GameStatsPanel({
       role,
       gameId: game.id,
       userId,
+      order: (game.players ?? []).length + 1,
     };
     await supabase.from("players").insert([player]);
     router.refresh();
