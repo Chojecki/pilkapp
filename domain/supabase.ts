@@ -22,6 +22,7 @@ export interface Database {
           numberOfPlayers: number | null
           creatorContact: string | null
           id: string
+          customTeams: boolean
         }
         Insert: {
           created_at?: string | null
@@ -35,6 +36,7 @@ export interface Database {
           numberOfPlayers?: number | null
           creatorContact?: string | null
           id?: string
+          customTeams?: boolean
         }
         Update: {
           created_at?: string | null
@@ -48,6 +50,7 @@ export interface Database {
           numberOfPlayers?: number | null
           creatorContact?: string | null
           id?: string
+          customTeams?: boolean
         }
       }
       players: {
@@ -59,6 +62,8 @@ export interface Database {
           didPay: boolean | null
           gameId: string | null
           userId: string | null
+          order: number | null
+          team: number | null
         }
         Insert: {
           created_at?: string | null
@@ -68,6 +73,8 @@ export interface Database {
           didPay?: boolean | null
           gameId?: string | null
           userId?: string | null
+          order?: number | null
+          team?: number | null
         }
         Update: {
           created_at?: string | null
@@ -77,6 +84,8 @@ export interface Database {
           didPay?: boolean | null
           gameId?: string | null
           userId?: string | null
+          order?: number | null
+          team?: number | null
         }
       }
       profiles: {

@@ -53,6 +53,7 @@ const CrateGameForm = () => {
       numberOfPlayers: numberOfPlayers || 14,
       time: time || "20:30",
       creatorContact: data.creatorContact,
+      customTeams: false,
     };
     try {
       const data = await supabase.from("games").insert([{ ...game }]);

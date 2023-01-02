@@ -38,8 +38,15 @@ export default async function GamePage({ params }: Props) {
 
   const players = game?.players ?? [];
 
+  const teamA = (players as Player[]).filter((player) => player.team === 1);
+  const teamB = (players as Player[]).filter((player) => player.team === 2);
+
+  const customTeams = game?.customTeams ? [teamA, teamB] : undefined;
+
   const splitedPlayers = splitPlayers(players as Player[], game as Game);
-  const suggestedSquds = suggestSquads(splitedPlayers.mainSquad, game as Game);
+  const suggestedSquds = customTeams
+    ? customTeams
+    : suggestSquads(splitedPlayers.mainSquad, game as Game);
 
   if (!game || !players || error) return <div>Błąd meczu :/</div>;
 
@@ -47,6 +54,7 @@ export default async function GamePage({ params }: Props) {
     <div className="h-screen md:fixed w-full">
       <div className="grid grid-cols-1 md:grid-cols-3">
         <GameStatsPanel
+          suggestedSquds={suggestedSquds}
           game={game as Game}
           players={players as Player[]}
           userData={userData}

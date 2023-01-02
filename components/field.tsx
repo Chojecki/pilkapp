@@ -18,7 +18,14 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
         priority
       />
       <div
-        className=" absolute w-10 gap-y-8 laptop:gap-y-10 flex flex-col justify-center items-center"
+        className={`absolute w-10 ${
+          suggestedSquds[0].filter((player) => player.role === "GK").length < 4
+            ? "gap-y-8"
+            : suggestedSquds[0].filter((player) => player.role === "GK")
+                .length <= 5
+            ? "gap-y-3"
+            : "gap-y-1"
+        } flex flex-col justify-center items-center`}
         style={{ top: 0, bottom: 0, left: "10%" }}
       >
         {suggestedSquds[0]
@@ -39,7 +46,14 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
           ))}
       </div>
       <div
-        className=" absolute w-10 gap-y-8 laptop:gap-y-10 flex flex-col justify-center items-center"
+        className={`absolute w-10 ${
+          suggestedSquds[0].filter((player) => player.role === "DF").length < 4
+            ? "gap-y-8"
+            : suggestedSquds[0].filter((player) => player.role === "DF")
+                .length <= 5
+            ? "gap-y-3"
+            : "gap-y-1"
+        } flex flex-col justify-center items-center`}
         style={{ top: 0, bottom: 0, left: "22%" }}
       >
         {suggestedSquds[0]
@@ -60,7 +74,14 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
           ))}
       </div>
       <div
-        className=" absolute w-10 gap-y-8 laptop:gap-y-10 flex flex-col justify-center items-center"
+        className={`absolute w-10 ${
+          suggestedSquds[0].filter((player) => player.role === "MF").length < 4
+            ? "gap-y-8"
+            : suggestedSquds[0].filter((player) => player.role === "MF")
+                .length <= 5
+            ? "gap-y-3"
+            : "gap-y-1"
+        } flex flex-col justify-center items-center`}
         style={{ top: 0, bottom: 0, left: "32%" }}
       >
         {suggestedSquds[0]
@@ -81,7 +102,14 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
           ))}
       </div>
       <div
-        className=" absolute w-10 gap-y-8 laptop:gap-y-10 flex flex-col justify-center items-center"
+        className={`absolute w-10 ${
+          suggestedSquds[0].filter((player) => player.role === "FW").length < 4
+            ? "gap-y-8"
+            : suggestedSquds[0].filter((player) => player.role === "FW")
+                .length <= 5
+            ? "gap-y-3"
+            : "gap-y-1"
+        } flex flex-col justify-center items-center`}
         style={{ top: 0, bottom: 0, left: "42%" }}
       >
         {suggestedSquds[0]
@@ -102,7 +130,14 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
           ))}
       </div>
       <div
-        className=" absolute w-10 gap-y-8 laptop:gap-y-10 flex flex-col justify-center items-center"
+        className={`absolute w-10 ${
+          suggestedSquds[1].filter((player) => player.role === "GK").length < 4
+            ? "gap-y-8"
+            : suggestedSquds[1].filter((player) => player.role === "GK")
+                .length <= 5
+            ? "gap-y-3"
+            : "gap-y-1"
+        } flex flex-col justify-center items-center`}
         style={{ top: 0, bottom: 0, left: "85%" }}
       >
         {suggestedSquds[1]
@@ -123,7 +158,14 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
           ))}
       </div>
       <div
-        className=" absolute w-10 gap-y-8 laptop:gap-y-10 flex flex-col justify-center items-center"
+        className={`absolute w-10 ${
+          suggestedSquds[1].filter((player) => player.role === "DF").length < 4
+            ? "gap-y-8"
+            : suggestedSquds[1].filter((player) => player.role === "DF")
+                .length <= 5
+            ? "gap-y-3"
+            : "gap-y-1"
+        } flex flex-col justify-center items-center`}
         style={{ top: 0, bottom: 0, left: "72%" }}
       >
         {suggestedSquds[1]
@@ -144,7 +186,14 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
           ))}
       </div>
       <div
-        className=" absolute w-10 gap-y-8 laptop:gap-y-10 flex flex-col justify-center items-center"
+        className={`absolute w-10 ${
+          suggestedSquds[1].filter((player) => player.role === "MF").length < 4
+            ? "gap-y-8"
+            : suggestedSquds[1].filter((player) => player.role === "MF")
+                .length <= 5
+            ? "gap-y-3"
+            : "gap-y-1"
+        } flex flex-col justify-center items-center`}
         style={{ top: 0, bottom: 0, left: "62%" }}
       >
         {suggestedSquds[1]
@@ -165,7 +214,14 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
           ))}
       </div>
       <div
-        className=" absolute w-10 gap-y-8 laptop:gap-y-10 flex flex-col justify-center items-center"
+        className={`absolute w-10 ${
+          suggestedSquds[1].filter((player) => player.role === "FW").length < 4
+            ? "gap-y-8"
+            : suggestedSquds[1].filter((player) => player.role === "FW")
+                .length <= 5
+            ? "gap-y-3"
+            : "gap-y-1"
+        } flex flex-col justify-center items-center`}
         style={{ top: 0, bottom: 0, left: "52%" }}
       >
         {suggestedSquds[1]

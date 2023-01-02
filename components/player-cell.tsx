@@ -10,6 +10,7 @@ const PlayerCell = ({
   player,
   index,
   onClick,
+  onActionClick,
   bench = false,
   onSwitchClick,
   isLoading,
@@ -21,6 +22,7 @@ const PlayerCell = ({
   index: number;
   bench?: boolean;
   onClick?: () => void;
+  onActionClick?: () => void;
   isLoading?: boolean;
   onSwitchClick?: (checked: boolean) => void;
   canManage?: boolean;
@@ -97,6 +99,7 @@ const PlayerCell = ({
           </div>
         </div>
       )}
+      {onActionClick && <Button onClick={onActionClick}>Zmień team</Button>}
       {onClick && (
         <AppDialog
           isOpen={modalIsOpen}

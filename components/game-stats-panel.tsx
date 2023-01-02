@@ -5,12 +5,13 @@ import { useMemo, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { Game, Player } from "../domain/game/game";
-import { assignPlayerToMostRareRole, suggestSquads } from "../utils/squads";
+import { assignPlayerToMostRareRole } from "../utils/squads";
 import { createBrowserClient } from "../utils/supabase-browser";
 import Button from "./button";
 import AppDialog from "./dialog";
 import AppListBox from "./list-box";
 import PlayerCell from "./player-cell";
+import SquadComposerModal from "./squad-composer-modal";
 import Stats from "./stats";
 import { useSupabase } from "./supabase-provider";
 import AppSwitch from "./switch";
@@ -25,12 +26,14 @@ export default function GameStatsPanel({
   game,
   players,
   userData,
+  suggestedSquds,
 }: {
   game: Game;
   players: Player[];
   userData: {
     full_name: string | null;
   } | null;
+  suggestedSquds: Player[][];
 }) {
   const router = useRouter();
   const supabase = createBrowserClient();
@@ -170,7 +173,6 @@ export default function GameStatsPanel({
     router.push("/admin");
   };
 
-  const suggestedSquds = suggestSquads(splitPlayers.mainSquad, game);
   const canManage =
     game.creator !== undefined && session?.user.id === game.creator;
 
@@ -323,6 +325,12 @@ export default function GameStatsPanel({
             </Button>
           </AppDialog>
         </div>
+        {canManage ? (
+          <SquadComposerModal
+            gameId={game.id}
+            isGameCustomTeams={game.customTeams}
+          />
+        ) : null}
         {/* Remove dialog */}
         <AppDialog
           isOpen={modalRemoveIsOpen}

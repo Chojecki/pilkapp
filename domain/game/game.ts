@@ -10,6 +10,7 @@ export type Game = {
   numberOfPlayers?: number;
   time?: string;
   creatorContact?: string;
+  customTeams: boolean;
 };
 
 export type Player = {
@@ -21,4 +22,5 @@ export type Player = {
   gameId: string;
   userId?: string;
   order?: number;
+  team?: 1 | 2;
 };
