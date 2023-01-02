@@ -38,8 +38,13 @@ export default async function GamePage({ params }: Props) {
 
   const players = game?.players ?? [];
 
-  const teamA = (players as Player[]).filter((player) => player.team === 1);
-  const teamB = (players as Player[]).filter((player) => player.team === 2);
+  const playersWhoPlays = (players as Player[]).slice(
+    0,
+    game?.numberOfPlayers ?? 2
+  );
+
+  const teamA = playersWhoPlays.filter((player) => player.team === 1);
+  const teamB = playersWhoPlays.filter((player) => player.team === 2);
 
   const customTeams = game?.customTeams ? [teamA, teamB] : undefined;
 

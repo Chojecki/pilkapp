@@ -13,11 +13,13 @@ import AppSwitch from "./switch";
 interface Props {
   gameId: string;
   isGameCustomTeams: boolean;
+  numberOfPlayers: number;
 }
 
 export default function SquadComposerModal({
   gameId,
   isGameCustomTeams,
+  numberOfPlayers,
 }: Props) {
   const supabase = createBrowserClient();
   const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +35,7 @@ export default function SquadComposerModal({
         .select("*")
         .eq("gameId", gameId)
         .order("created_at", { ascending: true });
-      return a.data;
+      return a.data?.slice(0, numberOfPlayers);
     }
   );
 

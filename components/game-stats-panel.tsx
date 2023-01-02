@@ -329,6 +329,7 @@ export default function GameStatsPanel({
           <SquadComposerModal
             gameId={game.id}
             isGameCustomTeams={game.customTeams}
+            numberOfPlayers={game.numberOfPlayers ?? 2}
           />
         ) : null}
         {/* Remove dialog */}
