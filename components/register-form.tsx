@@ -112,6 +112,12 @@ export default function RegisterForm() {
                   {isPending ? "Ładowanie ..." : "Zarejestruj"}
                 </Button>
               </form>
+              <Link className="text-sm" href="/privacy">
+                Rejestrując się, akceptujesz politykę prywatności dostępna{" "}
+                <span className="text-blue-600 mx-1 font-bold underline hover:cursor-pointer">
+                  tutaj
+                </span>
+              </Link>
               <Link className="text-sm" href="/login">
                 Masz konto?
                 <span className="text-blue-600 mx-1 font-bold underline hover:cursor-pointer">
