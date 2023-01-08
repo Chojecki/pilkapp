@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^7.2.0",
@@ -31,6 +32,7 @@
     "firebase": "^9.14.0",
     "next": "^13.1.0",
     "next-seo": "^5.15.0",
+    "next-sitemap": "^3.1.44",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.40.0",
