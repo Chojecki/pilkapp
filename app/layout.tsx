@@ -1,7 +1,6 @@
 import "server-only";
 
 import { Montserrat } from "@next/font/google";
-import PageWrapper from "../components/page-wrapper";
 
 import { createClient } from "../utils/supabase-server";
 
@@ -40,7 +39,7 @@ export default async function RootLayout({
       <body>
         <SupabaseProvider session={session}>
           <SupabaseListener serverAccessToken={session?.access_token} />
-          <PageWrapper>{children}</PageWrapper>
+          {children}
         </SupabaseProvider>
       </body>
     </html>
