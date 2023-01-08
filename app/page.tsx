@@ -236,7 +236,7 @@ export default async function Page() {
                   <path d="M22 4L12 14.01l-3-3"></path>
                 </svg>
                 <span className="title-font font-medium">
-                  Typewriter Polaroid Cray
+                  Live preview meczu
                 </span>
               </div>
             </div>
