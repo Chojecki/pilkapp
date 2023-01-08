@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://pilkapp.pl
+
+# Sitemaps
+Sitemap: https://pilkapp.pl/sitemap.xml
