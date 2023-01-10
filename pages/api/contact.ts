@@ -17,7 +17,7 @@ export default async function handler(
     const emailBody = `${name} wypisał się z meczu: ${gameName}`;
 
     let nodemailer = require("nodemailer");
-    const transporter = nodemailer.createTransport({
+    const transporter = await nodemailer.createTransport({
       port: 465,
       host: "smtp.gmail.com",
       auth: {
