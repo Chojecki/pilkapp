@@ -34,14 +34,15 @@ export default async function Page() {
             <h1 className="title-font sm:text-4xl text-3xl mb-4 font-extrabold text-sky-300">
               Umawianie się na mecze
             </h1>
+            <h2 className="title-font sm:text-xl text-xl mb-4 font-bold text-sky-200">
+              Bez konieczności zakładania konta!
+            </h2>
             <p className="mb-8 leading-relaxed">
               Czy masz dość bałaganu, który pojawia się przy umawianiu się na
               mecze piłkarskie? Z PiłkApp rozwiążesz ten problem raz na zawsze!
               Dzięki naszej aplikacji, łatwo zorganizujesz mecze z przyjaciółmi,
               bez niepotrzebnych komplikacji i rozczarowań związanych z
-              wypisywaniem się z gry czy też zmianami w składach drużyn. Dołącz
-              do naszej społeczności już teraz i ciesz się bezproblemowym
-              organizowaniem meczów piłkarskich!
+              wypisywaniem się z gry czy też zmianami w składach drużyn.
             </p>
             <div className="flex gap-4 justify-center">
               {!logged ? (
