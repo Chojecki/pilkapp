@@ -143,15 +143,32 @@ export default async function Page() {
             </div>
             <div className="xl:w-1/4 lg:w-1/2 md:w-full px-8 py-6 border-l-2 border-gray-200 border-opacity-60">
               <h2 className="text-lg sm:text-xl text-gray-900 font-medium title-font mb-2">
-                PWA
+                Powidomienia o meczach
               </h2>
               <p className="leading-relaxed text-base mb-4">
-                Aplikacja jest dostępna w postaci Progressive Web App. Dzięki
-                temu, możesz ją zainstalować na swoim telefonie i korzystać z
-                niej bezpośrednio z ekranu głównego. Nie musisz wtedy otwierać
-                przeglądarki, aby zobaczyć, czy ktoś dołączył do meczu.
+                Mimo, że aplikacja nie wymaga konta, to jednak organizator może
+                pozwolić urzytkownikom wypisać się z meczu. To funkcjonalność
+                jakiej nie ma w żadnej innej aplikacji tego typu. Kiedy gracz
+                wypisze się z meczu, organizator otrzyma E-maila z
+                powiadomieniem o tym kto się wypisał i kto jest na ławce
+                rezerowej.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+      <section className="text-gray-600 body-font">
+        <div className="container px-5 py-24 mx-auto flex flex-wrap">
+          <h2 className="sm:text-3xl text-2xl text-gray-900 text-center font-medium title-font mb-2 md:w-2/5">
+            PWA
+          </h2>
+          <div className="md:w-3/5 md:pl-6">
+            <p className="leading-relaxed text-base">
+              Aplikacja jest dostępna w postaci Progressive Web App. Dzięki
+              temu, możesz ją zainstalować na swoim telefonie i korzystać z niej
+              bezpośrednio z ekranu głównego. Nie musisz wtedy otwierać
+              przeglądarki, aby zobaczyć, czy ktoś dołączył do meczu.
+            </p>
           </div>
         </div>
       </section>
