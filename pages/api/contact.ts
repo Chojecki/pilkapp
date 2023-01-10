@@ -18,8 +18,7 @@ export default async function handler(
 
     let nodemailer = require("nodemailer");
     const transporter = await nodemailer.createTransport({
-      port: 465,
-      host: "smtp.gmail.com",
+      service: "gmail",
       auth: {
         user: process.env.NEXT_PUBLIC_NOTI_ADMIN_EMAIL,
         pass: process.env.NEXT_PUBLIC_NOTIF_PASS,
