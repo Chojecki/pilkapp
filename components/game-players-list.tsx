@@ -40,7 +40,8 @@ export default function GamePlayersList({
 
   const hanldePlayerDelete = async (player: Player) => {
     await supabase.from("players").delete().eq("id", player.id);
-    handleSendEmail(player.name);
+
+    // handleSendEmail(player.name);
 
     // Check if client side
     if (typeof window !== "undefined") {

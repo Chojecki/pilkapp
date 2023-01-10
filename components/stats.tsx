@@ -1,6 +1,8 @@
 import dayjs from "dayjs";
+import { useState } from "react";
 import Balancer from "react-wrap-balancer";
 import Button from "./button";
+import AppDialog from "./dialog";
 import ItemCard from "./item-card";
 import AppSwitch from "./switch";
 
@@ -37,6 +39,16 @@ const Stats = ({
   canAnonRemove,
   onAnonRemoveFlagChange,
 }: StatsProps) => {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const openDeleteModal = () => {
+    setDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false);
+  };
+
   return (
     <div className="p-4 w-full flex flex-col gap-4">
       <div>
@@ -156,16 +168,37 @@ const Stats = ({
         />
       )}
       {canManage ? (
-        <div className="flex item-center justify-between gap-4">
-          <label className="text-white">
-            Każdy może sam usunąć się z meczu?
-          </label>
-          <AppSwitch
-            srOnlyLabel="Pozwalaj anonimowym użytkownikom na usuwanie się z meczu"
-            checked={canAnonRemove}
-            onChange={(checked) => onAnonRemoveFlagChange(checked)}
-          />
-        </div>
+        <AppDialog
+          isOpen={deleteModalOpen}
+          closeModal={closeDeleteModal}
+          openModal={openDeleteModal}
+          closeOnTitle
+          title="Ustawienia meczu"
+          buttonLabel="Ustawienia meczu"
+        >
+          <div className="flex item-center py-5 justify-between gap-4">
+            <div className="flex flex-col gap-4">
+              <label className="font-bold">
+                Każdy może sam usunąć się z meczu?
+              </label>
+              <p>
+                Główną cechą PiłkApp jest brak konieczności zakładania konta. Ma
+                to ten minus, że appka nie wie kto jej używa i tym samym nie wie
+                czy osoba usuwająca gracza jest na 100% tym graczem.
+                <br />
+                <br /> Prosty mechanizm przed tym zapobiega, ale aktywując tę
+                opcję, istnieje ryzyko, że gracz będzie miał możliwość usunąć
+                innego gracza jeżeli kiedykolwiek w innym meczu wpisali się tym
+                samym imieniem.
+              </p>
+            </div>
+            <AppSwitch
+              srOnlyLabel="Pozwalaj anonimowym użytkownikom na usuwanie się z meczu"
+              checked={canAnonRemove}
+              onChange={(checked) => onAnonRemoveFlagChange(checked)}
+            />
+          </div>
+        </AppDialog>
       ) : null}
       {deleteGame ? (
         <Button full bold onClick={deleteGame} color="red">
