@@ -23,6 +23,7 @@ export interface Database {
           creatorContact: string | null
           id: string
           customTeams: boolean
+          canAnonRemove: boolean | null
         }
         Insert: {
           created_at?: string | null
@@ -37,6 +38,7 @@ export interface Database {
           creatorContact?: string | null
           id?: string
           customTeams?: boolean
+          canAnonRemove?: boolean | null
         }
         Update: {
           created_at?: string | null
@@ -51,6 +53,7 @@ export interface Database {
           creatorContact?: string | null
           id?: string
           customTeams?: boolean
+          canAnonRemove?: boolean | null
         }
       }
       players: {

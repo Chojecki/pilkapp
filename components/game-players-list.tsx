@@ -11,16 +11,50 @@ import { useSupabase } from "./supabase-provider";
 export default function GamePlayersList({
   splitedPlayers,
   gameCreator,
+  canAnonRemove,
 }: {
   splitedPlayers: { mainSquad: Player[]; bench: Player[] };
   gameCreator: string | null;
+  canAnonRemove: boolean;
 }) {
   const router = useRouter();
   const { session } = useSupabase();
   const supabase = createBrowserClient();
 
+  const handleSendEmail = async (playerName: string) => {
+    // Do fetch POST to /api/contact
+    const inputData = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: playerName,
+        adminEmail: "mar.chojecki@gmail.com",
+        gameName: "TEST MECZE",
+      }),
+    };
+
+    await fetch(`/api/contact`, inputData);
+  };
+
   const hanldePlayerDelete = async (player: Player) => {
     await supabase.from("players").delete().eq("id", player.id);
+    handleSendEmail(player.name);
+
+    // Check if client side
+    if (typeof window !== "undefined") {
+      // Remove player name if exist from local storage names array
+      const names = localStorage.getItem("names");
+      if (names) {
+        const namesArray = JSON.parse(names);
+        const filteredNames = namesArray.filter(
+          (name: string) => name !== player.name
+        );
+        localStorage.setItem("names", JSON.stringify(filteredNames));
+      }
+    }
+
     router.refresh();
   };
 
@@ -64,6 +98,7 @@ export default function GamePlayersList({
                     onClick={() => hanldePlayerDelete(participant)}
                     index={index + 1}
                     canManage={canManage}
+                    canAnonRemove={canAnonRemove}
                     player={participant}
                     isLoading={false}
                     onSwitchClick={(checked) => {
@@ -82,6 +117,7 @@ export default function GamePlayersList({
                 canManage={canManage}
                 index={index + 1}
                 player={participant}
+                canAnonRemove={canAnonRemove}
                 onClick={() => hanldePlayerDelete(participant)}
               />
             </div>

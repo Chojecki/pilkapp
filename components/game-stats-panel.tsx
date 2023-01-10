@@ -114,6 +114,14 @@ export default function GameStatsPanel({
       order: (game.players ?? []).length + 1,
     };
     await supabase.from("players").insert([player]);
+    // Add name to name array in local storage
+    if (typeof window !== "undefined") {
+      const names = JSON.parse(localStorage.getItem("names") ?? "[]");
+      if (!names.includes(data.name)) {
+        localStorage.setItem("names", JSON.stringify([...names, data.name]));
+      }
+    }
+
     router.refresh();
     closeModal();
     reset();
@@ -176,6 +184,15 @@ export default function GameStatsPanel({
   const canManage =
     game.creator !== undefined && session?.user.id === game.creator;
 
+  const handleChangeAnonRemoveFlag = async (value: boolean) => {
+    if (!game?.id) return;
+    await supabase
+      .from("games")
+      .update({ canAnonRemove: value })
+      .eq("id", game.id);
+    router.refresh();
+  };
+
   return (
     <div className="pb-8 md:overflow-y-scroll md:h-screen col-span-1 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 ...">
       <Stats
@@ -189,6 +206,9 @@ export default function GameStatsPanel({
         creatorContact={game.creatorContact}
         numberOfPlayers={game.numberOfPlayers ?? 14}
         deleteGame={canManage ? openRemoveModal : undefined}
+        canAnonRemove={game.canAnonRemove ?? false}
+        onAnonRemoveFlagChange={handleChangeAnonRemoveFlag}
+        canManage={canManage}
       >
         <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:space-x-4">
           <AppDialog
@@ -332,6 +352,7 @@ export default function GameStatsPanel({
             numberOfPlayers={game.numberOfPlayers ?? 2}
           />
         ) : null}
+
         {/* Remove dialog */}
         <AppDialog
           isOpen={modalRemoveIsOpen}

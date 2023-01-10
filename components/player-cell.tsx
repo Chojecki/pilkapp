@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Balancer from "react-wrap-balancer";
 import { Player } from "../domain/game/game";
 import Button from "./button";
@@ -16,6 +16,7 @@ const PlayerCell = ({
   isLoading,
   canManage = false,
   dark = false,
+  canAnonRemove = false,
   secondary = false,
 }: {
   player: Player;
@@ -28,6 +29,7 @@ const PlayerCell = ({
   canManage?: boolean;
   dark?: boolean;
   secondary?: boolean;
+  canAnonRemove?: boolean;
 }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -38,6 +40,19 @@ const PlayerCell = ({
   function closeModal() {
     setIsOpen(false);
   }
+  // Get array of names from localStorage and check if player name is in it
+  const isNameInLocalStorage = useMemo(() => {
+    if (typeof window !== "undefined") {
+      const names = JSON.parse(localStorage.getItem("names") || "[]");
+      return names.find((name: string) => name === player.name);
+    } else {
+      return false;
+    }
+  }, [player.name]);
+
+  const canRemove = useMemo(() => {
+    return canManage || canAnonRemove;
+  }, [canManage, canAnonRemove]);
 
   return (
     <div className="flex flex-row squad-list bg-transparent  border-b-2 border-sky-100 p-4 w-full">
@@ -107,7 +122,7 @@ const PlayerCell = ({
           closeModal={closeModal}
           closeOnTitle={!canManage}
           title={
-            canManage
+            canRemove
               ? "Czy na pewno chcesz usunąć gracza?"
               : "Skontaktuj się z organizatorem"
           }
@@ -116,25 +131,45 @@ const PlayerCell = ({
         >
           <div
             className={`flex py-4 flex-row space-x-4 ${
-              canManage ? "justify-center" : ""
+              canRemove ? "justify-center" : ""
             }`}
           >
-            {canManage ? (
+            {canRemove ? (
               <>
-                <Button color="red" onClick={onClick}>
-                  Usuń
-                </Button>
-                <Button color="gray" onClick={closeModal}>
-                  Anuluj
-                </Button>
+                {isNameInLocalStorage ? (
+                  <>
+                    <Button color="red" onClick={onClick}>
+                      Usuń
+                    </Button>
+                    <Button color="gray" onClick={closeModal}>
+                      Anuluj
+                    </Button>
+                  </>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    <Balancer>
+                      Wyląda na to, że zapisywałeś się na innej przeglądarce lub
+                      chcesz usunąć kogoś innego. W takim razie, skontaktuj się
+                      z organizatorem lub skorzystaj z przeglądarki w której się
+                      zapisywałeś.
+                    </Balancer>
+                    <label className="block bg-gray-50 mb-2 text-sm font-medium text-gray-900 border p-2 rounded-md  ">
+                      Gdzie jest kontakt? <br />
+                      <span className="font-small text-xs text-gray-600">
+                        Jeżeli nie masz kontaktu z organizatorem, powinien on
+                        być widoczny w sekcji informacyjnej
+                      </span>
+                    </label>
+                  </div>
+                )}
               </>
             ) : (
               <div className="flex flex-col gap-4">
                 <p className="text-left">
                   <Balancer>
-                    Tylko zalogowany użytkownik może sie usunać. Chodzi o to aby
-                    nie było bałaganu. Już niedługo będzie to możliwe, ale na tę
-                    chwilę, poroś oranizotora o usunuęcie.
+                    Organizator nie pozwala aby każdy mógł się usunąć. Chodzi o
+                    to aby nie było bałaganu. Już niedługo będzie to możliwe,
+                    ale na tę chwilę, poroś oranizotora o usunuęcie.
                   </Balancer>
                 </p>
                 <label className="block bg-gray-50 mb-2 text-sm font-medium text-gray-900 border p-2 rounded-md  ">

@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import Balancer from "react-wrap-balancer";
 import Button from "./button";
 import ItemCard from "./item-card";
+import AppSwitch from "./switch";
 
 interface StatsProps {
   playrsLength: number;
@@ -15,6 +16,9 @@ interface StatsProps {
   creatorContact?: string;
   children?: React.ReactNode;
   deleteGame?: () => void;
+  canManage: boolean;
+  canAnonRemove: boolean;
+  onAnonRemoveFlagChange: (checked: boolean) => void;
 }
 
 const Stats = ({
@@ -29,6 +33,9 @@ const Stats = ({
   creatorContact,
   children,
   deleteGame,
+  canManage,
+  canAnonRemove,
+  onAnonRemoveFlagChange,
 }: StatsProps) => {
   return (
     <div className="p-4 w-full flex flex-col gap-4">
@@ -148,6 +155,18 @@ const Stats = ({
           }
         />
       )}
+      {canManage ? (
+        <div className="flex item-center justify-between gap-4">
+          <label className="text-white">
+            Każdy może sam usunąć się z meczu?
+          </label>
+          <AppSwitch
+            srOnlyLabel="Pozwalaj anonimowym użytkownikom na usuwanie się z meczu"
+            checked={canAnonRemove}
+            onChange={(checked) => onAnonRemoveFlagChange(checked)}
+          />
+        </div>
+      ) : null}
       {deleteGame ? (
         <Button full bold onClick={deleteGame} color="red">
           Usuń mecz

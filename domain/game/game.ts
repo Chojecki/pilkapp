@@ -11,6 +11,7 @@ export type Game = {
   time?: string;
   creatorContact?: string;
   customTeams: boolean;
+  canAnonRemove?: boolean;
 };
 
 export type Player = {

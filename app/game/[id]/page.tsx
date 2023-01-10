@@ -75,6 +75,7 @@ export default async function GamePage({ params }: Props) {
             <GamePlayersList
               splitedPlayers={splitedPlayers}
               gameCreator={game.creator}
+              canAnonRemove={game.canAnonRemove ?? false}
             />
           </div>
         </div>
