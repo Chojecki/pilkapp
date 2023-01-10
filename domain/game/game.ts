@@ -12,6 +12,7 @@ export type Game = {
   creatorContact?: string;
   customTeams: boolean;
   canAnonRemove?: boolean;
+  creatorEmail?: string;
 };
 
 export type Player = {

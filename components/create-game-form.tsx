@@ -54,6 +54,7 @@ const CrateGameForm = () => {
       time: time || "20:30",
       creatorContact: data.creatorContact,
       customTeams: false,
+      creatorEmail: session.user.email,
     };
     try {
       const data = await supabase.from("games").insert([{ ...game }]);

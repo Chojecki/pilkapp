@@ -11,109 +11,115 @@ export interface Database {
     Tables: {
       games: {
         Row: {
+          canAnonRemove: boolean | null
           created_at: string | null
+          creator: string | null
+          creatorContact: string | null
+          creatorEmail: string | null
+          customTeams: boolean
           date: string | null
           description: string | null
+          id: string
+          ignoreLocalStorage: boolean | null
           name: string | null
+          numberOfPlayers: number | null
           place: string | null
           price: number | null
-          creator: string | null
           time: string | null
-          numberOfPlayers: number | null
-          creatorContact: string | null
-          id: string
-          customTeams: boolean
-          canAnonRemove: boolean | null
         }
         Insert: {
+          canAnonRemove?: boolean | null
           created_at?: string | null
+          creator?: string | null
+          creatorContact?: string | null
+          creatorEmail?: string | null
+          customTeams?: boolean
           date?: string | null
           description?: string | null
+          id?: string
+          ignoreLocalStorage?: boolean | null
           name?: string | null
+          numberOfPlayers?: number | null
           place?: string | null
           price?: number | null
-          creator?: string | null
           time?: string | null
-          numberOfPlayers?: number | null
-          creatorContact?: string | null
-          id?: string
-          customTeams?: boolean
-          canAnonRemove?: boolean | null
         }
         Update: {
+          canAnonRemove?: boolean | null
           created_at?: string | null
+          creator?: string | null
+          creatorContact?: string | null
+          creatorEmail?: string | null
+          customTeams?: boolean
           date?: string | null
           description?: string | null
+          id?: string
+          ignoreLocalStorage?: boolean | null
           name?: string | null
+          numberOfPlayers?: number | null
           place?: string | null
           price?: number | null
-          creator?: string | null
           time?: string | null
-          numberOfPlayers?: number | null
-          creatorContact?: string | null
-          id?: string
-          customTeams?: boolean
-          canAnonRemove?: boolean | null
         }
       }
       players: {
         Row: {
           created_at: string | null
-          name: string | null
-          role: string | null
-          id: string
           didPay: boolean | null
           gameId: string | null
-          userId: string | null
+          id: string
+          name: string | null
           order: number | null
+          role: string | null
           team: number | null
+          userId: string | null
         }
         Insert: {
           created_at?: string | null
-          name?: string | null
-          role?: string | null
-          id?: string
           didPay?: boolean | null
           gameId?: string | null
-          userId?: string | null
+          id?: string
+          name?: string | null
           order?: number | null
+          role?: string | null
           team?: number | null
+          userId?: string | null
         }
         Update: {
           created_at?: string | null
-          name?: string | null
-          role?: string | null
-          id?: string
           didPay?: boolean | null
           gameId?: string | null
-          userId?: string | null
+          id?: string
+          name?: string | null
           order?: number | null
+          role?: string | null
           team?: number | null
+          userId?: string | null
         }
       }
       profiles: {
         Row: {
+          avatar_url: string | null
+          full_name: string | null
           id: string
           updated_at: string | null
           username: string | null
-          full_name: string | null
-          avatar_url: string | null
           website: string | null
         }
         Insert: {
+          avatar_url?: string | null
+          full_name?: string | null
           id: string
           updated_at?: string | null
           username?: string | null
-          full_name?: string | null
-          avatar_url?: string | null
           website?: string | null
         }
         Update: {
+          avatar_url?: string | null
+          full_name?: string | null
           id?: string
           updated_at?: string | null
           username?: string | null
-          full_name?: string | null
-          avatar_url?: string | null
           website?: string | null
         }
       }

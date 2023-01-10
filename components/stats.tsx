@@ -190,6 +190,10 @@ const Stats = ({
                 opcję, istnieje ryzyko, że gracz będzie miał możliwość usunąć
                 innego gracza jeżeli kiedykolwiek w innym meczu wpisali się tym
                 samym imieniem.
+                <br />
+                <br />
+                Dostaniesz maila z potwierdzeniem usunięcia się z meczu przez
+                gracza.
               </p>
             </div>
             <AppSwitch

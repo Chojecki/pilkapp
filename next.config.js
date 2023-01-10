@@ -19,6 +19,8 @@ const nextConfig = withPWA({
   env: {
     NEXT_PUBLIC_SUPABASE_URL: process.env.SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.SUPABASE_ANON,
+    NEXT_PUBLIC_NOTIF_PASS: process.env.NOTIF_PASS,
+    NEXT_PUBLIC_NOTI_ADMIN_EMAIL: process.env.NOTI_ADMIN_EMAIL,
   }
 })
 

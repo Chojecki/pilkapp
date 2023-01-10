@@ -18,6 +18,7 @@ const PlayerCell = ({
   dark = false,
   canAnonRemove = false,
   secondary = false,
+  ignoreLocalStorage = false,
 }: {
   player: Player;
   index: number;
@@ -30,6 +31,7 @@ const PlayerCell = ({
   dark?: boolean;
   secondary?: boolean;
   canAnonRemove?: boolean;
+  ignoreLocalStorage?: boolean;
 }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -42,13 +44,16 @@ const PlayerCell = ({
   }
   // Get array of names from localStorage and check if player name is in it
   const isNameInLocalStorage = useMemo(() => {
+    if (ignoreLocalStorage) {
+      return true;
+    }
     if (typeof window !== "undefined") {
       const names = JSON.parse(localStorage.getItem("names") || "[]");
       return names.find((name: string) => name === player.name);
     } else {
       return false;
     }
-  }, [player.name]);
+  }, [ignoreLocalStorage, player.name]);
 
   const canRemove = useMemo(() => {
     return canManage || canAnonRemove;
@@ -136,7 +141,7 @@ const PlayerCell = ({
           >
             {canRemove ? (
               <>
-                {isNameInLocalStorage ? (
+                {isNameInLocalStorage || canManage ? (
                   <>
                     <Button color="red" onClick={onClick}>
                       Usuń

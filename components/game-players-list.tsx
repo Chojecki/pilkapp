@@ -12,16 +12,31 @@ export default function GamePlayersList({
   splitedPlayers,
   gameCreator,
   canAnonRemove,
+  gameName,
+  creatorEmail,
+  ignoreLocalStorage,
 }: {
   splitedPlayers: { mainSquad: Player[]; bench: Player[] };
   gameCreator: string | null;
   canAnonRemove: boolean;
+  gameName: string;
+  creatorEmail?: string;
+  ignoreLocalStorage?: boolean;
 }) {
   const router = useRouter();
   const { session } = useSupabase();
   const supabase = createBrowserClient();
 
   const handleSendEmail = async (playerName: string) => {
+    const isOrganisatorRemoving = session?.user.id;
+    if (!creatorEmail || isOrganisatorRemoving !== undefined) {
+      return;
+    }
+
+    const isPlayerNameOnBench = splitedPlayers.bench.some(
+      (player) => player.name === playerName
+    );
+
     // Do fetch POST to /api/contact
     const inputData = {
       method: "POST",
@@ -30,8 +45,13 @@ export default function GamePlayersList({
       },
       body: JSON.stringify({
         name: playerName,
-        adminEmail: "mar.chojecki@gmail.com",
-        gameName: "TEST MECZE",
+        adminEmail: creatorEmail,
+        gameName: gameName,
+        isPlayerNameOnBench: isPlayerNameOnBench ? "true" : "false",
+        nextInLine:
+          splitedPlayers.bench[0] !== undefined
+            ? splitedPlayers.bench[0].name
+            : "brak",
       }),
     };
 
@@ -41,7 +61,7 @@ export default function GamePlayersList({
   const hanldePlayerDelete = async (player: Player) => {
     await supabase.from("players").delete().eq("id", player.id);
 
-    // handleSendEmail(player.name);
+    handleSendEmail(player.name);
 
     // Check if client side
     if (typeof window !== "undefined") {
@@ -102,6 +122,7 @@ export default function GamePlayersList({
                     canAnonRemove={canAnonRemove}
                     player={participant}
                     isLoading={false}
+                    ignoreLocalStorage={ignoreLocalStorage}
                     onSwitchClick={(checked) => {
                       handleSelectDidPay(participant, checked);
                     }}
@@ -119,6 +140,7 @@ export default function GamePlayersList({
                 index={index + 1}
                 player={participant}
                 canAnonRemove={canAnonRemove}
+                ignoreLocalStorage={ignoreLocalStorage}
                 onClick={() => hanldePlayerDelete(participant)}
               />
             </div>

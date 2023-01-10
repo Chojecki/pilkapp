@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { sendEmail } from "../../utils/email-service";
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,20 +8,46 @@ export default async function handler(
     return res.status(405).send({ message: "Only post request allowed" });
   }
   try {
-    const { name, gameName, adminEmail } = req.body;
+    const { name, gameName, adminEmail, nextInLine, isPlayerNameOnBench } =
+      req.body;
 
     //send email to admin
-    const emailSubject = `${name} wypisał się z meczu: ${gameName}}`;
+    const emailSubject = `Gracz wypisał się z meczu: ${gameName}`;
 
-    const emailBody = `${name} wypisał się z meczu: ${gameName}}`;
-    const emailParam = {
+    const emailBody = `${name} wypisał się z meczu: ${gameName}`;
+
+    let nodemailer = require("nodemailer");
+    const transporter = nodemailer.createTransport({
+      port: 465,
+      host: "smtp.gmail.com",
+      auth: {
+        user: process.env.NEXT_PUBLIC_NOTI_ADMIN_EMAIL,
+        pass: process.env.NEXT_PUBLIC_NOTIF_PASS,
+      },
+      secure: true,
+      authentication: "plain",
+    });
+    const mailData = {
+      from: process.env.NEXT_PUBLIC_NOTI_ADMIN_EMAIL,
       to: adminEmail as string,
-      from: process.env.ADMIN_EMAIL as string,
       subject: emailSubject,
       text: emailBody,
+      html: `<div style="font-size: 24px;"><span style="font-weight: bold;">${name}</span> wypisał się z meczu: <span style="font-weight: bold;">${gameName}</span></div>
+      <p style="font-size: 18px;">${
+        isPlayerNameOnBench === "true"
+          ? "Był na rezerwie więc luz :)"
+          : nextInLine === "brak"
+          ? "Nie ma nikogo na rezerwie :("
+          : `Następny w kolejce jest: <span style="font-weight: bold;">${nextInLine}</span> daj mu cynk, że gra!`
+      }</p>
+      <p>Nie odpowiadaj na tę wiadomość. Jest to wiadomość automatyczna.</p>`,
     };
-
-    sendEmail(emailParam);
+    // @ts-ignore
+    transporter.sendMail(mailData, function (err, info) {
+      if (err) console.log(err);
+      else console.log(info);
+    });
+    res.status(200);
 
     return res.status(200).json({ message: "Contact Email Sent Successfully" });
   } catch (err) {

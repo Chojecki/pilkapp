@@ -75,7 +75,10 @@ export default async function GamePage({ params }: Props) {
             <GamePlayersList
               splitedPlayers={splitedPlayers}
               gameCreator={game.creator}
+              creatorEmail={game.creatorEmail ?? undefined}
               canAnonRemove={game.canAnonRemove ?? false}
+              gameName={game.name ?? "Brak nazwy"}
+              ignoreLocalStorage={game.ignoreLocalStorage ?? false}
             />
           </div>
         </div>
