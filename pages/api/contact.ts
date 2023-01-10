@@ -42,13 +42,8 @@ export default async function handler(
       <p>Nie odpowiadaj na tę wiadomość. Jest to wiadomość automatyczna.</p>`,
     };
     // @ts-ignore
-    await transporter.sendMail(mailData, function (err, info) {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({ message: err });
-      } else console.log(info);
-    });
-    res.status(200);
+    const t = await transporter.sendMail(mailData);
+    console.log(t);
 
     return res.status(200).json({ message: "Contact Email Sent Successfully" });
   } catch (err) {
