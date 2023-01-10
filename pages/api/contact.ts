@@ -44,8 +44,10 @@ export default async function handler(
     };
     // @ts-ignore
     await transporter.sendMail(mailData, function (err, info) {
-      if (err) console.log(err);
-      else console.log(info);
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ message: err });
+      } else console.log(info);
     });
     res.status(200);
 
