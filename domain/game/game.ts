@@ -13,6 +13,8 @@ export type Game = {
   customTeams: boolean;
   canAnonRemove?: boolean;
   creatorEmail?: string;
+  isPublic?: boolean;
+  city?: string;
 };
 
 export type Player = {

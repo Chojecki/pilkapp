@@ -12,6 +12,7 @@ export interface Database {
       games: {
         Row: {
           canAnonRemove: boolean | null
+          city: string | null
           created_at: string | null
           creator: string | null
           creatorContact: string | null
@@ -21,6 +22,7 @@ export interface Database {
           description: string | null
           id: string
           ignoreLocalStorage: boolean | null
+          isPublic: boolean | null
           name: string | null
           numberOfPlayers: number | null
           place: string | null
@@ -29,6 +31,7 @@ export interface Database {
         }
         Insert: {
           canAnonRemove?: boolean | null
+          city?: string | null
           created_at?: string | null
           creator?: string | null
           creatorContact?: string | null
@@ -38,6 +41,7 @@ export interface Database {
           description?: string | null
           id?: string
           ignoreLocalStorage?: boolean | null
+          isPublic?: boolean | null
           name?: string | null
           numberOfPlayers?: number | null
           place?: string | null
@@ -46,6 +50,7 @@ export interface Database {
         }
         Update: {
           canAnonRemove?: boolean | null
+          city?: string | null
           created_at?: string | null
           creator?: string | null
           creatorContact?: string | null
@@ -55,6 +60,7 @@ export interface Database {
           description?: string | null
           id?: string
           ignoreLocalStorage?: boolean | null
+          isPublic?: boolean | null
           name?: string | null
           numberOfPlayers?: number | null
           place?: string | null

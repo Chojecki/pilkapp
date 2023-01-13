@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { Game, Player } from "../domain/game/game";
@@ -126,6 +126,12 @@ export default function GameStatsPanel({
     closeModal();
     reset();
   };
+
+  useEffect(() => {
+    window.onpopstate = () => {
+      router.refresh();
+    };
+  }, [router]);
 
   const openModal = () => {
     setIsOpen(true);

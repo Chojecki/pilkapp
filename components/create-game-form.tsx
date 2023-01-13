@@ -2,12 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import Button from "../components/button";
 import { Game } from "../domain/game/game";
 import { createBrowserClient } from "../utils/supabase-browser";
 import { useSupabase } from "./supabase-provider";
+import AppSwitch from "./switch";
 
 type GameCrateInputs = {
   name: string;
@@ -18,6 +19,8 @@ type GameCrateInputs = {
   numberOfPlayers?: number;
   time?: string;
   creatorContact?: string;
+  isPublic?: boolean;
+  city?: string;
 };
 
 const CrateGameForm = () => {
@@ -28,6 +31,8 @@ const CrateGameForm = () => {
   const {
     register,
     handleSubmit,
+    control,
+    watch,
     formState: { errors, isValid, isSubmitting },
   } = useForm<GameCrateInputs>({
     mode: "onSubmit",
@@ -55,6 +60,8 @@ const CrateGameForm = () => {
       creatorContact: data.creatorContact,
       customTeams: false,
       creatorEmail: session.user.email,
+      isPublic: data.isPublic || false,
+      city: data.city,
     };
     try {
       const data = await supabase.from("games").insert([{ ...game }]);
@@ -69,6 +76,8 @@ const CrateGameForm = () => {
       console.log(e);
     }
   };
+
+  const isPublicOn = watch("isPublic");
 
   return (
     <div className="p-4">
@@ -133,6 +142,33 @@ const CrateGameForm = () => {
           {...register("creatorContact", { required: true })}
           placeholder="Kontakt do organizatora"
         />
+
+        <div className="w-full py-4 col-span-2 flex items-center justify-between">
+          <label>
+            Czy chcesz umieścić grę na publicznej tablicy z grami w Twoim
+            mieście?
+          </label>
+          <Controller
+            name="isPublic"
+            control={control}
+            render={({ field }) => (
+              <AppSwitch
+                {...field}
+                srOnlyLabel="Ustaw grę jako publiczną"
+                checked={Boolean(field.value)}
+                onChange={(e) => field.onChange(e)}
+              />
+            )}
+          />
+        </div>
+
+        {isPublicOn && (
+          <input
+            className="bg-gray-50 col-span-2 my-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
+            {...register("city", { required: Boolean(isPublicOn) })}
+            placeholder="Miasto"
+          />
+        )}
 
         {errors.name && <p className="text-red-500">Nazwa jest wymagana</p>}
         {errors.date && <p className="text-red-500">Data jest wymagana</p>}
