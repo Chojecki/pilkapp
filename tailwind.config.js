@@ -20,5 +20,5 @@ module.exports = {
   variants: {
     opacity: ({ after }) => after(['disabled'])
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/line-clamp')],
 }

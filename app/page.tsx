@@ -44,7 +44,7 @@ export default async function Page() {
               bez niepotrzebnych komplikacji i rozczarowań związanych z
               wypisywaniem się z gry czy też zmianami w składach drużyn.
             </p>
-            <div className="flex gap-4 justify-center">
+            <div className="flex justify-center md:justify-start flex-wrap gap-4">
               {!logged ? (
                 <Link href="/login">
                   <Button bold>
@@ -63,6 +63,11 @@ export default async function Page() {
                   </Button>
                 </Link>
               ) : null}
+              <Link href="/public-games">
+                <Button color="green" bold>
+                  <p className="text-2xl">Mecze w Twoim mieście</p>
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
