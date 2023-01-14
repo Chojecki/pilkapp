@@ -13,6 +13,11 @@
   <priority>1.00</priority>
 </url>
 <url>
+  <loc>https://www.pilkapp.pl/public-games/</loc>
+  <lastmod>2023-01-14T10:55:26+00:00</lastmod>
+  <priority>>0.80</priority>
+</url>
+<url>
   <loc>https://www.pilkapp.pl/login/</loc>
   <lastmod>2023-01-08T19:55:26+00:00</lastmod>
   <priority>0.64</priority>
@@ -21,11 +26,6 @@
   <loc>https://www.pilkapp.pl/register/</loc>
   <lastmod>2023-01-08T19:55:26+00:00</lastmod>
   <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://www.pilkapp.pl/public-games/</loc>
-  <lastmod>2023-01-14T10:55:26+00:00</lastmod>
-  <priority>>0.80</priority>
 </url>
 
 
