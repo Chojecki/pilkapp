@@ -9,23 +9,33 @@
 
 <url>
   <loc>https://www.pilkapp.pl/</loc>
-  <lastmod>2023-01-08T19:55:26+00:00</lastmod>
+  <lastmod>2023-01-14T13:04:35+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://www.pilkapp.pl/public-games/</loc>
-  <lastmod>2023-01-14T10:55:26+00:00</lastmod>
-  <priority>>0.80</priority>
+  <loc>https://www.pilkapp.pl/login</loc>
+  <lastmod>2023-01-14T13:04:35+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://www.pilkapp.pl/login/</loc>
-  <lastmod>2023-01-08T19:55:26+00:00</lastmod>
+  <loc>https://www.pilkapp.pl/public-games</loc>
+  <lastmod>2023-01-14T13:04:35+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.pilkapp.pl/game/16310972-5f3a-42d1-849a-2720c4fb406d</loc>
+  <lastmod>2023-01-14T13:04:35+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.pilkapp.pl/register</loc>
+  <lastmod>2023-01-14T13:04:35+00:00</lastmod>
   <priority>0.64</priority>
 </url>
 <url>
-  <loc>https://www.pilkapp.pl/register/</loc>
-  <lastmod>2023-01-08T19:55:26+00:00</lastmod>
-  <priority>0.64</priority>
+  <loc>https://www.pilkapp.pl/privacy</loc>
+  <lastmod>2023-01-14T13:04:35+00:00</lastmod>
+  <priority>0.51</priority>
 </url>
 
 
