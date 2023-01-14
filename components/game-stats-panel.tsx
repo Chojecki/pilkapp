@@ -259,7 +259,7 @@ export default function GameStatsPanel({
                   padding="py-2"
                   control={control}
                   items={[
-                    { value: "None", name: "Wyjebane" },
+                    { value: "None", name: "Obojętne" },
                     { value: "GK", name: "Gruby na brame" },
                     { value: "DF", name: "Obrona" },
                     { value: "MF", name: "Pomoc" },
