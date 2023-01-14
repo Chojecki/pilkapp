@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+
 import { v4 as uuidv4 } from "uuid";
 import { Game, Player } from "../domain/game/game";
 import { assignPlayerToMostRareRole } from "../utils/squads";
@@ -36,6 +37,7 @@ export default function GameStatsPanel({
   suggestedSquds: Player[][];
 }) {
   const router = useRouter();
+
   const supabase = createBrowserClient();
   const { session } = useSupabase();
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -117,8 +119,12 @@ export default function GameStatsPanel({
     // Add name to name array in local storage
     if (typeof window !== "undefined") {
       const names = JSON.parse(localStorage.getItem("names") ?? "[]");
-      if (!names.includes(data.name)) {
-        localStorage.setItem("names", JSON.stringify([...names, data.name]));
+      const nameWithGameId = `${data.name}|${game.id}`;
+      if (!names.includes(nameWithGameId)) {
+        localStorage.setItem(
+          "names",
+          JSON.stringify([...names, nameWithGameId])
+        );
       }
     }
 

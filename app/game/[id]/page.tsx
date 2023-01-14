@@ -79,6 +79,7 @@ export default async function GamePage({ params }: Props) {
               canAnonRemove={game.canAnonRemove ?? false}
               gameName={game.name ?? "Brak nazwy"}
               ignoreLocalStorage={game.ignoreLocalStorage ?? false}
+              isGamePublic={game.isPublic ?? false}
             />
           </div>
         </div>

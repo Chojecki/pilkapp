@@ -38,6 +38,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.40.0",
     "react-modal": "^3.16.1",
+    "react-toastify": "^9.1.1",
     "react-wrap-balancer": "^0.2.3",
     "sass": "^1.56.1",
     "server-only": "^0.0.1",

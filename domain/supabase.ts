@@ -70,6 +70,7 @@ export interface Database {
       }
       players: {
         Row: {
+          confirmed: boolean | null
           created_at: string | null
           didPay: boolean | null
           gameId: string | null
@@ -81,6 +82,7 @@ export interface Database {
           userId: string | null
         }
         Insert: {
+          confirmed?: boolean | null
           created_at?: string | null
           didPay?: boolean | null
           gameId?: string | null
@@ -92,6 +94,7 @@ export interface Database {
           userId?: string | null
         }
         Update: {
+          confirmed?: boolean | null
           created_at?: string | null
           didPay?: boolean | null
           gameId?: string | null

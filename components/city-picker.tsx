@@ -32,7 +32,7 @@ export default function CityPicker(props: { search?: string }) {
     "Wszystkie",
   ];
 
-  const selected = props.search ?? cities[0];
+  const selected = props.search ? props.search : "";
   const [query, setQuery] = useState("");
 
   const filteredcities =

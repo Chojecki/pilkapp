@@ -10,11 +10,27 @@ import hero from "../assets/hero.png";
 import logo from "../assets/logo.png";
 import Button from "../components/button";
 import LogoutButton from "../components/logout-button";
+import PublicGameCell from "../components/public-game-cell";
+import { Game } from "../domain/game/game";
 import { createClient } from "../utils/supabase-server";
 
 export default async function Page() {
   const supabase = createClient();
   const logged = (await supabase.auth.getSession()).data?.session?.user.id;
+
+  const today = new Date();
+  const todayTimestamp = today.toISOString().split("T")[0];
+
+  const { data: lastGames } = await supabase
+    .from("games")
+    .select("*, players(*)")
+    .limit(4)
+    .order("date", {
+      ascending: true,
+    })
+    .gte("date", todayTimestamp)
+    .eq("isPublic", true);
+
   return (
     <>
       <header className="text-gray-600 body-font bg-gray-900">
@@ -76,6 +92,36 @@ export default async function Page() {
         </div>
       </section>
 
+      {
+        <section className="text-gray-600 body-font bojo  ">
+          <div className="container px-5 py-24 mx-auto">
+            <div className="flex flex-wrap w-full mb-5 flex-col items-center text-center">
+              <h1 className="sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900">
+                Ostation dodane mecze:
+              </h1>
+            </div>
+
+            <div className="">
+              {lastGames && lastGames.length > 0 ? (
+                <div className="flex flex-wrap -m-4">
+                  {lastGames.map((item, index) => (
+                    <div
+                      key={item.id ?? index}
+                      className="xl:w-1/3 md:w-1/2 w-full p-4"
+                    >
+                      <PublicGameCell game={item as Game} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <h3 className="w-full text-center font-extrabold text-xl">
+                  Wygląda na to, że ma meczy. Możesz stworzyć własny 😎
+                </h3>
+              )}
+            </div>
+          </div>
+        </section>
+      }
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-24 mx-auto">
           <div className="flex flex-col text-center w-full mb-20">

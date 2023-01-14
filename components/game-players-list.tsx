@@ -15,6 +15,7 @@ export default function GamePlayersList({
   gameName,
   creatorEmail,
   ignoreLocalStorage,
+  isGamePublic,
 }: {
   splitedPlayers: { mainSquad: Player[]; bench: Player[] };
   gameCreator: string | null;
@@ -22,6 +23,7 @@ export default function GamePlayersList({
   gameName: string;
   creatorEmail?: string;
   ignoreLocalStorage?: boolean;
+  isGamePublic: boolean;
 }) {
   const router = useRouter();
   const { session } = useSupabase();

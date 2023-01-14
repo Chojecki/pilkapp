@@ -27,4 +27,5 @@ export type Player = {
   userId?: string;
   order?: number;
   team?: 1 | 2;
+  confirmed?: boolean;
 };

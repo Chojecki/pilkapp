@@ -57,7 +57,7 @@ export default async function Page(props: Props) {
           <CityPicker search={search} />
         </div>
         <div className="">
-          {games && games.length > 0 && (
+          {games && games.length > 0 ? (
             <div className="flex flex-wrap -m-4">
               {games.map((item, index) => (
                 <div
@@ -68,6 +68,15 @@ export default async function Page(props: Props) {
                 </div>
               ))}
             </div>
+          ) : search === "dupa" ? (
+            <h3 className="w-full font-extrabold text-xl">
+              Dupa to nie miasto 😂 Ale szacunek za próbę
+            </h3>
+          ) : (
+            <h3 className="w-full font-extrabold text-xl">
+              Wygląda na to, że ma meczy w tym mieście. Możesz stworzyć własny
+              😎
+            </h3>
           )}
         </div>
       </div>

@@ -9,6 +9,7 @@ export default function Head() {
         content="vYyu7gttcFkYJg6JtKSjbvTsfJ9wbE3Sj25sw5-ofiQ"
       />
       <link rel="manifest" href="/manifest.json" />
+      <link rel="shortcut icon" href="/favicon.ico" />
       <NextSeo
         useAppDir={true}
         title="PiłkApp"

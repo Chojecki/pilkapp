@@ -1,5 +1,8 @@
 import dayjs from "dayjs";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Balancer from "react-wrap-balancer";
 import Button from "./button";
 import AppDialog from "./dialog";
@@ -41,6 +44,8 @@ const Stats = ({
 }: StatsProps) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
+  const path = usePathname();
+
   const openDeleteModal = () => {
     setDeleteModalOpen(true);
   };
@@ -62,6 +67,17 @@ const Stats = ({
           </p>
         )}
       </div>
+      {path && (
+        <p
+          className="text-white cursor-pointer underline text-xs"
+          onClick={() => {
+            navigator.clipboard.writeText(`https://www.pilkapp.pl${path}`);
+            toast.success("Link skopiowany do schowka");
+          }}
+        >
+          Skopiuj link do meczu
+        </p>
+      )}
       {children}
       <ItemCard
         title="Zapisanych"
@@ -209,6 +225,7 @@ const Stats = ({
           Usuń mecz
         </Button>
       ) : null}
+      <ToastContainer />
     </div>
   );
 };

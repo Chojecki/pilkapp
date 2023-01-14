@@ -49,11 +49,12 @@ const PlayerCell = ({
     }
     if (typeof window !== "undefined") {
       const names = JSON.parse(localStorage.getItem("names") || "[]");
-      return names.find((name: string) => name === player.name);
+      const nameWithGameId = `${player.name}|${player.gameId}`;
+      return names.find((name: string) => name === nameWithGameId);
     } else {
       return false;
     }
-  }, [ignoreLocalStorage, player.name]);
+  }, [ignoreLocalStorage, player.gameId, player.name]);
 
   const canRemove = useMemo(() => {
     return canManage || canAnonRemove;
