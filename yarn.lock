@@ -1436,10 +1436,10 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@next/env@*", "@next/env@13.1.0":
-  "integrity" "sha512-6iNixFzCndH+Bl4FetQzOMjxCJqg8fs0LAlZviig1K6mIjOWH2m2oPcHcOg1Ta5VCe7Bx5KG1Hs+NrWDUkBt9A=="
-  "resolved" "https://registry.npmjs.org/@next/env/-/env-13.1.0.tgz"
-  "version" "13.1.0"
+"@next/env@*", "@next/env@13.1.6":
+  "integrity" "sha512-s+W9Fdqh5MFk6ECrbnVmmAOwxKQuhGMT7xXHrkYIBMBcTiOqNWhv5KbJIboKR5STXxNXl32hllnvKaffzFaWQg=="
+  "resolved" "https://registry.npmjs.org/@next/env/-/env-13.1.6.tgz"
+  "version" "13.1.6"
 
 "@next/eslint-plugin-next@13.1.0":
   "integrity" "sha512-LGh0iqcEwxs0HmEK96cXXuhofcOGSUGl8Zms279JW8Zq/6GJkXo87gtRpfJrwD+a77nEIdRaORPM91Us3xW0Qw=="
@@ -1453,10 +1453,10 @@
   "resolved" "https://registry.npmjs.org/@next/font/-/font-13.1.0.tgz"
   "version" "13.1.0"
 
-"@next/swc-darwin-arm64@13.1.0":
-  "integrity" "sha512-0hUydiAW18jK2uGPnZRdnRQtdB/3ZoPo84A6zH7MJHxAWw9lzVsv3kMg9kgVBBlrivzqdNN8rdgA+eYNxzXU9w=="
-  "resolved" "https://registry.npmjs.org/@next/swc-darwin-arm64/-/swc-darwin-arm64-13.1.0.tgz"
-  "version" "13.1.0"
+"@next/swc-darwin-arm64@13.1.6":
+  "integrity" "sha512-KKRQH4DDE4kONXCvFMNBZGDb499Hs+xcFAwvj+rfSUssIDrZOlyfJNy55rH5t2Qxed1e4K80KEJgsxKQN1/fyw=="
+  "resolved" "https://registry.npmjs.org/@next/swc-darwin-arm64/-/swc-darwin-arm64-13.1.6.tgz"
+  "version" "13.1.6"
 
 "@nodelib/fs.scandir@2.1.5":
   "integrity" "sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g=="
@@ -3702,9 +3702,9 @@
   "version" "1.0.1"
 
 "json5@^1.0.1":
-  "integrity" "sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow=="
-  "resolved" "https://registry.npmjs.org/json5/-/json5-1.0.1.tgz"
-  "version" "1.0.1"
+  "integrity" "sha512-g1MWMLBiz8FKi1e4w0UyVL3w+iJceWAFBAaBnnGKOpNa5f8TLktkbre1+s6oICydWAm+HRUGTmI+//xv2hvXYA=="
+  "resolved" "https://registry.npmjs.org/json5/-/json5-1.0.2.tgz"
+  "version" "1.0.2"
   dependencies:
     "minimist" "^1.2.0"
 
@@ -3981,30 +3981,30 @@
   "resolved" "https://registry.npmjs.org/next-tick/-/next-tick-1.1.0.tgz"
   "version" "1.1.0"
 
-"next@*", "next@^13.1.0", "next@^8.1.1-canary.54 || >=9.0.0", "next@>=9.1.0":
-  "integrity" "sha512-lQMZH1V94L5IL/WaihQkTYabSY73aqgrkGPJB5uz+2O3ES4I3losV/maXLY7l7x5e+oNyE9N81upNQ8uRsR5/A=="
-  "resolved" "https://registry.npmjs.org/next/-/next-13.1.0.tgz"
-  "version" "13.1.0"
+"next@*", "next@^13.1.6", "next@^8.1.1-canary.54 || >=9.0.0", "next@>=9.1.0":
+  "integrity" "sha512-hHlbhKPj9pW+Cymvfzc15lvhaOZ54l+8sXDXJWm3OBNBzgrVj6hwGPmqqsXg40xO1Leq+kXpllzRPuncpC0Phw=="
+  "resolved" "https://registry.npmjs.org/next/-/next-13.1.6.tgz"
+  "version" "13.1.6"
   dependencies:
-    "@next/env" "13.1.0"
+    "@next/env" "13.1.6"
     "@swc/helpers" "0.4.14"
     "caniuse-lite" "^1.0.30001406"
     "postcss" "8.4.14"
     "styled-jsx" "5.1.1"
   optionalDependencies:
-    "@next/swc-android-arm-eabi" "13.1.0"
-    "@next/swc-android-arm64" "13.1.0"
-    "@next/swc-darwin-arm64" "13.1.0"
-    "@next/swc-darwin-x64" "13.1.0"
-    "@next/swc-freebsd-x64" "13.1.0"
-    "@next/swc-linux-arm-gnueabihf" "13.1.0"
-    "@next/swc-linux-arm64-gnu" "13.1.0"
-    "@next/swc-linux-arm64-musl" "13.1.0"
-    "@next/swc-linux-x64-gnu" "13.1.0"
-    "@next/swc-linux-x64-musl" "13.1.0"
-    "@next/swc-win32-arm64-msvc" "13.1.0"
-    "@next/swc-win32-ia32-msvc" "13.1.0"
-    "@next/swc-win32-x64-msvc" "13.1.0"
+    "@next/swc-android-arm-eabi" "13.1.6"
+    "@next/swc-android-arm64" "13.1.6"
+    "@next/swc-darwin-arm64" "13.1.6"
+    "@next/swc-darwin-x64" "13.1.6"
+    "@next/swc-freebsd-x64" "13.1.6"
+    "@next/swc-linux-arm-gnueabihf" "13.1.6"
+    "@next/swc-linux-arm64-gnu" "13.1.6"
+    "@next/swc-linux-arm64-musl" "13.1.6"
+    "@next/swc-linux-x64-gnu" "13.1.6"
+    "@next/swc-linux-x64-musl" "13.1.6"
+    "@next/swc-win32-arm64-msvc" "13.1.6"
+    "@next/swc-win32-ia32-msvc" "13.1.6"
+    "@next/swc-win32-x64-msvc" "13.1.6"
 
 "node-domexception@^1.0.0":
   "integrity" "sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ=="
