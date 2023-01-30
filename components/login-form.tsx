@@ -19,8 +19,11 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { isSubmitting },
   } = useForm<Inputs>({ mode: "onChange" });
+
+  const email = watch("email");
 
   const { supabase, session } = useSupabase();
   const router = useRouter();
@@ -37,6 +40,36 @@ export default function LoginForm() {
       console.log({ error });
     }
   };
+
+  const handlePasswordReset = async () => {
+    if (!email) return alert("Musisz podać email");
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: "https://pilkapp.pl/login",
+    });
+
+    if (error) {
+      console.log({ error });
+    } else {
+      alert(
+        "Sprawdź swoją skrzynkę pocztową. Wyślemy Ci link do resetu hasła. Jeśli nie widzisz wiadomości, sprawdź folder ze spamem albo spróbuj ponownie za 60 sekund."
+      );
+    }
+  };
+
+  useEffect(() => {
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event == "PASSWORD_RECOVERY") {
+        const newPassword = prompt("Wprowadź nowe hasło");
+        if (!newPassword) return alert("Musisz podać nowe hasło");
+        const { data, error } = await supabase.auth.updateUser({
+          password: newPassword,
+        });
+
+        if (data) alert("Udało się! Twoje hasło zostało zmienione.");
+        if (error) alert("Coś poszło nie tak. Spróbuj ponownie.");
+      }
+    });
+  }, [supabase.auth]);
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -97,6 +130,9 @@ export default function LoginForm() {
                 Pamiętaj, że możesz używać zapisywać się na mecze bez logowania.
                 Potrzebujesz tylko linku do meczu od organizotora
               </Link>
+              <Button bold color="yellow" onClick={handlePasswordReset}>
+                Zapomniałem hasła 😅
+              </Button>
             </div>
           </div>
         </div>
