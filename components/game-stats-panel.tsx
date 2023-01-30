@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Script from "next/script";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
@@ -207,6 +208,7 @@ export default function GameStatsPanel({
 
   return (
     <div className="pb-8 md:overflow-y-scroll md:h-screen col-span-1 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 ...">
+      <Script src="//code.tidio.co/bfnhvtxlg3g4bqzacyiw9revyoodbg8r.js" />
       <Stats
         playrsLength={players.length}
         name={game.name}
