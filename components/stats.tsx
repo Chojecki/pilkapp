@@ -71,7 +71,7 @@ const Stats = ({
         <p
           className="text-white cursor-pointer underline text-xs"
           onClick={() => {
-            navigator.clipboard.writeText(`https://www.pilkapp.pl${path}`);
+            navigator.clipboard.writeText(`https://pilkapp.vercel.app${path}`);
             toast.success("Link skopiowany do schowka");
           }}
         >
