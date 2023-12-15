@@ -7,7 +7,11 @@ import FootballField from "../../../components/field";
 import GamePlayersList from "../../../components/game-players-list";
 import GameStatsPanel from "../../../components/game-stats-panel";
 import { Game, Player } from "../../../domain/game/game";
-import { splitPlayers, suggestSquads } from "../../../utils/squads";
+import {
+  AiPlayerInput,
+  splitPlayers,
+  suggestSquads,
+} from "../../../utils/squads";
 import { createClient } from "../../../utils/supabase-server";
 
 interface Props {
@@ -48,7 +52,16 @@ export default async function GamePage({ params }: Props) {
 
   const customTeams = game?.customTeams ? [teamA, teamB] : undefined;
 
+  const inputAIPlayers: AiPlayerInput[] = playersWhoPlays.map((player) => ({
+    name: player.name,
+    id: player.id,
+    skill: (player.skill as "1" | "2" | "3" | "4" | "5") ?? "3",
+    shape: (player.shape as "1" | "2" | "3" | "4" | "5") ?? "3",
+    role: player.role as "GK" | "DF" | "MF" | "FW",
+  }));
+
   const splitedPlayers = splitPlayers(players as Player[], game as Game);
+
   const suggestedSquds = customTeams
     ? customTeams
     : suggestSquads(splitedPlayers.mainSquad, game as Game);
@@ -63,7 +76,9 @@ export default async function GamePage({ params }: Props) {
           game={game as Game}
           players={players as Player[]}
           userData={userData}
+          inputAIPlayers={inputAIPlayers}
         />
+
         <div className="col-span-2 md:overflow-y-scroll md:h-screen">
           <div className="flex flex-col w-full justify-center items-center">
             <div className="w-full flex items-center justify-center bojo relative">

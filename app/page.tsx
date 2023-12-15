@@ -224,7 +224,7 @@ export default async function Page() {
           </div>
         </div>
       </section>
-      <section className="text-gray-600 body-font bono">
+      {/* <section className="text-gray-600 body-font bono">
         <div className="container px-5 py-24 mx-auto">
           <div className="text-center mb-20">
             <h1 className="sm:text-3xl text-2xl text-center title-font font-extrabold text-sky-200 mb-4">
@@ -347,7 +347,7 @@ export default async function Page() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
       <footer className="text-gray-600 body-font">
         <div className="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
           <Image

@@ -1,4 +1,13 @@
+import OpenAI from "openai";
 import { Game, Player } from "../domain/game/game";
+
+export interface AiPlayerInput {
+  id: string;
+  name: string;
+  role: "GK" | "DF" | "MF" | "FW";
+  skill: "1" | "2" | "3" | "4" | "5";
+  shape: "1" | "2" | "3" | "4" | "5";
+}
 
 export const splitPlayers = (players: Player[], game: Game) => {
   // First game.numberOfPlayers players
@@ -8,6 +17,40 @@ export const splitPlayers = (players: Player[], game: Game) => {
   const bench = players?.slice(game?.numberOfPlayers ?? 14) ?? [];
 
   return { mainSquad, bench };
+};
+
+const openai = new OpenAI({
+  apiKey: process.env.NEXT_PUBLIC_SQUAD_KEY,
+  dangerouslyAllowBrowser: true,
+});
+export const suggestSquadsWithOpenAI = async (
+  input: AiPlayerInput[],
+  playersPerTeam: number
+) => {
+  const inputAsString = JSON.stringify(input);
+  const chatCompletion = await openai.chat.completions.create({
+    messages: [
+      { role: "system", content: systemPrompt },
+      {
+        role: "user",
+        content: `${inputAsString} Each team should have ${playersPerTeam} players`,
+      },
+    ],
+    model: "gpt-3.5-turbo",
+    temperature: 0.1,
+    max_tokens: 1164,
+  });
+
+  const { choices } = chatCompletion;
+  const { message } = choices[0];
+  if (message && message.content) {
+    const messageContent = message.content;
+    const parsedMessage = JSON.parse(messageContent);
+    console.log("parsedMessage", parsedMessage);
+    return parsedMessage;
+  } else {
+    console.log("error", message);
+  }
 };
 
 export const suggestSquads = (mainSquad: Player[], game?: Game) => {
@@ -118,3 +161,30 @@ export const assignPlayerToMostRareRole = (
 
   return "DF";
 };
+
+const systemPrompt = `
+You are a soccer and sport specialist.
+
+You will get a list of players in format of:
+
+type Player = {
+    id: string;
+    name: string;
+    role: "GK" | "DF" | "MF" | "FW",
+skill: "1" | "2" | "3" | "4" | "5",
+shape: "1" | "2" | "3" | "4" | "5", 
+}
+
+Base on given list of players you will split player into two teams. You want team to be as equal as possible - this means have equal chance to win. In case of skill and shape "1" means worst and "5" best. The role is about the role on soccer field. GK - goalkeeper, DF -defence, MF - midfield, FW - attacker.
+
+Not every team could have goalkeeper. For eg there might be only one and only one team will have goalkeeper. In that situation the other team which doesn't have goalkeeper will take turns at the goalkeeper position every 5 minutes. It means they probably need more defenders. It also means that players in a team without goalkeeper will be running less that players in a team with goalkeeper - because goalkeeper don't run much and they are changing on this position. So the "shape" is important in this aspect too.
+
+Reply in format of array of two teams like:
+Player[][] - first team, second team where eatch array has the same length or one more player than the other team (in case of odd number of players in the list you got as an input)
+
+If there is Even number of players in the list you got as an input then each team should have the same number of players. If there is odd number of players the list you got as an input, then one team should have one player more than the other team.
+
+Remember - In one team from response can't be more that one more player than in the other team.
+
+return just data in that json format. Don't add anything else
+`;

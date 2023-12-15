@@ -12,24 +12,25 @@ interface AppListBoxProps {
     name: string;
   }[];
   control: Control<Input>;
+  name: "role" | "skill" | "shape";
   padding?: string;
 }
 
 export default function AppListBox(props: AppListBoxProps) {
   return (
     <Controller
-      name="role"
+      name={props.name}
       defaultValue={{ name: props.items[0].name, value: props.items[0].value }}
       render={({ field }) => {
         return (
           <div className={`w-full ${props.padding ?? props.padding}`}>
             <Listbox value={field.value} onChange={field.onChange}>
               <div className="relative mt-1">
-                <Listbox.Button className="relative w-full cursor-default rounded-lg border border-gray-300 bg-white py-2 pl-3 pr-10 text-left  focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                <Listbox.Button className="relative w-full cursor-default rounded-lg border border-gray-300 bg-white py-2 pl-3 pr-10 text-left  focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm z-0">
                   <span className="block truncate">
                     {field.value && field.value.name
                       ? field.value.name
-                      : "Wybierz rolę"}
+                      : "Wybierz coś"}
                   </span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownIcon
@@ -44,7 +45,7 @@ export default function AppListBox(props: AppListBoxProps) {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                  <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-50">
                     {props.items.map((item, personIdx) => (
                       <Listbox.Option
                         key={personIdx}

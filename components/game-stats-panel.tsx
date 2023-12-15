@@ -7,7 +7,11 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
 import { v4 as uuidv4 } from "uuid";
 import { Game, Player } from "../domain/game/game";
-import { assignPlayerToMostRareRole } from "../utils/squads";
+import {
+  AiPlayerInput,
+  assignPlayerToMostRareRole,
+  suggestSquadsWithOpenAI,
+} from "../utils/squads";
 import { createBrowserClient } from "../utils/supabase-browser";
 import Button from "./button";
 import AppDialog from "./dialog";
@@ -21,6 +25,8 @@ import AppSwitch from "./switch";
 export type Input = {
   name: string;
   role: { value: string; name: string };
+  shape: { value: string; name: string };
+  skill: { value: string; name: string };
   isAnonymous: boolean;
 };
 
@@ -29,6 +35,7 @@ export default function GameStatsPanel({
   players,
   userData,
   suggestedSquds,
+  inputAIPlayers,
 }: {
   game: Game;
   players: Player[];
@@ -36,6 +43,7 @@ export default function GameStatsPanel({
     full_name: string | null;
   } | null;
   suggestedSquds: Player[][];
+  inputAIPlayers: AiPlayerInput[];
 }) {
   const router = useRouter();
 
@@ -44,6 +52,10 @@ export default function GameStatsPanel({
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modalRemoveIsOpen, setRemoveIsOpen] = useState(false);
   const [squadModalIsOpen, setSquadIsOpen] = useState(false);
+
+  const [aiSquadModalIsOpen, setAiSquadIsOpen] = useState(false);
+  const [aiSquads, setAiSquads] = useState<Player[][]>([]);
+  const [isAIloading, setIsAIloading] = useState(false);
 
   const {
     register,
@@ -114,6 +126,8 @@ export default function GameStatsPanel({
       role,
       gameId: game.id,
       userId,
+      skill: data.skill.value,
+      shape: data.shape.value,
       order: (game.players ?? []).length + 1,
     };
     await supabase.from("players").insert([player]);
@@ -153,6 +167,14 @@ export default function GameStatsPanel({
 
   const closeSquadModal = () => {
     setSquadIsOpen(false);
+  };
+
+  const openAiSquadModal = () => {
+    setAiSquadIsOpen(true);
+  };
+
+  const closeAiSquadModal = () => {
+    setAiSquadIsOpen(false);
   };
 
   const openRemoveModal = () => {
@@ -204,6 +226,19 @@ export default function GameStatsPanel({
       .update({ canAnonRemove: value })
       .eq("id", game.id);
     router.refresh();
+  };
+
+  const handleAI = async () => {
+    setIsAIloading(true);
+    try {
+      const res = await suggestSquadsWithOpenAI(
+        inputAIPlayers,
+        (game?.numberOfPlayers ?? 14) / 2
+      );
+      setAiSquads(res);
+    } finally {
+      setIsAIloading(false);
+    }
   };
 
   return (
@@ -258,6 +293,7 @@ export default function GameStatsPanel({
                 </label>
                 <AppListBox
                   padding="py-2"
+                  name="role"
                   control={control}
                   items={[
                     { value: "None", name: "Obojętne" },
@@ -265,6 +301,35 @@ export default function GameStatsPanel({
                     { value: "DF", name: "Obrona" },
                     { value: "MF", name: "Pomoc" },
                     { value: "FW", name: "Napad" },
+                  ]}
+                />
+                <label className="block my-2 text-sm font-medium text-gray-900    ">
+                  Forma
+                </label>
+                <AppListBox
+                  padding="py-2"
+                  name="shape"
+                  control={control}
+                  items={[
+                    { value: "3", name: "Średnia forma" },
+                    { value: "4", name: "Będzie biegane" },
+                    { value: "1", name: "Dawno nie grałem" },
+                    { value: "2", name: "Coś tam boli ale mogę grać" },
+                  ]}
+                />
+                <label className="block my-2 text-sm font-medium text-gray-900    ">
+                  Umiejętności
+                </label>
+                <AppListBox
+                  padding="py-2"
+                  name="skill"
+                  control={control}
+                  items={[
+                    { value: "2", name: "Średni" },
+                    { value: "1", name: "Rekreacyjny" },
+                    { value: "3", name: "Dobry" },
+                    { value: "4", name: "Bardzo dobry" },
+                    { value: "5", name: "Gram w klubie regularnie" },
                   ]}
                 />
                 <div className="flex gap-2 py-4 items-center w-full justify-between">
@@ -319,12 +384,63 @@ export default function GameStatsPanel({
           </AppDialog>
           <AppDialog
             closeOnTitle
-            buttonColor="green"
+            buttonColor="red"
             isOpen={squadModalIsOpen}
             openModal={openSquadModal}
             closeModal={closeSquadModal}
+            title="Sugerowane składy AI"
+            buttonLabel="Poka składy AI"
+            full
+            buttonPadding="px-4 py-3"
+          >
+            <div className="">
+              <p className="font-bold py-4">FC Ziomale</p>
+              <Button full onClick={handleAI}>
+                AI
+              </Button>
+              {aiSquads && aiSquads[0]
+                ? aiSquads[0].map((player, index) => {
+                    return (
+                      <div key={player.id}>
+                        <PlayerCell dark player={player} index={index + 1} />
+                      </div>
+                    );
+                  })
+                : isAIloading
+                ? "ładuje..."
+                : "brak składu"}
+            </div>
+            <div className="pb-4">
+              <p className="font-bold pt-6 pb-4">Mordeczki United</p>
+              {aiSquads && aiSquads[1]
+                ? aiSquads[1].map((player, index) => {
+                    return (
+                      <div key={player.id}>
+                        <PlayerCell
+                          secondary
+                          dark
+                          player={player}
+                          index={index + 1}
+                        />
+                      </div>
+                    );
+                  })
+                : isAIloading
+                ? "ładuje..."
+                : "brak składu"}
+            </div>
+            <Button bold full onClick={closeSquadModal}>
+              Ok
+            </Button>
+          </AppDialog>
+          <AppDialog
+            closeOnTitle
+            buttonColor="green"
+            isOpen={aiSquadModalIsOpen}
+            openModal={openAiSquadModal}
+            closeModal={closeAiSquadModal}
             title="Sugerowane składy"
-            buttonLabel="Poka składy"
+            buttonLabel="Składy"
             full
             buttonPadding="px-4 py-3"
           >

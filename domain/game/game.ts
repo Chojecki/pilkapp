@@ -28,4 +28,6 @@ export type Player = {
   order?: number;
   team?: 1 | 2;
   confirmed?: boolean;
+  skill?: string;
+  shape?: string;
 };
