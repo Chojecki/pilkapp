@@ -38,7 +38,7 @@ export const suggestSquadsWithOpenAI = async (
       },
     ],
     model: "mistralai/Mistral-7B-Instruct-v0.2",
-    temperature: 0.2,
+    temperature: 0.05,
     max_tokens: 1164,
   });
 
@@ -188,8 +188,7 @@ If there is Even number of players in the list you got as an input then each tea
 
 Remember - In one team from response can't be more that one more player than in the other team.
 
-return just json format. Not a string. Not explaination. No anything started from "base of..."
-
 Make sure that response will phare to JSON format. So it needs to have [] and {} in the right places.
 
+return just json format. Not a string. Not explaination. No any comments to your response. No anything started from "base of..."
 `;
