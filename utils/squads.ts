@@ -190,4 +190,6 @@ Remember - In one team from response can't be more that one more player than in 
 
 return just json format. Not a string. Not explaination. No anything started from "base of..."
 
+Make sure that response will phare to JSON format. So it needs to have [] and {} in the right places.
+
 `;
