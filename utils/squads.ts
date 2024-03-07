@@ -1,4 +1,3 @@
-import OpenAI from "openai";
 import { Game, Player } from "../domain/game/game";
 
 export interface AiPlayerInput {
@@ -19,40 +18,40 @@ export const splitPlayers = (players: Player[], game: Game) => {
   return { mainSquad, bench };
 };
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true,
-  baseURL: "https://api.together.xyz/v1",
-});
+// const openai = new OpenAI({
+//   apiKey: process.env.OPENAI_API_KEY,
+//   dangerouslyAllowBrowser: true,
+//   baseURL: "https://api.together.xyz/v1",
+// });
 export const suggestSquadsWithOpenAI = async (
   input: AiPlayerInput[],
   playersPerTeam: number
 ) => {
   const inputAsString = JSON.stringify(input);
-  const chatCompletion = await openai.chat.completions.create({
-    messages: [
-      { role: "system", content: systemPrompt },
-      {
-        role: "user",
-        content: `${inputAsString} Each team should have ${playersPerTeam} players`,
-      },
-    ],
-    model: "mistralai/Mistral-7B-Instruct-v0.2",
-    temperature: 0.2,
-    max_tokens: 1164,
-  });
+  // const chatCompletion = await openai.chat.completions.create({
+  //   messages: [
+  //     { role: "system", content: systemPrompt },
+  //     {
+  //       role: "user",
+  //       content: `${inputAsString} Each team should have ${playersPerTeam} players`,
+  //     },
+  //   ],
+  //   model: "mistralai/Mistral-7B-Instruct-v0.2",
+  //   temperature: 0.2,
+  //   max_tokens: 1164,
+  // });
 
-  const { choices } = chatCompletion;
-  const { message } = choices[0];
-  if (message && message.content) {
-    const messageContent = message.content;
-    console.log("messageContent", messageContent);
-    const parsedMessage = JSON.parse(messageContent);
-    console.log("parsedMessage", parsedMessage);
-    return parsedMessage;
-  } else {
-    console.log("error", message);
-  }
+  // const { choices } = chatCompletion;
+  // const { message } = choices[0];
+  // if (message && message.content) {
+  //   const messageContent = message.content;
+  //   console.log("messageContent", messageContent);
+  //   const parsedMessage = JSON.parse(messageContent);
+  //   console.log("parsedMessage", parsedMessage);
+  //   return parsedMessage;
+  // } else {
+  //   console.log("error", message);
+  // }
 };
 
 export const suggestSquads = (mainSquad: Player[], game?: Game) => {
