@@ -20,7 +20,7 @@ export const splitPlayers = (players: Player[], game: Game) => {
 };
 
 const openai = new OpenAI({
-  apiKey: process.env.NEXT_PUBLIC_SQUAD_KEY,
+  apiKey: process.env.SQUAD_KEY,
   dangerouslyAllowBrowser: true,
   baseURL: "https://api.together.xyz/v1",
 });
