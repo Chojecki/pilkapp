@@ -38,8 +38,8 @@ export const suggestSquadsWithOpenAI = async (
       },
     ],
     model: "codellama/CodeLlama-7b-Instruct-hf",
-    temperature: 0.05,
-    max_tokens: 1164,
+    temperature: 0.1,
+    max_tokens: 2164,
   });
 
   const { choices } = chatCompletion;
