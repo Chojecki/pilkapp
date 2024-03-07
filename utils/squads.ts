@@ -37,7 +37,7 @@ export const suggestSquadsWithOpenAI = async (
         content: `${inputAsString} Each team should have ${playersPerTeam} players`,
       },
     ],
-    model: "mistralai/Mistral-7B-Instruct-v0.2",
+    model: "mistralai/Mixtral-8x7B-Instruct-v0.1",
     temperature: 0.05,
     max_tokens: 1164,
   });
