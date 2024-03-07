@@ -10,6 +10,9 @@ const withPWA = require('@ducanh2912/next-pwa').default({
 const nextConfig = withPWA({
   reactStrictMode: true,
   swcMinify: true,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+  },
   experimental: {
     appDir: true,
     fontLoaders: [

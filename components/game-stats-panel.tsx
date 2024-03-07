@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
 import { v4 as uuidv4 } from "uuid";
+import { create } from "zustand";
 import { Game, Player } from "../domain/game/game";
 import {
   AiPlayerInput,
@@ -21,6 +22,16 @@ import SquadComposerModal from "./squad-composer-modal";
 import Stats from "./stats";
 import { useSupabase } from "./supabase-provider";
 import AppSwitch from "./switch";
+
+interface SquadStore {
+  aiSquads: Player[][];
+  setAiSquads: (aiSquads: Player[][]) => void;
+}
+
+export const useSquadStore = create<SquadStore>((set) => ({
+  aiSquads: [],
+  setAiSquads: (aiSquads) => set({ aiSquads }),
+}));
 
 export type Input = {
   name: string;
@@ -54,7 +65,11 @@ export default function GameStatsPanel({
   const [squadModalIsOpen, setSquadIsOpen] = useState(false);
 
   const [aiSquadModalIsOpen, setAiSquadIsOpen] = useState(false);
-  const [aiSquads, setAiSquads] = useState<Player[][]>([]);
+  const [aiSquads, setAiSquads] = useSquadStore((state) => [
+    state.aiSquads,
+    state.setAiSquads,
+  ]);
+
   const [isAIloading, setIsAIloading] = useState(false);
 
   const {
@@ -389,7 +404,7 @@ export default function GameStatsPanel({
             openModal={openSquadModal}
             closeModal={closeSquadModal}
             title="Sugerowane składy AI"
-            buttonLabel="Poka składy AI"
+            buttonLabel="Poka składy AI (beta)"
             full
             buttonPadding="px-4 py-3"
           >

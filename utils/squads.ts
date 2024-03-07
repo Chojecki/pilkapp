@@ -22,6 +22,7 @@ export const splitPlayers = (players: Player[], game: Game) => {
 const openai = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_SQUAD_KEY,
   dangerouslyAllowBrowser: true,
+  baseURL: "https://api.together.xyz/v1",
 });
 export const suggestSquadsWithOpenAI = async (
   input: AiPlayerInput[],
@@ -36,8 +37,8 @@ export const suggestSquadsWithOpenAI = async (
         content: `${inputAsString} Each team should have ${playersPerTeam} players`,
       },
     ],
-    model: "gpt-3.5-turbo",
-    temperature: 0.1,
+    model: "mistralai/Mistral-7B-Instruct-v0.2",
+    temperature: 0.2,
     max_tokens: 1164,
   });
 
@@ -45,6 +46,7 @@ export const suggestSquadsWithOpenAI = async (
   const { message } = choices[0];
   if (message && message.content) {
     const messageContent = message.content;
+    console.log("messageContent", messageContent);
     const parsedMessage = JSON.parse(messageContent);
     console.log("parsedMessage", parsedMessage);
     return parsedMessage;
@@ -186,5 +188,6 @@ If there is Even number of players in the list you got as an input then each tea
 
 Remember - In one team from response can't be more that one more player than in the other team.
 
-return just data in that json format. Don't add anything else
+return just json format. Not a string. Not explaination. No anything started from "base of..."
+
 `;

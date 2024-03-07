@@ -1,13 +1,19 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
 import field from "../assets/field.jpg";
 import { Player } from "../domain/game/game";
+import { useSquadStore } from "./game-stats-panel";
+import AppSwitch from "./switch";
 
 type SoccerFieldProps = {
-  suggestedSquds: Player[][];
+  squds: Player[][];
 };
 
-const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
+const FootballField: React.FC<SoccerFieldProps> = ({ squds }) => {
+  const [aiSquads] = useSquadStore((state) => [state.aiSquads]);
+  const [suggestedSquds, setDisplayedSquds] = React.useState<Player[][]>(squds);
   return (
     <div className="relative tablet:w-[520px] tablet:h-[300px] laptop:w-[650px] laptop:h-[420px]">
       <Image
@@ -17,6 +23,22 @@ const FootballField: React.FC<SoccerFieldProps> = ({ suggestedSquds }) => {
         sizes={"650px, 420px"}
         priority
       />
+      {aiSquads && aiSquads.length > 0 && (
+        <div className="flex gap-4 justify-center items-center">
+          <AppSwitch
+            checked={suggestedSquds === aiSquads}
+            onChange={(cheked) => {
+              if (cheked && aiSquads.length > 0) {
+                setDisplayedSquds(aiSquads);
+              } else {
+                setDisplayedSquds(squds);
+              }
+            }}
+            srOnlyLabel="Switch to AI"
+          />
+          <h3 className="z-50 font-bold text-white">Poka składy AI</h3>
+        </div>
+      )}
       <div
         className={`absolute w-10 ${
           suggestedSquds[0].filter((player) => player.role === "GK").length < 4
