@@ -179,7 +179,7 @@ shape: "1" | "2" | "3" | "4" | "5",
 
 Base on given list of players you will split player into two teams. You want team to be as equal as possible - this means have equal chance to win. In case of skill and shape "1" means worst and "5" best. The role is about the role on soccer field. GK - goalkeeper, DF -defence, MF - midfield, FW - attacker.
 
-Not every team could have goalkeeper. For eg there might be only one and only one team will have goalkeeper. In that situation the other team which doesn't have goalkeeper will take turns at the goalkeeper position every 5 minutes. It means they probably need more defenders. It also means that players in a team without goalkeeper will be running less that players in a team with goalkeeper - because goalkeeper don't run much and they are changing on this position. So the "shape" is important in this aspect too.
+Not every team could have goalkeeper. But if there is at least two GK, each team needs to have one. If there is only one GK and only one team will have goalkeeper - In that situation the other team which doesn't have goalkeeper will take turns at the goalkeeper position every 5 minutes. It means they probably need more defenders. It also means that players in a team without goalkeeper will be running less that players in a team with goalkeeper - because goalkeeper don't run much and they are changing on this position. So the "shape" is important in this aspect too.
 
 Reply in format of array of two teams like:
 Player[][] - first team, second team where eatch array has the same length or one more player than the other team (in case of odd number of players in the list you got as an input)
