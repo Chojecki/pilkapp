@@ -37,7 +37,7 @@ export const suggestSquadsWithOpenAI = async (
         content: `${inputAsString} Each team should have ${playersPerTeam} players`,
       },
     ],
-    model: "codellama/CodeLlama-7b-Instruct-hf",
+    model: "mistralai/Mixtral-8x7B-Instruct-v0.1",
     temperature: 0.1,
     max_tokens: 2164,
   });
@@ -191,4 +191,6 @@ Remember - In one team from response can't be more that one more player than in 
 Make sure that response will phare to JSON format. So it needs to have [] and {} in the right places.
 
 return just json format. Not explaination. No any additional comments to your response. No anything started from "Base of..."
+
+Example response: [[{"id":"1","name":"John","role":"GK","skill":"5","shape":"5"},{"id":"2","name":"Mike","role":"DF","skill":"4","shape":"3"}],[{"id":"3","name":"Tom","role":"GK","skill":"3","shape":"2"},{"id":"4","name":"Jerry","role":"DF","skill":"2","shape":"1"}]
 `;
