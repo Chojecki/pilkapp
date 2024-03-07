@@ -8,7 +8,11 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { create } from "zustand";
 import { Game, Player } from "../domain/game/game";
-import { AiPlayerInput, assignPlayerToMostRareRole } from "../utils/squads";
+import {
+  AiPlayerInput,
+  assignPlayerToMostRareRole,
+  suggestSquadsWithOpenAI,
+} from "../utils/squads";
 import { createBrowserClient } from "../utils/supabase-browser";
 import Button from "./button";
 import AppDialog from "./dialog";
@@ -242,11 +246,11 @@ export default function GameStatsPanel({
   const handleAI = async () => {
     setIsAIloading(true);
     try {
-      // const res = await suggestSquadsWithOpenAI(
-      //   inputAIPlayers,
-      //   (game?.numberOfPlayers ?? 14) / 2
-      // );
-      // setAiSquads(res);
+      const res = await suggestSquadsWithOpenAI(
+        inputAIPlayers,
+        (game?.numberOfPlayers ?? 14) / 2
+      );
+      setAiSquads(res);
     } finally {
       setIsAIloading(false);
     }
