@@ -34,7 +34,7 @@ export const suggestSquadsWithOpenAI = async (
       { role: "system", content: systemPrompt },
       {
         role: "user",
-        content: `${inputAsString} Each team should have ${playersPerTeam} players`,
+        content: `${inputAsString} Each team should have ${playersPerTeam} players. Assistant, please respond ONLY in JSON format. I understand that this may seem repetitive, but it is crucial that your response contains NO additional text, explanations, or prompts, only the JSON response.`,
       },
     ],
     model: "mistralai/Mixtral-8x7B-Instruct-v0.1",
@@ -190,6 +190,4 @@ Remember - In one team from response can't be more that one more player than in 
 
 Make sure that response will phare to JSON format. So it needs to have [] and {} in the right places.
 
-Example response: [[{"id":"1","name":"John","role":"GK","skill":"5","shape":"5"},{"id":"2","name":"Mike","role":"DF","skill":"4","shape":"3"}],[{"id":"3","name":"Tom","role":"GK","skill":"3","shape":"2"},{"id":"4","name":"Jerry","role":"DF","skill":"2","shape":"1"}]
-
-Assistant, please respond ONLY in JSON format. I understand that this may seem repetitive, but it is crucial that your response contains NO additional text, explanations, or prompts, only the JSON response.`;
+Example response: [[{"id":"1","name":"John","role":"GK","skill":"5","shape":"5"},{"id":"2","name":"Mike","role":"DF","skill":"4","shape":"3"}],[{"id":"3","name":"Tom","role":"GK","skill":"3","shape":"2"},{"id":"4","name":"Jerry","role":"DF","skill":"2","shape":"1"}]`;
