@@ -1,4 +1,3 @@
-import OpenAI from "openai";
 import { Game, Player } from "../domain/game/game";
 
 export interface AiPlayerInput {
@@ -19,41 +18,102 @@ export const splitPlayers = (players: Player[], game: Game) => {
   return { mainSquad, bench };
 };
 
-const openai = new OpenAI({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true,
-  baseURL: "https://api.together.xyz/v1",
-});
-export const suggestSquadsWithOpenAI = async (
-  input: AiPlayerInput[],
-  playersPerTeam: number
-) => {
-  const inputAsString = JSON.stringify(input);
-  const chatCompletion = await openai.chat.completions.create({
-    messages: [
-      { role: "system", content: systemPrompt },
-      {
-        role: "user",
-        content: `${inputAsString} Each team should have ${playersPerTeam} players`,
-      },
-    ],
-    model: "mistralai/Mixtral-8x7B-Instruct-v0.1",
-    temperature: 0.1,
-    max_tokens: 2164,
+// const openai = new OpenAI({
+//   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+//   dangerouslyAllowBrowser: true,
+//   baseURL: "https://api.together.xyz/v1",
+// });
+// export const suggestSquadsWithOpenAI = async (
+//   input: AiPlayerInput[],
+//   playersPerTeam: number
+// ) => {
+//   const inputAsString = JSON.stringify(input);
+//   const chatCompletion = await openai.chat.completions.create({
+//     messages: [
+//       { role: "system", content: systemPrompt },
+//       {
+//         role: "user",
+//         content: `${inputAsString} Each team should have ${playersPerTeam} players`,
+//       },
+//     ],
+//     model: "mistralai/Mixtral-8x7B-Instruct-v0.1",
+//     temperature: 0.1,
+//     max_tokens: 2164,
+//   });
+
+//   const { choices } = chatCompletion;
+//   const { message } = choices[0];
+//   if (message && message.content) {
+//     const messageContent = message.content;
+//     console.log("messageContent", messageContent);
+//     const parsedMessage = JSON.parse(messageContent);
+//     console.log("parsedMessage", parsedMessage);
+//     return parsedMessage;
+//   } else {
+//     console.log("error", message);
+//   }
+// };
+
+export function splitTeams(players: Player[]): Player[][] {
+  // Sort players by role importance (GK > DF > MF > FW) and then by skill and shape
+  const sortedPlayers = players.sort((a, b) => {
+    const roleOrder: { [key: string]: number } = { GK: 0, DF: 1, MF: 2, FW: 3 };
+    if (a.role !== b.role) return roleOrder[a.role] - roleOrder[b.role];
+    if (a.skill !== b.skill)
+      return parseInt(b.skill ?? "3") - parseInt(a.skill ?? "3");
+    return parseInt(b.shape ?? "3") - parseInt(a.shape ?? "3");
   });
 
-  const { choices } = chatCompletion;
-  const { message } = choices[0];
-  if (message && message.content) {
-    const messageContent = message.content;
-    console.log("messageContent", messageContent);
-    const parsedMessage = JSON.parse(messageContent);
-    console.log("parsedMessage", parsedMessage);
-    return parsedMessage;
-  } else {
-    console.log("error", message);
+  const team1: Player[] = [];
+  const team2: Player[] = [];
+  let team1Score = 0;
+  let team2Score = 0;
+
+  // Distribute goalkeepers
+  const goalkeepers = sortedPlayers.filter((p) => p.role === "GK");
+  if (goalkeepers.length >= 2) {
+    team1.push(goalkeepers[0]);
+    team2.push(goalkeepers[1]);
+    team1Score +=
+      parseInt(goalkeepers[0].skill ?? "3") +
+      parseInt(goalkeepers[0].shape ?? "3");
+    team2Score +=
+      parseInt(goalkeepers[1].skill ?? "3") +
+      parseInt(goalkeepers[1].shape ?? "3");
+  } else if (goalkeepers.length === 1) {
+    // If only one goalkeeper, give it to the team with lower score
+    if (team1Score <= team2Score) {
+      team1.push(goalkeepers[0]);
+      team1Score +=
+        parseInt(goalkeepers[0].skill ?? "3") +
+        parseInt(goalkeepers[0].shape ?? "3");
+    } else {
+      team2.push(goalkeepers[0]);
+      team2Score +=
+        parseInt(goalkeepers[0].skill ?? "3") +
+        parseInt(goalkeepers[0].shape ?? "3");
+    }
   }
-};
+
+  // Distribute remaining players
+  const remainingPlayers = sortedPlayers.filter((p) => p.role !== "GK");
+  for (const player of remainingPlayers) {
+    const playerScore =
+      parseInt(player.skill ?? "3") + parseInt(player.shape ?? "3");
+    if (
+      team1.length <= team2.length &&
+      (team1Score <= team2Score || team2.length === players.length / 2)
+    ) {
+      team1.push(player);
+      team1Score += playerScore;
+    } else {
+      team2.push(player);
+      team2Score += playerScore;
+    }
+  }
+
+  return [team1, team2];
+}
 
 export const suggestSquads = (mainSquad: Player[], game?: Game) => {
   // Get all players with the same role

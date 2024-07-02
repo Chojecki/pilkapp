@@ -8,11 +8,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { create } from "zustand";
 import { Game, Player } from "../domain/game/game";
-import {
-  AiPlayerInput,
-  assignPlayerToMostRareRole,
-  suggestSquadsWithOpenAI,
-} from "../utils/squads";
+import { assignPlayerToMostRareRole, splitTeams } from "../utils/squads";
 import { createBrowserClient } from "../utils/supabase-browser";
 import Button from "./button";
 import AppDialog from "./dialog";
@@ -54,7 +50,7 @@ export default function GameStatsPanel({
     full_name: string | null;
   } | null;
   suggestedSquds: Player[][];
-  inputAIPlayers: AiPlayerInput[];
+  inputAIPlayers: Player[];
 }) {
   const router = useRouter();
 
@@ -177,6 +173,7 @@ export default function GameStatsPanel({
     setIsOpen(false);
   };
   const openSquadModal = () => {
+    handleAI();
     setSquadIsOpen(true);
   };
 
@@ -246,10 +243,7 @@ export default function GameStatsPanel({
   const handleAI = async () => {
     setIsAIloading(true);
     try {
-      const res = await suggestSquadsWithOpenAI(
-        inputAIPlayers,
-        (game?.numberOfPlayers ?? 14) / 2
-      );
+      const res = await splitTeams(inputAIPlayers);
       setAiSquads(res);
     } finally {
       setIsAIloading(false);
@@ -410,9 +404,7 @@ export default function GameStatsPanel({
           >
             <div className="">
               <p className="font-bold py-4">FC Ziomale</p>
-              <Button full onClick={handleAI}>
-                AI
-              </Button>
+
               {aiSquads && aiSquads[0]
                 ? aiSquads[0].map((player, index) => {
                     return (
