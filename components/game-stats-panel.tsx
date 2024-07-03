@@ -67,6 +67,7 @@ export default function GameStatsPanel({
   ]);
 
   const [isAIloading, setIsAIloading] = useState(false);
+  const [nameError, setNameError] = useState("");
 
   const {
     register,
@@ -94,6 +95,22 @@ export default function GameStatsPanel({
   }, [players, session?.user.id]);
 
   const onSubmit: SubmitHandler<Input> = async (data) => {
+    // Check if user name is in shape of "name atLeast3CharactersSurname"
+
+    const name = data.name.split(" ");
+    if (name.length < 2) {
+      setNameError("Podaj imię i nazwisko");
+      return;
+    }
+    if (name[0].length < 3) {
+      setNameError("Imię musi mieć co najmniej 3 litery");
+      return;
+    }
+    if (name[1].length < 3) {
+      setNameError("Nazwisko musi mieć co najmniej 3 litery");
+      return;
+    }
+
     // Check if user from data with the same name is already in the game
     const isUserNameInTheGame = players?.some(
       (participant) => participant.name === data.name
@@ -286,13 +303,15 @@ export default function GameStatsPanel({
                 <label className="block mb-2 text-sm font-medium text-gray-900    ">
                   Imię
                 </label>
+                <p className="text-red-500 text-md">{nameError}</p>
                 <input
                   className="bg-gray-50 mb-4 mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5    "
                   type="text"
                   {...register("name", { required: true })}
-                  placeholder="Imię"
+                  placeholder="Imię i Nazwisko"
                   defaultValue={userData?.full_name ?? ""}
                 />
+
                 <label className="block bg-gray-50 mb-2 text-sm font-medium text-gray-900 border p-2 rounded-md  ">
                   Gdzie wolisz grać ? (wybierz z listy) <br />
                   <span className="font-small text-xs text-gray-600">
