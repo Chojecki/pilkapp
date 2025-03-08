@@ -55,62 +55,89 @@ export const splitPlayers = (players: Player[], game: Game) => {
 // };
 
 export function splitTeams(players: Player[]): Player[][] {
-  // Sort players by role importance (GK > DF > MF > FW) and then by skill and shape
-  const sortedPlayers = players.sort((a, b) => {
+  // Calculate player strength based on skill and shape
+  const getPlayerStrength = (player: Player): number => {
+    const skillNum = player.skill ? parseInt(player.skill) : 3;
+    const shapeNum = player.shape ? parseInt(player.shape) : 3;
+    // Give slightly more weight to skill than shape
+    return skillNum * 1.2 + shapeNum;
+  };
+
+  // Sort players by role and strength
+  const sortedPlayers = [...players].sort((a, b) => {
     const roleOrder: { [key: string]: number } = { GK: 0, DF: 1, MF: 2, FW: 3 };
     if (a.role !== b.role) return roleOrder[a.role] - roleOrder[b.role];
-    if (a.skill !== b.skill)
-      return parseInt(b.skill ?? "3") - parseInt(a.skill ?? "3");
-    return parseInt(b.shape ?? "3") - parseInt(a.shape ?? "3");
+    return getPlayerStrength(b) - getPlayerStrength(a);
   });
 
   const team1: Player[] = [];
   const team2: Player[] = [];
-  let team1Score = 0;
-  let team2Score = 0;
+  let team1Strength = 0;
+  let team2Strength = 0;
 
-  // Distribute goalkeepers
+  // First, distribute goalkeepers evenly
   const goalkeepers = sortedPlayers.filter((p) => p.role === "GK");
+  const outfieldPlayers = sortedPlayers.filter((p) => p.role !== "GK");
+
   if (goalkeepers.length >= 2) {
     team1.push(goalkeepers[0]);
     team2.push(goalkeepers[1]);
-    team1Score +=
-      parseInt(goalkeepers[0].skill ?? "3") +
-      parseInt(goalkeepers[0].shape ?? "3");
-    team2Score +=
-      parseInt(goalkeepers[1].skill ?? "3") +
-      parseInt(goalkeepers[1].shape ?? "3");
+    team1Strength += getPlayerStrength(goalkeepers[0]);
+    team2Strength += getPlayerStrength(goalkeepers[1]);
+
+    // Add remaining GKs alternately if any
+    for (let i = 2; i < goalkeepers.length; i++) {
+      if (team1Strength <= team2Strength) {
+        team1.push(goalkeepers[i]);
+        team1Strength += getPlayerStrength(goalkeepers[i]);
+      } else {
+        team2.push(goalkeepers[i]);
+        team2Strength += getPlayerStrength(goalkeepers[i]);
+      }
+    }
   } else if (goalkeepers.length === 1) {
-    // If only one goalkeeper, give it to the team with lower score
-    if (team1Score <= team2Score) {
+    // If only one GK, give to the team that will have more defenders
+    const defenders = outfieldPlayers.filter((p) => p.role === "DF");
+    if (defenders.length % 2 === 0) {
       team1.push(goalkeepers[0]);
-      team1Score +=
-        parseInt(goalkeepers[0].skill ?? "3") +
-        parseInt(goalkeepers[0].shape ?? "3");
+      team1Strength += getPlayerStrength(goalkeepers[0]);
     } else {
       team2.push(goalkeepers[0]);
-      team2Score +=
-        parseInt(goalkeepers[0].skill ?? "3") +
-        parseInt(goalkeepers[0].shape ?? "3");
+      team2Strength += getPlayerStrength(goalkeepers[0]);
     }
   }
 
-  // Distribute remaining players
-  const remainingPlayers = sortedPlayers.filter((p) => p.role !== "GK");
-  for (const player of remainingPlayers) {
-    const playerScore =
-      parseInt(player.skill ?? "3") + parseInt(player.shape ?? "3");
-    if (
-      team1.length <= team2.length &&
-      (team1Score <= team2Score || team2.length === players.length / 2)
-    ) {
-      team1.push(player);
-      team1Score += playerScore;
-    } else {
-      team2.push(player);
-      team2Score += playerScore;
+  // Group outfield players by role
+  const defenders = outfieldPlayers.filter((p) => p.role === "DF");
+  const midfielders = outfieldPlayers.filter((p) => p.role === "MF");
+  const forwards = outfieldPlayers.filter((p) => p.role === "FW");
+
+  // Helper function to distribute players of a role
+  const distributePlayersByRole = (players: Player[]) => {
+    for (const player of players) {
+      if (team1.length > team2.length) {
+        team2.push(player);
+        team2Strength += getPlayerStrength(player);
+      } else if (team2.length > team1.length) {
+        team1.push(player);
+        team1Strength += getPlayerStrength(player);
+      } else {
+        // Teams have equal size, distribute based on total strength
+        if (team1Strength <= team2Strength) {
+          team1.push(player);
+          team1Strength += getPlayerStrength(player);
+        } else {
+          team2.push(player);
+          team2Strength += getPlayerStrength(player);
+        }
+      }
     }
-  }
+  };
+
+  // Distribute players by role, maintaining balance
+  distributePlayersByRole(defenders);
+  distributePlayersByRole(midfielders);
+  distributePlayersByRole(forwards);
 
   return [team1, team2];
 }
