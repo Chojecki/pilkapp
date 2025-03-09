@@ -26,6 +26,7 @@ export default function SquadComposerModal({
   const [checked, setChecked] = useState(isGameCustomTeams);
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [isSaving, setIsSaving] = useState(false);
 
   const { data: playersOfTheGame, mutate } = useSWR(
     `playersOf-${gameId}`,
@@ -62,16 +63,23 @@ export default function SquadComposerModal({
   };
 
   const handleSave = async () => {
-    await supabase
-      .from("games")
-      .update({ customTeams: checked })
-      .eq("id", gameId);
+    try {
+      setIsSaving(true);
+      await supabase
+        .from("games")
+        .update({ customTeams: checked })
+        .eq("id", gameId);
 
-    startTransition(() => {
-      router.refresh();
-    });
+      startTransition(() => {
+        router.refresh();
+      });
 
-    setIsOpen(false);
+      setIsOpen(false);
+    } catch (error) {
+      console.error("Error saving teams:", error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -84,9 +92,11 @@ export default function SquadComposerModal({
       buttonLabel="Ustaw składy"
       buttonColor="yellow"
     >
-      <div className="felx flex-col gap-4">
-        <div className="flex gap-4">
-          <label>Czy chcesz sam ustawić składy ?</label>
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-4 items-center">
+          <label className="text-gray-900">
+            Czy chcesz sam ustawić składy ?
+          </label>
           <AppSwitch
             srOnlyLabel="Sam chce ustawić składy"
             checked={checked}
@@ -96,7 +106,7 @@ export default function SquadComposerModal({
 
         <div className="py-4">
           <Button color="green" full bold onClick={handleSave}>
-            {isPending ? "Zapisuje ..." : "Zapisz"}
+            {isSaving ? "Zapisuje ..." : "Zapisz"}
           </Button>
         </div>
 

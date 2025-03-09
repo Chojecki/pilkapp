@@ -495,7 +495,7 @@ export default function GameStatsPanel({
                 );
               })}
             </div>
-            <Button bold full onClick={closeSquadModal}>
+            <Button bold full onClick={closeAiSquadModal}>
               Ok
             </Button>
           </AppDialog>

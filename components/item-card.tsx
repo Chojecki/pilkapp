@@ -2,7 +2,7 @@ import { FC } from "react";
 
 interface ItemCardProps {
   title?: string;
-  boldTitle: string;
+  boldTitle: string | React.ReactNode;
   icon?: React.ReactNode;
 }
 

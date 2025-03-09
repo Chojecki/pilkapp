@@ -81,7 +81,18 @@ const Stats = ({
       {children}
       <ItemCard
         title="Zapisanych"
-        boldTitle={`${playrsLength} / ${numberOfPlayers}`}
+        boldTitle={
+          <>
+            <span
+              data-testid="players-count"
+              className={playrsLength < numberOfPlayers ? "text-red-600" : ""}
+            >
+              {playrsLength}
+            </span>
+            {" / "}
+            {numberOfPlayers}
+          </>
+        }
         icon={
           <svg
             className="w-6 h-6"
