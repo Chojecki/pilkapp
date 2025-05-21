@@ -30,4 +30,5 @@ export type Player = {
   confirmed?: boolean;
   skill?: string;
   shape?: string;
+  isFixedTeammate?: boolean; // New field
 };
