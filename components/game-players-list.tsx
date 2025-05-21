@@ -28,6 +28,71 @@ export default function GamePlayersList({
   const router = useRouter();
   const { session } = useSupabase();
   const supabase = createBrowserClient();
+  const [fixedTeammateId, setFixedTeammateId] = useState<string | null>(null);
+  const [organizerPlayerId, setOrganizerPlayerId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Initialize fixedTeammateId from fetched player data
+    const allPlayers = [...splitedPlayers.mainSquad, ...splitedPlayers.bench];
+    const fixedPlayer = allPlayers.find((p) => p.isFixedTeammate);
+    if (fixedPlayer) {
+      setFixedTeammateId(fixedPlayer.id);
+    } else {
+      setFixedTeammateId(null); // Ensure it's reset if no one is fixed
+    }
+
+    // Identify the organizer's player ID
+    if (session?.user?.id && gameCreator === session.user.id) {
+      const orgPlayer = allPlayers.find(p => p.userId === session.user.id);
+      if (orgPlayer) {
+        setOrganizerPlayerId(orgPlayer.id);
+      }
+    }
+  }, [splitedPlayers, session?.user?.id, gameCreator]);
+
+  const handleToggleFixedTeammate = async (playerToToggle: Player) => {
+    if (!canManage) return; // Should not happen if UI is correct, but good check
+
+    // Organizer cannot be selected as a fixed teammate
+    if (playerToToggle.id === organizerPlayerId) {
+      console.log("Organizer cannot be selected as a fixed teammate.");
+      return;
+    }
+
+    const currentFixedId = fixedTeammateId;
+    let newFixedId: string | null = null;
+
+    try {
+      if (playerToToggle.id === currentFixedId) {
+        // Deselecting the current fixed teammate
+        await supabase
+          .from("players")
+          .update({ is_fixed_teammate: false })
+          .eq("id", playerToToggle.id);
+        newFixedId = null;
+      } else {
+        // Selecting a new fixed teammate
+        // First, unfix the old one if exists
+        if (currentFixedId) {
+          await supabase
+            .from("players")
+            .update({ is_fixed_teammate: false })
+            .eq("id", currentFixedId);
+        }
+        // Then, fix the new one
+        await supabase
+          .from("players")
+          .update({ is_fixed_teammate: true })
+          .eq("id", playerToToggle.id);
+        newFixedId = playerToToggle.id;
+      }
+      setFixedTeammateId(newFixedId);
+      router.refresh();
+    } catch (error) {
+      console.error("Error toggling fixed teammate:", error);
+      // Optionally, revert state or show error to user
+    }
+  };
 
   const handleSendEmail = async (playerName: string) => {
     const isOrganisatorRemoving = session?.user.id;
@@ -128,6 +193,11 @@ export default function GamePlayersList({
                     onSwitchClick={(checked) => {
                       handleSelectDidPay(participant, checked);
                     }}
+                    // Fixed teammate props
+                    isFixed={participant.id === fixedTeammateId}
+                    onToggleFixedTeammate={() => handleToggleFixedTeammate(participant)}
+                    showLockIcon={canManage}
+                    isOrganizer={participant.id === organizerPlayerId}
                   />
                 </div>
               </Transition>
@@ -144,6 +214,11 @@ export default function GamePlayersList({
                 canAnonRemove={canAnonRemove}
                 ignoreLocalStorage={ignoreLocalStorage}
                 onClick={() => hanldePlayerDelete(participant)}
+                 // Fixed teammate props
+                isFixed={participant.id === fixedTeammateId}
+                onToggleFixedTeammate={() => handleToggleFixedTeammate(participant)}
+                showLockIcon={canManage}
+                isOrganizer={participant.id === organizerPlayerId}
               />
             </div>
           ))}

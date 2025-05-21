@@ -19,6 +19,11 @@ const PlayerCell = ({
   canAnonRemove = false,
   secondary = false,
   ignoreLocalStorage = false,
+  // New props for fixed teammate
+  isFixed = false,
+  onToggleFixedTeammate,
+  showLockIcon = false,
+  isOrganizer = false,
 }: {
   player: Player;
   index: number;
@@ -32,6 +37,11 @@ const PlayerCell = ({
   secondary?: boolean;
   canAnonRemove?: boolean;
   ignoreLocalStorage?: boolean;
+  // New props for fixed teammate
+  isFixed?: boolean;
+  onToggleFixedTeammate?: () => void;
+  showLockIcon?: boolean;
+  isOrganizer?: boolean;
 }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -78,6 +88,20 @@ const PlayerCell = ({
           {player.name} <span>({player.role})</span>
         </div>
       </div>
+      {showLockIcon && !isOrganizer && onToggleFixedTeammate && (
+        <div className="flex items-center justify-center mr-2">
+          <button
+            onClick={onToggleFixedTeammate}
+            disabled={isOrganizer} // Double ensure disabled, though it shouldn't be shown if isOrganizer
+            className={`p-2 rounded-md ${
+              isFixed ? "bg-green-500 text-white" : "bg-gray-300 text-black"
+            } ${isOrganizer ? "opacity-50 cursor-not-allowed" : ""}`}
+            aria-label={isFixed ? "Unlock teammate" : "Lock teammate"}
+          >
+            {isFixed ? "🔒" : "🔓"}
+          </button>
+        </div>
+      )}
       {canManage && onSwitchClick && (
         <div className="flex justify-center items-center pr-2">
           <div className="form-control">
